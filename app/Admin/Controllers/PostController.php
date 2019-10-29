@@ -36,11 +36,13 @@ class PostController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Post);
+		$model = new Post;
+		$model->where('type', $this->request->type);
+        $grid = new Grid($model);
 
         $grid->column('id', __('Id'));
         $grid->column('title', __('Title'));
-        $grid->column('content', __('Content'));
+        $grid->column('category.name', __('Category')); // Here is the point.
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
 
@@ -58,7 +60,7 @@ class PostController extends AdminController
         $show = new Show(Post::findOrFail($id));
 
         $show->field('id', __('Id'));
-
+		
         $show->field('title', __('Title'));
         $show->field('content', __('Content'));
         $show->field('created_at', __('Created at'));
@@ -77,7 +79,9 @@ class PostController extends AdminController
         $form = new Form(new Post);
         $form->text('type')->value($this->request->type);
         $form->text('title', __('Title'));
-        $form->select('category_id', trans('admin.parent_id'))->options(Category::selectOptions());
+        $form->select('category_id', trans('admin.parent_id'))->options(Category::selectOptions(function($query){
+            return $query->where('type',$this->request->type);
+        }));
         $form->ckeditor('content', __('Content'));
 
         $form->hasMany('comments', function (Form\NestedForm $form) {
