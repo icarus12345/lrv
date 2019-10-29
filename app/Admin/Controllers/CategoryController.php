@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
 class CategoryController extends Controller
 {
     use HasResourceActions;
-    use ModelForm;
+    //use ModelForm;
 
     /**
      * Create a new grid model instance.
