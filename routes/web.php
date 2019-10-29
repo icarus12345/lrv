@@ -23,10 +23,10 @@ Route::group([
 	Route::group([
 		'middleware' => ['verified'],
 	], function () use ($router) {
-		Route::get('/home', 'HomeController@index')->name('home');
+		// Route::get('/home', 'HomeController@index')->name('home');
 	});
-	Route::get('/demo', 'HomeController@demo')->name('demo');
-
+	// Route::get('/demo', 'HomeController@demo')->name('demo');
 });
-// Allow roles `administrator` and `editor` access the routes under group.
 
+Route::get('/home', 'HomeController@index');
+Route::get('locale/{locale}', 'HomeController@locale')->name('locale');

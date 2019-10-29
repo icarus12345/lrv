@@ -34,4 +34,16 @@ class HomeController extends Controller
     {
         return view('home');
     }
+	
+	public function locale(string $locale)
+    {
+        if (!in_array($locale, \Config::get('app.locales'))) {
+            // Set default locale;
+            $locale = \Config::get('app.locale');
+        }
+
+        \Session::put('locale', $locale);
+
+        return redirect()->back();
+    }
 }
