@@ -5,7 +5,8 @@ namespace App\Admin\Controllers;
 
 use Encore\Admin\Layout\Content;
 use Illuminate\Routing\Controller;
-use Encore\Admin\Controllers\HasResourceActions;
+use App\Admin\Controllers\AdminController;
+use App\Admin\Traits\HasResourceActions;
 use Encore\Admin\Controllers\ModelForm;
 use App\Models\Category;
 use Encore\Admin\Form;
@@ -13,21 +14,12 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Illuminate\Http\Request;
 
-class CategoryController extends Controller
+class CategoryController extends AdminController
 {
-    use HasResourceActions;
-    //use ModelForm;
+    // use HasResourceActions;
+    // use ModelForm;
 
-    /**
-     * Create a new grid model instance.
-     *
-     * @param EloquentModel $model
-     * @param Grid          $grid
-     */
-    public function __construct(Request $request)
-    {
-        $this->request = $request;
-    }
+    
 
     /**
      * Title for current resource.
@@ -36,15 +28,7 @@ class CategoryController extends Controller
      */
     protected $title = 'App\Models\Category';
 
-    /**
-     * Get content title.
-     *
-     * @return string
-     */
-    protected function title()
-    {
-        return $this->title;
-    }
+    
 
     /**
      * Index interface.
@@ -53,81 +37,12 @@ class CategoryController extends Controller
      *
      * @return Content
      */
-    public function index(Content $content)
+    public function grid()
     {
-        // dd(Category::tree(function($query){
-        //     return $query->model->where('type',$this->request->type);
-        // }));
-        return $content
-            ->title($this->title())
-            ->description($this->description['index'] ?? trans('admin.list'))
-            ->body(Category::treeByType($this->request->type));
+        return Category::treeByType($this->request->type);
     }
 
-    /**
-     * Show interface.
-     *
-     * @param mixed   $id
-     * @param Content $content
-     *
-     * @return Content
-     */
-    public function show($id, Content $content)
-    {
-        return $content
-            ->title($this->title())
-            ->description($this->description['show'] ?? trans('admin.show'))
-            ->body($this->detail($id));
-    }
-
-    /**
-     * Edit interface.
-     *
-     * @param mixed   $id
-     * @param Content $content
-     *
-     * @return Content
-     */
-    public function edit($id, Content $content)
-    {
-        return $content
-            ->title($this->title())
-            ->description($this->description['edit'] ?? trans('admin.edit'))
-            ->body($this->form()->edit($id));
-    }
-
-    /**
-     * Create interface.
-     *
-     * @param Content $content
-     *
-     * @return Content
-     */
-    public function create(Content $content)
-    {
-        return $content
-            ->title($this->title())
-            ->description($this->description['create'] ?? trans('admin.create'))
-            ->body($this->form());
-    }
-
-    /**
-     * Make a grid builder.
-     *
-     * @return Grid
-     */
-    protected function grid()
-    {
-        $grid = new Grid(new Category);
-
-        $grid->column('id', __('Id'));
-        $grid->column('name', __('Name'));
-        $grid->column('parent_id', __('Parent id'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
-
-        return $grid;
-    }
+    
 
     /**
      * Make a show builder.
@@ -135,13 +50,18 @@ class CategoryController extends Controller
      * @param mixed $id
      * @return Show
      */
-    protected function detail($id)
+    protected function detail($type = null,$id  = null)
     {
-        $show = new Show(Category::findOrFail($id));
+        $show = new Show(Category::findOrFail($id??$type));
 
         $show->field('id', __('Id'));
-        $show->field('name', __('Name'));
-        $show->field('parent_id', __('Parent id'));
+        $show->parent_id(__('Parent id'))->as(function ($id) {
+            return Category::findOrFail($id)->name;
+        });
+        $locales = \Config::get('app.locales');
+        foreach ($locales as $locale) {
+            $show->field("name_{$locale}", trans('admin.title')."(".__("common.locales.{$locale}").")");
+        }
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
 
@@ -155,7 +75,6 @@ class CategoryController extends Controller
      */
     protected function form()
     {
-        
 
         $form = new Form(new Category);
 
@@ -163,9 +82,13 @@ class CategoryController extends Controller
         $form->hidden('type')->value($this->request->type);
 
         $form->select('parent_id', trans('admin.parent_id'))->options(Category::selectOptions(function($query){
-            return $query->where('type',$this->request->type);
+            if($this->request->type) $query->where('type', $this->request->type);
+            return $query;
         }));
-        $form->text('name', trans('admin.title'))->rules('required');
+        $locales = \Config::get('app.locales');
+        foreach ($locales as $locale) {
+            $form->text("name_{$locale}", trans('admin.title')."(".__("common.locales.{$locale}").")")->rules('required');
+        }
         // $form->icon('icon', trans('admin.icon'))->default('fa-bars')->rules('required')->help($this->iconHelp());
         // $form->text('uri', trans('admin.uri'));
         // $form->multipleSelect('roles', trans('admin.roles'))->options($roleModel::all()->pluck('name', 'id'));
@@ -175,7 +98,6 @@ class CategoryController extends Controller
 
         $form->display('created_at', trans('admin.created_at'));
         $form->display('updated_at', trans('admin.updated_at'));
-
         return $form;
     }
 

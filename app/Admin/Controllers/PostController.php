@@ -4,7 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Models\Post;
 use App\Models\Category;
-use Encore\Admin\Controllers\AdminController;
+use App\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
@@ -77,10 +77,11 @@ class PostController extends AdminController
     protected function form()
     {
         $form = new Form(new Post);
-        $form->text('type')->value($this->request->type);
+        $form->hidden('type')->value($this->request->type);
         $form->text('title', __('Title'));
         $form->select('category_id', trans('admin.parent_id'))->options(Category::selectOptions(function($query){
-            return $query->where('type',$this->request->type);
+            if($this->request->type) $query->where('type', $this->request->type);
+            return $query;
         }));
         $form->ckeditor('content', __('Content'));
 
