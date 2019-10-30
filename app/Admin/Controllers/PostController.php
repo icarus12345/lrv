@@ -42,7 +42,7 @@ class PostController extends AdminController
 
         $grid->column('id', __('Id'));
         $grid->column('title', __('Title'));
-        $grid->column('category.name', __('Category')); // Here is the point.
+        $grid->column('category.name_en', __('Category')); // Here is the point.
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
 

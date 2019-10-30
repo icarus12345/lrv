@@ -77,12 +77,12 @@ class CategoryController extends AdminController
     {
 
         $form = new Form(new Category);
-
         $form->display('id', 'ID');
         $form->hidden('type')->value($this->request->type);
-
         $form->select('parent_id', trans('admin.parent_id'))->options(Category::selectOptions(function($query){
-            if($this->request->type) $query->where('type', $this->request->type);
+            if($this->request->type) {
+				return $query->where('type', $this->request->type);
+			}
             return $query;
         }));
         $locales = \Config::get('app.locales');

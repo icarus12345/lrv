@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class AdminController extends Controller
 {
     use HasResourceActions;
-
+	public $locale;
     /**
      * Create a new grid model instance.
      *
@@ -20,6 +20,7 @@ class AdminController extends Controller
     public function __construct(Request $request)
     {
         $this->request = $request;
+        $this->locale = Helpers::getLocale();;
     }
 
     /**
@@ -79,7 +80,7 @@ class AdminController extends Controller
         return $content
             ->title($this->title())
             ->description($this->description['show'] ?? trans('admin.show'))
-            ->body($this->detail($id??$type));
+            ->body($this->detail($type,$id));
     }
 
     /**
@@ -92,6 +93,7 @@ class AdminController extends Controller
      */
     public function edit($type,$id = null, Content $content)
     {
+		
         return $content
             ->title($this->title())
             ->description($this->description['edit'] ?? trans('admin.edit'))
@@ -107,6 +109,7 @@ class AdminController extends Controller
      */
     public function create($type = null,Content $content)
     {
+		
         return $content
             ->title($this->title())
             ->description($this->description['create'] ?? trans('admin.create'))

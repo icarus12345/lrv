@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+
 use App\Models\BaseModel;
 use Encore\Admin\Traits\AdminBuilder;
 use Encore\Admin\Traits\ModelTree;
@@ -15,6 +16,7 @@ class Category extends BaseModel
     protected $fillable = [
         'name_vi','name_en', 'order', 'parent_id',
     ];
+	
     public function __construct()
     {
         parent::__construct();
@@ -44,8 +46,44 @@ class Category extends BaseModel
         $self = new static();
         $tree = new Tree($self);
         return $tree->query(function($query) use ($type) {
-            if($type) $query->where('type', $type);
+            if($type) return $query->where('type', $type);
             return $query;
         });
     }
+	
+	
+	
+	public static function toTree($nodes){
+		$self = new static();
+		return $self->buildNested($nodes);
+	}
+	
+	public static function buildNested($nodes = [], $parentId = 0)
+    {
+		$self = new static();
+        $branch = [];
+        
+        foreach ($nodes as $node) {
+            if ($node->{$self->parentColumn} == $parentId) {
+                $children = $self->buildNested($nodes, $node->{$self->getKeyName()});
+
+                if ($children) {
+                    $node->children = $children;
+                }
+
+                $branch[] = $node;
+            }
+        }
+
+        return $branch;
+    }
+	
+	public function toArray() 
+	{
+		// List out all attributes you want to get, anytime this model is called.
+		$attributes = parent::toArray();
+		$attributes['name'] = $this->name;
+
+		return $attributes;
+	}
 }

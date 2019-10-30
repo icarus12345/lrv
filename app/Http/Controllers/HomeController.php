@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\Category;
 class HomeController extends Controller
 {
     /**
@@ -22,7 +22,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+		$rows = Category::where('type', 'product')->get();
+		$tree = Category::toTree($rows);
+        return view('home',[
+			'categories'	=> $tree
+		]);
     }
 
     /**

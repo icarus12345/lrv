@@ -50,22 +50,17 @@
 							<li><a href="about.html">About</a></li>
 							<li><a href="shop.html">Shop</a>
 								<ul class="mega-menu">
+									@foreach($categories as $item)
 									<li>
-										<a class="mega-title" href="#">Categories</a>
+										<a class="mega-title" href="#">{{$item->name}}</a>
+										
 										<ul>
-											<li><a href="office-building.html">Office Building</a></li>
-											<li><a href="coffee-house.html">Coffee House</a></li>
-											<li><a href="home-decor.html">Home Decor</a></li>
+											@foreach($item->children as $subitem)
+											<li><a href="office-building.html">{{$subitem->name}}</a></li>
+											@endforeach
 										</ul>
 									</li>
-									<li>
-										<a class="mega-title" href="#">Product Design</a>
-										<ul>
-											<li><a href="chair.html">Chair Design</a></li>
-											<li><a href="table.html">Table Design</a></li>
-											<li><a href="set.html">Set Design</a></li>
-										</ul>
-									</li>
+									@endforeach
 									<li class="mega-menu-img w-50">
 										<a href="#"><img src="/assets/themes/gid/img/news-letter.jpg" alt=""></a>
 									</li>
