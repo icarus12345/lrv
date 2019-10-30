@@ -22,8 +22,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-		$rows = Category::where('type', 'product')->get();
-		$tree = Category::toTree($rows);
+		$rows = Category::where('type', 'gid')->get();
+		$tree = Category::buildNested($rows);
         return view('home',[
 			'categories'	=> $tree
 		]);

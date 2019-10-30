@@ -6,6 +6,7 @@ use Encore\Admin\Layout\Content;
 use Illuminate\Routing\Controller;
 use App\Admin\Traits\HasResourceActions;
 use Illuminate\Http\Request;
+use App\Helpers;
 
 class AdminController extends Controller
 {
@@ -20,7 +21,7 @@ class AdminController extends Controller
     public function __construct(Request $request)
     {
         $this->request = $request;
-        $this->locale = Helpers::getLocale();;
+        $this->locale = \App::getLocale();;
     }
 
     /**

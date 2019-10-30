@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Encore\Admin\Traits\AdminBuilder;
 use Encore\Admin\Traits\ModelTree;
 use Encore\Admin\Tree;
-use App\Helpers;
 
 class BaseModel extends Model
 {
@@ -25,6 +24,6 @@ class BaseModel extends Model
     public function getLocaleAttribute()
     {
         
-        return Helpers::getLocale();
+        return \App::getLocale();
     }
 }

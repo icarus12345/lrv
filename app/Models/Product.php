@@ -27,7 +27,11 @@ class Product extends BaseModel
 	protected $casts = [
         'pictures' => 'array'
     ];
-    
+    public function __construct()
+    {
+        parent::__construct();
+        
+    }
 
     public function category()
     {

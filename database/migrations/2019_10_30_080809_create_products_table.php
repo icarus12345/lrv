@@ -29,7 +29,7 @@ class CreateProductsTable extends Migration
             $table->decimal('rating', 2, 1)->default(0);
 			$table->enum('status', ['Active','Inactive'])->default('Active');
 			//$table->boolean('status')->default(true);
-            $table->string('type',50);
+            $table->string('type',50)->nullable();
 	
             $table->timestamps();
         });

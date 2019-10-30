@@ -53,10 +53,10 @@ class Category extends BaseModel
 	
 	
 	
-	public static function toTree($nodes){
-		$self = new static();
-		return $self->buildNested($nodes);
-	}
+	// public static function toTreeObject($nodes = null){
+	// 	$self = new static();
+	// 	return $self->buildNested($nodes);
+	// }
 	
 	public static function buildNested($nodes = [], $parentId = 0)
     {

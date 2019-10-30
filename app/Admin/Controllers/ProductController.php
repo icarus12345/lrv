@@ -10,6 +10,7 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Form\Tab;
 use Illuminate\Http\Request;
+use Encore\Admin\Widgets\Box;
 
 class ProductController extends AdminController
 {
@@ -81,7 +82,6 @@ class ProductController extends AdminController
     protected function form()
     {
         $form = new Form(new Product);
-        /*
 		$form->select('category_id', trans('admin.parent_id'))->options(Category::selectOptions(function($query){
             if($this->request->type) return $query->where('type', $this->request->type);
             return $query;
@@ -89,26 +89,14 @@ class ProductController extends AdminController
 		
 		
 		  
-		$locales = \Config::get('app.locales');
+        $locales = \Config::get('app.locales');
         foreach ($locales as $locale) {
             $form->text("name_{$locale}", trans('admin.title')."(".__("common.locales.{$locale}").")")->rules('required');
-			$form->ckeditor("content_{$locale}", __('Content')."(".__("common.locales.{$locale}").")");
         }
-		*/
-        
-        $tabs = $form->tab('Basic info', function ($form) {
-			$form->hidden('type')->value($this->request->type);
-			
-		})->tab('Profile', function ($form) {
-
-		   
-
-		});
-		$tabs->tab('Pictures', function ($form) {
-			$form->multipleImage('pictures')->removable()->sortable();
-		});
-        
-
+        foreach ($locales as $locale) {
+            $form->ckeditor("content_{$locale}", __('Content')."(".__("common.locales.{$locale}").")")->rules('required');
+        }
+		$form->multipleImage('pictures')->removable()->sortable()->rules('required');
         return $form;
     }
 }
