@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\Product;
 class HomeController extends Controller
 {
     /**
@@ -24,8 +25,10 @@ class HomeController extends Controller
     {
 		$rows = Category::where('type', 'gid')->get();
 		$tree = Category::buildNested($rows);
+		$products = Product::feature()->offset(0)->limit(10)->get();
         return view('home',[
-			'categories'	=> $tree
+			'categories'	=> $tree,
+			'products'	=> $products,
 		]);
     }
 

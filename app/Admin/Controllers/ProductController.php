@@ -62,12 +62,19 @@ class ProductController extends AdminController
         $show = new Show(Product::findOrFail($id));
 
         $show->field('id', __('Id'));
-		
 		$locales = \Config::get('app.locales');
         foreach ($locales as $locale) {
             $show->field("name_{$locale}", trans('admin.title')."(".__("common.locales.{$locale}").")")->rules('required');
         }
-        
+		$show->image()->image();
+		$show->pictures()->label();
+		$show->price();
+        foreach ($locales as $locale) {
+            $show->field("desc_{$locale}", trans('Description')."(".__("common.locales.{$locale}").")")->rules('required');
+        }
+		foreach ($locales as $locale) {
+            $show->field("content_{$locale}", trans('Content')."(".__("common.locales.{$locale}").")")->rules('required');
+        }
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
 
@@ -92,6 +99,10 @@ class ProductController extends AdminController
         $locales = \Config::get('app.locales');
         foreach ($locales as $locale) {
             $form->text("name_{$locale}", trans('admin.title')."(".__("common.locales.{$locale}").")")->rules('required');
+        }
+		$form->image('image');
+		foreach ($locales as $locale) {
+            $form->text("desc_{$locale}", trans('admin.description')."(".__("common.locales.{$locale}").")")->rules('required');
         }
         foreach ($locales as $locale) {
             $form->ckeditor("content_{$locale}", __('Content')."(".__("common.locales.{$locale}").")")->rules('required');

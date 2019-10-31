@@ -20,8 +20,9 @@ class DatabaseSeeder extends Seeder
         $sql = file_get_contents(database_path('seeds/category.sql'));
         DB::unprepared($sql);
 
-        // factory(App\Models\Product::class, 20)->create();
+        factory(App\Models\Product::class, 20)->create();
 
+		/*
         Schema::disableForeignKeyConstraints();
         Product::truncate();
         Schema::enableForeignKeyConstraints();
@@ -44,5 +45,6 @@ class DatabaseSeeder extends Seeder
                 'type' => 'gid',
             ]);
         }
+		*/
     }
 }

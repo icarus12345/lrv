@@ -3,10 +3,10 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
-
 class Product extends BaseModel
 {
     //
+	protected $table = 'products';
     protected $fillable = [
         'category_id', 
         'name_vi', 
@@ -27,11 +27,6 @@ class Product extends BaseModel
 	protected $casts = [
         'pictures' => 'array'
     ];
-    public function __construct()
-    {
-        parent::__construct();
-        
-    }
 
     public function category()
     {
@@ -68,9 +63,9 @@ class Product extends BaseModel
 		}
 	}
 
-	public function getPicturesAttribute($pictures)
+	public function getPicturesAttribute()
 	{
-		return json_decode($pictures, true);
+		return json_decode($this->pictures, true);
 	}
 	
 	public function toArray() 
@@ -80,5 +75,53 @@ class Product extends BaseModel
 		$attributes['name'] = $this->name;
 
 		return $attributes;
+	}
+	
+	/**
+     * Scopes.
+     *
+     * @param Builder $query
+     */
+    public function scopeFeature($query)
+    {
+        return $query->inRandomOrder();
+    }
+	
+	public function setImageAttribute($binary)
+    {
+        $disk = 'public';
+
+        if (isset($this->attributes['id'])) {
+            $path = \Storage::disk($disk)->putFile($this->attributes['id'], $binary, 'public');
+        } else {
+            $path = $binary;
+        }
+
+        $this->attributes['image'] = $path;
+    }
+
+    public function setNullToImage()
+    {
+        $this->attributes['image'] = null;
+    }
+
+    public function getImageAttribute()
+    {
+        $disk = 'public';
+
+        if (!$this->getOriginal('image')) {
+            return 'images/no-image.svg';
+        }
+
+        if (strpos($this->getOriginal('image'), 'http') !== false) {
+            return $this->getOriginal('image');
+        } else {
+            return \Storage::disk($disk)->url($this->getOriginal('image'));
+        }
+    }
+	
+	public function getPriceAttribute($pictures)
+	{
+		return number_format($this->attributes['price'], 2) . '$';
 	}
 }
