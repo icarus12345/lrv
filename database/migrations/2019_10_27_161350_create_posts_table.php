@@ -18,8 +18,8 @@ class CreatePostsTable extends Migration
             $table->integer('category_id');
             $table->string('title_vi');
             $table->string('title_en');
-            $table->text('content');
-            $table->string('type',50);
+            $table->text('content_vi');
+            $table->text('content_en');
 
             $table->timestamps();
         });

@@ -21,11 +21,16 @@ class Product extends BaseModel
 		'review_num',
 		'rating',
 		'status',
-		'type',
+        'type',
+        'label',
+        'instock',
+        'tags',
+		'extra',
     ];
 	
 	protected $casts = [
-        'pictures' => 'array'
+        'extra' => 'json',
+        'pictures' => 'array',
     ];
 
     public function category()
@@ -65,14 +70,31 @@ class Product extends BaseModel
 
 	public function getPicturesAttribute()
 	{
-		return json_decode($this->pictures, true);
+		return json_decode($this->attributes['pictures'], true);
 	}
+
+    public function setExtraAttribute($extra)
+    {
+        if (is_array($extra)) {
+            $this->attributes['extra'] = json_encode($extra);
+        }
+    }
+
+    public function getExtraAttribute()
+    {
+        if($this->attributes['extra']) return json_decode($this->attributes['extra'], true);
+        return [];
+    }
 	
 	public function toArray() 
 	{
 		// List out all attributes you want to get, anytime this model is called.
 		$attributes = parent::toArray();
-		$attributes['name'] = $this->name;
+        $attributes['name'] = $this->name;
+        $attributes['desc'] = $this->desc;
+        $attributes['pictures'] = $this->pictures;
+        $attributes['content'] = $this->content;
+		$attributes['image'] = $this->image;
 
 		return $attributes;
 	}
@@ -107,7 +129,7 @@ class Product extends BaseModel
 
     public function getImageAttribute()
     {
-        $disk = 'public';
+        $disk = 'public/product';
 
         if (!$this->getOriginal('image')) {
             return 'images/no-image.svg';
@@ -122,6 +144,6 @@ class Product extends BaseModel
 	
 	public function getPriceAttribute($pictures)
 	{
-		return number_format($this->attributes['price'], 2) . '$';
+		return number_format($this->attributes['price']) . '₫';
 	}
 }

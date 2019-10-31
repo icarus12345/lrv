@@ -5,9 +5,13 @@
 			<!--Slider Area Start-->
 			<div class="slider-area">
 				<div class="bend niceties preview-1">
-					<div id="ensign-nivoslider-3" class="slides">   
-					   <a href="shop.html"><img src="/assets/themes/gid/img/slider/5.jpg" alt=""/></a>
-					   <a href="shop.html"> <img src="/assets/themes/gid/img/slider/6.jpg" alt=""/></a>
+					<div id="ensign-nivoslider-3" class="slides"> 
+						@if($sliders[0])
+					   	<a href="{{$sliders[0]->link}}"><img src="{{$sliders[0]->image}}" alt="{{$sliders[0]->name}}"/></a>
+					   	@endif
+						@if($sliders[1])
+					   	<a href="{{$sliders[1]->link}}"> <img src="{{$sliders[1]->image}}" alt="{{$sliders[1]->name}}"/></a>
+					  	 @endif
 					</div>
 				</div>
 			</div>
@@ -18,25 +22,25 @@
 			<div class="banner-area row">
 				<div class="col-12">
 					<div class="banner-image">
-						<a href="shop.html">
-							<img src="/assets/themes/gid/img/banner/10.jpg" alt="">
-						</a>
+						@if($sliders[2])
+					   	<a href="{{$sliders[2]->link}}"><img src="{{$sliders[2]->image}}" alt="{{$sliders[2]->name}}"/></a>
+					   	@endif
 					</div>
 				</div>
 				<div class="col-12">
 					<div class="row no-gutters">
 						<div class="col-6">
 							<div class="banner-image">
-								<a href="product-details.html">
-									<img src="/assets/themes/gid/img/banner/11.jpg" alt="">
-								</a>
+								@if($sliders[3])
+							   	<a href="{{$sliders[3]->link}}"><img src="{{$sliders[3]->image}}" alt="{{$sliders[3]->name}}"/></a>
+							   	@endif
 							</div>                            
 						</div>
 						<div class="col-6">
 							<div class="banner-image">
-								<a href="product-details.html">
-									<img src="/assets/themes/gid/img/banner/12.jpg" alt="">
-								</a>
+								@if($sliders[4])
+							   	<a href="{{$sliders[4]->link}}"><img src="{{$sliders[4]->image}}" alt="{{$sliders[4]->name}}"/></a>
+							   	@endif
 							</div>                            
 						</div>
 					</div> 

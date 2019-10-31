@@ -14,16 +14,7 @@ use Encore\Admin\Widgets\Box;
 
 class ProductController extends AdminController
 {
-    /**
-     * Create a new grid model instance.
-     *
-     * @param EloquentModel $model
-     * @param Grid          $grid
-     */
-    public function __construct(Request $request)
-    {
-        $this->request = $request;
-    }
+    
     /**
      * Title for current resource.
      *
@@ -38,13 +29,15 @@ class ProductController extends AdminController
      */
     protected function grid()
     {
-		$model = new Product;
-		$model->where('type', $this->request->type);
-        $grid = new Grid($model);
+        $grid = new Grid(new Product);
+		$grid->model()->where('type', $this->request->type);
 
         $grid->column('id', __('Id'));
         $grid->column("name", __('Title'));
         $grid->column("category.name", __('Category')); // Here is the point.
+        $grid->label()->editable('select', ['' => 'None', 'new' => 'New', 'hot' => 'Hot']);
+        $grid->instock()->editable();
+        $grid->tags()->label();
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
 
@@ -100,6 +93,9 @@ class ProductController extends AdminController
         foreach ($locales as $locale) {
             $form->text("name_{$locale}", trans('admin.title')."(".__("common.locales.{$locale}").")")->rules('required');
         }
+        $form->number('price', 'Price')->min(10);
+        $form->number('instock', 'Instock')->min(10);
+        $form->select('label', 'Label')->options(['' => 'None', 'new' => 'New', 'hot' => 'Hot']);
 		$form->image('image');
 		foreach ($locales as $locale) {
             $form->text("desc_{$locale}", trans('admin.description')."(".__("common.locales.{$locale}").")")->rules('required');
@@ -107,7 +103,14 @@ class ProductController extends AdminController
         foreach ($locales as $locale) {
             $form->ckeditor("content_{$locale}", __('Content')."(".__("common.locales.{$locale}").")")->rules('required');
         }
-		$form->multipleImage('pictures')->removable()->sortable()->rules('required');
+		$form->multipleImage('pictures')->removable()->sortable();
+        $form->tags('tags');
+        $form->table('extra','Extra', function ($form) {
+
+            $form->color('color','Color');
+            $form->select('size', 'Size')->options(['' => 'None', 'S' => 'S', 'M' => 'M']);
+
+        });
         return $form;
     }
 }

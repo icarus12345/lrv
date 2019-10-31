@@ -17,8 +17,8 @@ class DatabaseSeeder extends Seeder
         // $this->call(UsersTableSeeder::class);
         $this->call(AdminTablesSeeder::class);
 
-        $sql = file_get_contents(database_path('seeds/category.sql'));
-        DB::unprepared($sql);
+        DB::unprepared(file_get_contents(database_path('seeds/category.sql')));
+        DB::unprepared(file_get_contents(database_path('seeds/banners.sql')));
 
         factory(App\Models\Product::class, 20)->create();
 

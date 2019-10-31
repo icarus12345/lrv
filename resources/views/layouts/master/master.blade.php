@@ -50,7 +50,7 @@
 	<link rel="stylesheet" href="/assets/themes/gid/css/responsive.css">
 	<!-- modernizr JS
 	============================================ -->		
-	<script src="/assets/themes/gid/js/vendor/modernizr-2.8.3.min.js"></script>
+	<script src="/assets/themes/gid/js/modernizr-2.8.3.min.js"></script>
 	@yield('css')
 	
 	
@@ -61,7 +61,7 @@
     @include('layouts.master.footer')
 	<!-- jquery
 	============================================ -->		
-	<script src="/assets/themes/gid/js/vendor/jquery-1.12.4.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 	<!-- bootstrap JS
 	============================================ -->		
 	<script src="/assets/themes/gid/js/bootstrap.bundle.min.js"></script>

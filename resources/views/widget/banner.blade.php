@@ -4,39 +4,37 @@
 		<div class="row mb-n30">
 			<div class="col-md-3 col-12 mb-30">
 				<div class="banner-image">
-					<a href="shop.html">
-						<img src="/assets/themes/gid/img/banner/13.jpg" alt="">
-					</a>
+					@if($banners[0])
+					   	<a href="{{$banners[0]->link}}"><img src="{{$banners[0]->image}}" alt="{{$banners[0]->name}}"/></a>
+				   	@endif
 				</div>
 			</div>
 			<div class="col-md-6 col-12 mb-30">
 				<div class="banner-image mb-30">
-					<a href="shop.html">
-						<img src="/assets/themes/gid/img/banner/14.jpg" alt="">
-					</a>
+					@if($banners[1])
+					   	<a href="{{$banners[1]->link}}"><img src="{{$banners[1]->image}}" alt="{{$banners[1]->name}}"/></a>
+				   	@endif
 				</div>
 				<div class="row mb-n30">
 					<div class="col-md-6 col-12 mb-30"> 
 						<div class="banner-image">
-							<a href="shop.html">
-								<img src="/assets/themes/gid/img/banner/1.jpg" alt="">
-							</a>
+							@if($banners[3])
+							   	<a href="{{$banners[3]->link}}"><img src="{{$banners[3]->image}}" alt="{{$banners[3]->name}}"/></a>
+						   	@endif
 						</div>
 					</div>
 					<div class="col-md-6 col-12 mb-30"> 
-						<div class="banner-image">
-							<a href="#">
-								<img src="/assets/themes/gid/img/banner/2.jpg" alt="">
-							</a>
-						</div>
+						@if($banners[4])
+						   	<a href="{{$banners[4]->link}}"><img src="{{$banners[4]->image}}" alt="{{$banners[4]->name}}"/></a>
+					   	@endif
 					</div>
 				</div>
 			</div>
 			<div class="col-md-3 col-12 mb-30">
 				<div class="banner-image">
-					<a href="shop.html">
-						<img src="/assets/themes/gid/img/banner/15.jpg" alt="">
-					</a>
+					@if($banners[2])
+					   	<a href="{{$banners[2]->link}}"><img src="{{$banners[2]->image}}" alt="{{$banners[2]->name}}"/></a>
+				   	@endif
 				</div>
 			</div>			
 		</div>

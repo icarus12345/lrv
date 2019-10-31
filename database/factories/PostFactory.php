@@ -11,7 +11,7 @@ $factory->define(Post::class, function (Faker $faker) {
         'category_id' => Category::inRandomOrder()->first()->id, 
         'title_vi' => $faker->name, 
 		'title_en' => $faker->name,
-		'content' => $faker->paragraph(1),
-		'type' => 'gid',
+		'content_vi' => $faker->text,
+		'content_en' => $faker->text,
     ];
 });
