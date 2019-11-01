@@ -34,7 +34,8 @@ class CreateProductsTable extends Migration
             $table->string('tags')->nullable();
             $table->string('label',50)->nullable();
 
-            $table->text('extra')->nullable();
+            $table->text('colors')->nullable();
+            $table->text('sizes')->nullable();
 	
             $table->timestamps();
         });

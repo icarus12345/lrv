@@ -17,11 +17,13 @@
 						<div class="product-img-content">
 							<!--Product Image-->
 							<div class="product-img">
-								<a href="product-details.html" title="{{$item->name}}">
+								<a href="product/detail/{{$item->id}}" title="{{$item->name}}">
 									<img src="{{$item->image}}" alt="">
 								</a>		                                    
 							</div>
-							<span class="new-label">New</span>
+							@if($item->label)
+							<span class="new-label">{{$item->label}}</span>
+							@endif
 							<!--Product Action-->
 							<div class="product-action">
 								<a href="#" title="Add to cart"><i class="fa fa-shopping-cart"></i></a>
@@ -29,7 +31,7 @@
 							</div>
 						</div>
 						<div class="product-content">
-							<h5><a href="product-details.html" title="Printed Dress">{{$item->name}}</a></h5>
+							<h5><a href="product-details.html" title="{{$item->name}}">{{$item->name}}</a></h5>
 							<!--Product Rating-->
 							<div class="rating-icon">
 								<i class="fa fa-star"></i>
@@ -40,7 +42,7 @@
 							</div>
 							<!--Product Price-->
 							<div class="product-price">
-								<span class="new-price">{{$item->price}}</span>
+								<span class="new-price">{{$item->price_with_format}}</span>
 							</div>
 						</div>
 					</div>

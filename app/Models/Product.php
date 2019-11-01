@@ -25,11 +25,13 @@ class Product extends BaseModel
         'label',
         'instock',
         'tags',
-		'extra',
+		'colors',
+		'sizes',
     ];
 	
 	protected $casts = [
-        'extra' => 'json',
+        'colors' => 'json',
+        'sizes' => 'json',
         'pictures' => 'array',
     ];
 
@@ -64,7 +66,7 @@ class Product extends BaseModel
 	public function setPicturesAttribute($pictures)
 	{
 		if (is_array($pictures)) {
-			$this->attributes['pictures'] = json_encode($pictures);
+			$this->attributes['pictures'] = json_encode($pictures,true);
 		}
 	}
 
@@ -73,16 +75,35 @@ class Product extends BaseModel
 		return json_decode($this->attributes['pictures'], true);
 	}
 
-    public function setExtraAttribute($extra)
+    public function setColorsAttribute($colors)
     {
-        if (is_array($extra)) {
-            $this->attributes['extra'] = json_encode($extra);
+        if (is_array($colors)) {
+			foreach($colors as $color) {
+				$arr[] = $color;
+			}
+            $this->attributes['colors'] = json_encode($arr,true);
+        }
+    }
+	
+	public function getColorsAttribute()
+    {
+        if($this->attributes['colors']) return json_decode($this->attributes['colors'], true);
+        return [];
+    }
+	
+	public function setSizesAttribute($sizes)
+    {
+        if (is_array($sizes)) {
+			foreach($sizes as $size) {
+				$arr[] = $size;
+			}
+            $this->attributes['sizes'] = json_encode($arr,true);
         }
     }
 
-    public function getExtraAttribute()
+    public function getSizesAttribute()
     {
-        if($this->attributes['extra']) return json_decode($this->attributes['extra'], true);
+        if($this->attributes['sizes']) return json_decode($this->attributes['sizes'], true);
         return [];
     }
 	
@@ -95,6 +116,8 @@ class Product extends BaseModel
         $attributes['pictures'] = $this->pictures;
         $attributes['content'] = $this->content;
 		$attributes['image'] = $this->image;
+		$attributes['colors'] = $this->colors;
+		$attributes['sizes'] = $this->sizes;
 
 		return $attributes;
 	}
@@ -132,7 +155,7 @@ class Product extends BaseModel
         $disk = 'public/product';
 
         if (!$this->getOriginal('image')) {
-            return 'images/no-image.svg';
+            return '/images/no-image.svg';
         }
 
         if (strpos($this->getOriginal('image'), 'http') !== false) {
@@ -142,7 +165,7 @@ class Product extends BaseModel
         }
     }
 	
-	public function getPriceAttribute($pictures)
+	public function getPriceWithFormatAttribute($pictures)
 	{
 		return number_format($this->attributes['price']) . '₫';
 	}

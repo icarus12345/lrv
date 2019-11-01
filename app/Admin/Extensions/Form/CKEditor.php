@@ -2,9 +2,9 @@
 
 namespace App\Admin\Extensions\Form;
 
-use Encore\Admin\Form\Field;
+use Encore\Admin\Form\Field\Textarea;
 
-class CKEditor extends Field
+class CKEditor extends Textarea
 {
     public static $js = [
         '/packages/ckeditor/ckeditor.js',

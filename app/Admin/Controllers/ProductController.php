@@ -36,6 +36,7 @@ class ProductController extends AdminController
         $grid->column("name", __('Title'));
         $grid->column("category.name", __('Category')); // Here is the point.
         $grid->label()->editable('select', ['' => 'None', 'new' => 'New', 'hot' => 'Hot']);
+        $grid->price()->editable();
         $grid->instock()->editable();
         $grid->tags()->label();
         $grid->column('created_at', __('Created at'));
@@ -82,35 +83,87 @@ class ProductController extends AdminController
     protected function form()
     {
         $form = new Form(new Product);
-		$form->select('category_id', trans('admin.parent_id'))->options(Category::selectOptions(function($query){
-            if($this->request->type) return $query->where('type', $this->request->type);
-            return $query;
-        }));
-		
-		
+		$form->column(6, function($form){
+			$form->select('category_id', trans('Category'))
+				->options(Category::selectOptions(function($query){
+					if($this->request->type) return $query->where('type', $this->request->type);
+					return $query;
+				}))
+				->disableHorizontal();
+		});
+		$form->column(6, function($form){
+			$form->select('label', 'Label')
+				->options(['' => 'None', 'new' => 'New', 'hot' => 'Hot'])
+				->disableHorizontal();
+		});
 		  
         $locales = \Config::get('app.locales');
         foreach ($locales as $locale) {
-            $form->text("name_{$locale}", trans('admin.title')."(".__("common.locales.{$locale}").")")->rules('required');
+			$lang = "(".__("common.locales.{$locale}").")";
+			$form->column(6, function($form) use ($locale,$lang) {
+				$form->text("name_{$locale}", trans('admin.title').$lang)
+					->rules('required')
+					->disableHorizontal();
+				$form->textarea("desc_{$locale}", trans('admin.description').$lang)
+					->rules('required')
+					->disableHorizontal();
+				$form->ckeditor("content_{$locale}", __('Content').$lang)
+					->rules('required')
+					->disableHorizontal();
+			});
         }
-        $form->number('price', 'Price')->min(10);
-        $form->number('instock', 'Instock')->min(10);
-        $form->select('label', 'Label')->options(['' => 'None', 'new' => 'New', 'hot' => 'Hot']);
-		$form->image('image');
-		foreach ($locales as $locale) {
-            $form->text("desc_{$locale}", trans('admin.description')."(".__("common.locales.{$locale}").")")->rules('required');
-        }
-        foreach ($locales as $locale) {
-            $form->ckeditor("content_{$locale}", __('Content')."(".__("common.locales.{$locale}").")")->rules('required');
-        }
-		$form->multipleImage('pictures')->removable()->sortable();
-        $form->tags('tags');
-        $form->table('extra','Extra', function ($form) {
-
-            $form->color('color','Color');
-            $form->select('size', 'Size')->options(['' => 'None', 'S' => 'S', 'M' => 'M']);
-
+		$form->column(3, function($form){
+			$form->number('price', 'Price')
+				->min(10)
+				->rules(['required','numeric'])
+				->disableHorizontal();
+		});
+		$form->column(3, function($form){
+			$form->number('instock', 'Instock')
+				->min(10)
+				->disableHorizontal();
+		});
+        $form->column(6, function($form){
+			$form->tags('tags')
+				->disableHorizontal();
+		});
+		$form->column(12, function($form){
+			$form->image('image')
+				->disableHorizontal();
+		});
+		$form->column(12, function($form){
+			$form->multipleImage('pictures')
+				->removable()
+				->sortable()
+				->disableHorizontal();
         });
+		$form->column(6, function($form){
+			$field = $form->table('colors','Colors', function ($form) {
+
+				$form->text('color','Color');
+
+			})
+			->with(function($value,$field){
+				$field->setView('admin.form.hasmanytable');
+				return $value;
+			})
+			->disableHorizontal();
+			//dd($field->getView());
+		});
+		$form->column(6, function($form){
+			$field = $form->table('sizes','Sizes', function ($form) {
+
+				
+				$form->text('size', 'Size');
+
+			})
+			->with(function($value,$field){
+				$field->setView('admin.form.hasmanytable');
+				return $value;
+			})
+			->disableHorizontal();
+			//dd($field->getView());
+		});
         return $form;
     }
 }
