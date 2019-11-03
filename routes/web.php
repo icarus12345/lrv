@@ -29,5 +29,12 @@ Route::group([
 });
 
 Route::get('/home', 'HomeController@index');
+Route::get('/about', 'HomeController@about');
 Route::get('/product/detail/{id}', 'ProductController@detail')->where(['id'=>'[0-9]+']);
+
+Route::get('/shop', 'ProductController@index');
+Route::post('/shop', 'ProductController@index');
+Route::get('/category/{id}', 'ProductController@category')->where(['id'=>'[0-9]+']);
+Route::post('/category/{id}', 'ProductController@category')->where(['id'=>'[0-9]+']);
+
 Route::get('locale/{locale}', 'HomeController@locale')->name('locale');

@@ -1117,6 +1117,7 @@ span.sale-label {
     color: #cfcfcf;
     cursor: pointer;
 }
+.rating-icon .active,
 .rating-icon i:hover {
     color: #C38748;
 }
@@ -2593,18 +2594,29 @@ h3.footer-widget-title {
     height: 100%;
     overflow: hidden;
 }
-.sidebar-selects ul li {}
+.sidebar-selects ul li {
+    position: relative;
+}
 .sidebar-selects ul li + li {
     margin-top: 10px;
     line-height: 1;
 }
+.sidebar-selects ul li label,
 .sidebar-selects ul li a {
     position: relative;
     padding-left: 25px;
     line-height: 16px;
     display: block;
 }
+
+.sidebar-selects ul li label input[type="checkbox"]{
+    opacity: 0;
+    position: absolute;
+    left: 0;top:0;
+    }
+.sidebar-selects ul li label input[type="checkbox"] + span::before,
 .sidebar-selects ul li a::before,
+.sidebar-selects ul li label input[type="checkbox"] + span::after,
 .sidebar-selects ul li a::after {
     content: "";
     position: absolute;
@@ -2615,6 +2627,7 @@ h3.footer-widget-title {
     line-height: 16px;
     border: 1px solid #dddddd;
 }
+.sidebar-selects ul li label input[type="checkbox"] + span::after,
 .sidebar-selects ul li a::after {
     content: "\f00c";
     font-family: Fontawesome;
@@ -2624,10 +2637,12 @@ h3.footer-widget-title {
     color: #ffffff;
     opacity: 0;
 }
+.sidebar-selects ul li label input[type="checkbox"]:checked + span::before,
 .sidebar-selects ul li a.active::before {
     border-color: #3db54a;
     background-color: #3db54a;
 }
+.sidebar-selects ul li label input[type="checkbox"]:checked + span::after,
 .sidebar-selects ul li a.active::after {
     opacity: 1;
 }
@@ -3226,3 +3241,27 @@ h3.widget-title-modal {
     color: #ffffff;
 }
 .float-rg{float: right;}
+.prod-thumb{
+    padding-bottom: 130%;
+    box-shadow: 0 0 2px rgba(0,0,0,.1)
+}
+.h2x{
+        padding-bottom: calc((100% + 30px)*174.5/100);
+}
+.w2x{
+    padding-bottom: 53%
+
+}
+.h1x{
+    padding-bottom: 70%;
+}
+.cover{
+    background-repeat: no-repeat;
+    background-position: center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+}
+
+
+

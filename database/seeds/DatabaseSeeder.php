@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
 
         DB::unprepared(file_get_contents(database_path('seeds/category.sql')));
         DB::unprepared(file_get_contents(database_path('seeds/banners.sql')));
+        DB::unprepared(file_get_contents(database_path('seeds/size-color.sql')));
 
         factory(App\Models\Product::class, 20)->create();
 

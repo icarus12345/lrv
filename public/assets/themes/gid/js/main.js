@@ -165,16 +165,7 @@
     /*----------------------------
         Price Range
     ------------------------------ */  
-    $("#price-range").slider({
-        range: true,
-        min: 40,
-        max: 600,
-        values: [ 60, 570 ],
-        slide: function( event, ui ) {
-            $(".price-amount").text("£"+ui.values[0]+" - £"+ui.values[1]);
-        }
-    });
-    $(".price-amount").text("£"+$("#price-range").slider("values", 0)+" - £"+$("#price-range").slider("values", 1));
+    
  
     /*--------------------------------
         Custom Toggle Function

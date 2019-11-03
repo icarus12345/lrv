@@ -26,16 +26,16 @@ class CreateProductsTable extends Migration
             $table->text('content_en')->nullable();
             $table->text('pictures')->nullable();
             $table->integer('review_num')->default(0);
+            $table->integer('discount')->default(0);
             $table->decimal('rating', 2, 1)->default(0);
             $table->enum('status', ['Active','Inactive'])->default('Active');
             $table->string('type',50)->nullable();
 
-			$table->integer('instock')->default(0);
+            $table->integer('instock')->default(0);
+			$table->integer('sold')->default(0);
             $table->string('tags')->nullable();
             $table->string('label',50)->nullable();
 
-            $table->text('colors')->nullable();
-            $table->text('sizes')->nullable();
 	
             $table->timestamps();
         });

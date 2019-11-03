@@ -3,7 +3,7 @@
 	<div class="container-fluid">
 	
 		<div class="section-title title-shape text-center">
-			<h4 class="title">Featured products</h4>
+			<h4 class="title">Similar products</h4>
 		</div>
 	
 		<div class="row">

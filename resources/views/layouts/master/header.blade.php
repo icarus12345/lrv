@@ -46,17 +46,17 @@
 				<div class="position-static col-auto d-none d-lg-block">
 					<nav class="main-menu">
 						<ul>
-							<li><a href="home.html">{{__('common.home')}}</a></li>
-							<li><a href="about.html">About</a></li>
-							<li><a href="shop.html">Shop</a>
+							<li><a href="/home">{{__('common.home')}}</a></li>
+							<li><a href="/about">About</a></li>
+							<li><a href="/shop">Shop</a>
 								<ul class="mega-menu">
 									@foreach($categories as $item)
 									<li>
-										<a class="mega-title" href="#">{{$item->name}}</a>
+										<a class="mega-title" href="/category/{{$item->id}}">{{$item->name}}</a>
 										
 										<ul>
 											@foreach($item->children as $subitem)
-											<li><a href="office-building.html">{{$subitem->name}}</a></li>
+											<li><a href="/category/{{$subitem->id}}">{{$subitem->name}}</a></li>
 											@endforeach
 										</ul>
 									</li>
@@ -66,8 +66,8 @@
 									</li>
 								</ul>
 							</li>
-							<li><a href="blog.html">Blog</a></li>
-							<li><a href="contact.html">Contact</a></li>
+							<li><a href="/blog">Blog</a></li>
+							<li><a href="/contact">Contact</a></li>
 						</ul>
 					</nav>
 				</div>
@@ -84,7 +84,7 @@
 									<div class="content">
 										<a href="product-details.html" class="title">Printed Dress</a>
 										<span class="details">S, Orange</span>
-										<span class="price">1 x Åí 16.00</span>
+										<span class="price">1 x ¬Å‚Äô 16.00</span>
 										<a href="#" class="remove"><i class="fa fa-close"></i></a>
 									</div>
 								</li>
@@ -93,13 +93,13 @@
 									<div class="content">
 										<a href="product-details.html" class="title">Printed Summer Dress</a>
 										<span class="details">S, Orange</span>
-										<span class="price">2 x Åí 36.00</span>
+										<span class="price">2 x ¬Å‚Äô 36.00</span>
 										<a href="#" class="remove"><i class="fa fa-close"></i></a>
 									</div>
 								</li>
 							</ul>
 							<div class="header-cart-total">
-								<h6 class="total">Total: <span class="total">Åí 86.00</span></h6>
+								<h6 class="total">Total: <span class="total">¬Å‚Äô 86.00</span></h6>
 							</div>
 							<div class="header-cart-buttons">
 								<a class="button" href="shopping_cart.html">Checkout<i class="fa fa-angle-right"></i></a>

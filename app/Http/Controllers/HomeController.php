@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Banner;
 use App\Models\Product;
+use App\Models\Content;
 class HomeController extends Controller
 {
+    public $data;
     /**
      * Create a new controller instance.
      *
@@ -15,6 +17,11 @@ class HomeController extends Controller
      */
     public function __construct()
     {
+        $rows = Category::where('type', 'gid')->get();
+        $tree = Category::buildNested($rows);
+        $this->data = [
+            'categories'    => $tree,
+        ];
     }
 
     /**
@@ -24,17 +31,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-		$rows = Category::where('type', 'gid')->get();
-		$tree = Category::buildNested($rows);
         $products = Product::feature()->offset(0)->limit(10)->get();
         $sliders = Banner::where('type','slider')->offset(0)->limit(5)->get();
 		$banners = Banner::where('type','banner')->offset(0)->limit(5)->get();
-        return view('home',[
-			'categories'	=> $tree,
+        return view('home', array_merge([
             'products'  => $products,
             'sliders'   => $sliders,
 			'banners'	=> $banners,
-		]);
+		], $this->data));
     }
 
     /**
@@ -57,5 +61,10 @@ class HomeController extends Controller
         \Session::put('locale', $locale);
 
         return redirect()->back();
+    }
+
+    public function about(){
+        $this->data['content'] = Content::findOrFail(1);
+        return view('about',$this->data);
     }
 }

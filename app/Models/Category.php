@@ -30,6 +30,18 @@ class Category extends BaseModel
         return $this->belongsTo(\App\Models\Category::class);
     }
 
+    public function childs()
+    {
+        return $this->hasMany(\App\Models\Category::class, 'parent_id');
+    }
+
+    public function products()
+    {
+        return $this->hasMany(\App\Models\Product::class);
+    }
+
+
+
     /**
      * Get the name.
      *

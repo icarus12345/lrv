@@ -4,6 +4,9 @@ namespace App\Admin\Controllers;
 
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Color;
+use App\Models\Size;
+
 use App\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -38,6 +41,7 @@ class ProductController extends AdminController
         $grid->label()->editable('select', ['' => 'None', 'new' => 'New', 'hot' => 'Hot']);
         $grid->price()->editable();
         $grid->instock()->editable();
+        $grid->discount()->editable();
         $grid->tags()->label();
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
@@ -112,15 +116,21 @@ class ProductController extends AdminController
 					->disableHorizontal();
 			});
         }
-		$form->column(3, function($form){
+		$form->column(2, function($form){
 			$form->number('price', 'Price')
 				->min(10)
 				->rules(['required','numeric'])
 				->disableHorizontal();
 		});
-		$form->column(3, function($form){
+		$form->column(2, function($form){
 			$form->number('instock', 'Instock')
-				->min(10)
+				->min(0)
+				->disableHorizontal();
+		});
+		$form->column(2, function($form){
+			$form->number('discount', 'Discount')
+				->min(0)
+				->max(100)
 				->disableHorizontal();
 		});
         $form->column(6, function($form){
@@ -129,40 +139,46 @@ class ProductController extends AdminController
 		});
 		$form->column(12, function($form){
 			$form->image('image')
+				->move('product')
 				->disableHorizontal();
 		});
 		$form->column(12, function($form){
 			$form->multipleImage('pictures')
+				->move('product')
 				->removable()
 				->sortable()
 				->disableHorizontal();
         });
 		$form->column(6, function($form){
-			$field = $form->table('colors','Colors', function ($form) {
+			// $field = $form->table('colors','Colors', function ($form) {
 
-				$form->text('color','Color');
+			// 	$form->text('color','Color');
 
-			})
-			->with(function($value,$field){
-				$field->setView('admin.form.hasmanytable');
-				return $value;
-			})
-			->disableHorizontal();
-			//dd($field->getView());
+			// })
+			// ->with(function($value,$field){
+			// 	$field->setView('admin.form.hasmanytable');
+			// 	return $value;
+			// })
+			// ->disableHorizontal();
+			$form->multipleSelect('colors')
+				->options(Color::pluck('name', 'id'))
+				->disableHorizontal();
 		});
 		$form->column(6, function($form){
-			$field = $form->table('sizes','Sizes', function ($form) {
+		// 	$field = $form->table('sizes','Sizes', function ($form) {
 
 				
-				$form->text('size', 'Size');
+		// 		$form->text('size', 'Size');
 
-			})
-			->with(function($value,$field){
-				$field->setView('admin.form.hasmanytable');
-				return $value;
-			})
-			->disableHorizontal();
-			//dd($field->getView());
+		// 	})
+		// 	->with(function($value,$field){
+		// 		$field->setView('admin.form.hasmanytable');
+		// 		return $value;
+		// 	})
+		// 	->disableHorizontal();
+			$form->multipleSelect('sizes')
+				->options(Size::pluck('name', 'id'))
+				->disableHorizontal();
 		});
         return $form;
     }
