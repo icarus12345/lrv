@@ -4,9 +4,13 @@
 		<div class="breadcrumbs-area">
             <div class="container">
                 <ul class="breadcrumbs">
-                    <li><a href="index.html"><i class="fa fa-home"></i>Home</a></li>
-                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="/"><i class="fa fa-home"></i>Home</a></li>
+					@if(isset($category))
+                    <li><a href="/shop">Shop</a></li>
                     <li class="active">{{$category->name}}</li>
+					@else
+					<li class="active">Shop</li>
+					@endif
                 </ul>
             </div>
         </div>
@@ -19,7 +23,7 @@
                     
                     <div class="col-lg-9 col-12 mb-30">
                     
-                        <div class="page-category-banner mb-30"><img src="img/bedroom.jpg" alt="" /></div>
+                        <div class="page-category-banner mb-30"><img src="/assets/themes/gid/img/bedroom.jpg" alt="" /></div>
                         
                         <!--Shop Toolbar Start-->
                         <div class="shop-toolbar">
@@ -59,12 +63,16 @@
                                             <div class="product-img-content">
                                                 <!--Product Image-->
                                                 <div class="product-img">
-                                                    <a href="product-details.html" title="{{$item->name}}">
+                                                    <a href="/product/detail/{{$item->id}}" title="{{$item->name}}">
                                                         <div class="cover prod-thumb" style="background-image:url('{{$item->image_path}}')" ></div>
                                                     </a>                                            
                                                 </div>
-                                                @if($item->label)
-												<span class="new-label">{{$item->label}}</span>
+                                                @if($item->labels)
+													<span class="product-labels">
+													@foreach($item->labels as $label) 
+													<span class="{{$label}}-label">{{$label}}</span>
+													@endforeach
+													</span>
 												@endif
                                                 <!--Product Action-->
                                                 <div class="product-action">
@@ -73,7 +81,11 @@
                                                 </div>
                                             </div>
                                             <div class="product-content">
-                                                <h5><a href="product-details.html" title="{{$item->name}}">{{$item->name}}</a></h5>
+                                                <h5>
+													<a href="/product/detail/{{$item->id}}" title="{{$item->name}}">
+													{{$item->name}}
+													</a>
+												</h5>
                                                 <!--Product Rating-->
                                                 <div class="rating-icon">
                                                     {!!$item->star!!}
@@ -99,14 +111,14 @@
                                             <div class="col-md-4 col-12 mb-20">
                                                <div class="left-item">
                                                     <!--Product Image-->
-                                                    <a href="product-details.html" title="{{$item->name}}">
+                                                    <a href="/product/detail/{{$item->id}}" title="{{$item->name}}">
                                                         <div class="cover prod-thumb" style="background-image:url('{{$item->image_path}}')" ></div>
                                                     </a>
                                                 </div>
                                             </div>
                                             <div class="col-md-8 col-12 mb-20">
                                                 <div class="deal-product-content ">
-                                                    <h5><a href="product-details.html" title="{{$item->name}}">{{$item->name}}</a></h5>
+                                                    <h5><a href="/product/detail/{{$item->id}}" title="{{$item->name}}">{{$item->name}}</a></h5>
                                                     <!--Product Price-->
                                                     <div class="product-price">
                                                         <span class="new-price">{!!$item->price_with_discount_format!!}</span>
@@ -149,7 +161,43 @@
                             <!--Sidebar Area Title Start-->
 							<form method="POST" id="search">                            
                           		@csrf
-                            
+								<!--Category Start-->
+	                            <div class="sidebar">
+	                               
+	                                <h6 class="sidebar-title">Categories</h6>
+	                                
+	                                <div class="sidebar-selects">
+	                                    <ul>
+	                                    	@foreach($categories as $item)
+	                                        <li>
+												<label>
+													<input 
+														type="checkbox" 
+														name="categories[]" 
+														value="{{$item->id}}" 
+														@if(in_array($item->id,\Session::get('categories')??[])) checked @endif>
+													<span> {{$item->name}}</span>
+												</label>
+												<ul style="padding-left: 24px">
+													@foreach($item->children as $subitem)
+														<label>
+															<input 
+																type="checkbox" 
+																name="categories[]" 
+																value="{{$subitem->id}}" 
+																@if(in_array($subitem->id,\Session::get('categories')??[])) checked @endif>
+															<span> {{$subitem->name}}</span>
+														</label>
+													@endforeach
+												</ul>
+											</li>
+	                                        @endforeach
+	                                    </ul>
+	                                </div>
+	                                
+	                            </div>
+								
+								
 	                            <!--Sidebar Start-->
 	                            <div class="sidebar">
 	                               
@@ -174,7 +222,16 @@
 	                                <div class="sidebar-selects">
 	                                    <ul>
 	                                    	@foreach(\App\Models\Size::countProduct()->get() as $size)
-	                                        <li><label><input type="checkbox" name="size[]" value="{{$size->id}}" @if(in_array($size->id,\Session::get('size'))) checked @endif><span> {{$size->name}} ( {{$size->total}} )</span></label></li>
+	                                        <li>
+												<label>
+													<input 
+														type="checkbox" 
+														name="size[]" 
+														value="{{$size->id}}" 
+														@if(in_array($size->id,\Session::get('size')??[])) checked @endif>
+													<span> {{$size->name}} ( {{$size->total}} )</span>
+												</label>
+											</li>
 	                                        @endforeach
 	                                    </ul>
 	                                </div>
@@ -189,7 +246,16 @@
 	                                <div class="sidebar-selects">
 	                                    <ul>
 	                                        @foreach(\App\Models\Color::countProduct()->get() as $color)
-	                                        <li><label><input type="checkbox" name="color[]" value="{{$color->id}}" @if(in_array($color->id,\Session::get('color'))) checked @endif><span> {{$color->name}} ( {{$color->total}} )</span></label></li>
+	                                        <li>
+												<label>
+													<input 
+														type="checkbox" 
+														name="color[]" 
+														value="{{$color->id}}" 
+														@if(in_array($color->id,\Session::get('color')??[])) checked @endif>
+													<span> {{$color->name}} ( {{$color->total}} )</span>
+												</label>
+											</li>
 	                                        @endforeach
 	                                    </ul>
 	                                </div>
@@ -216,18 +282,43 @@
 @section('js')
 <script type="text/javascript">
 	$(document).ready(()=>{
+		var max = {{App\Models\Product::max('price')}};
+		var min_price = {{\Session::get('min_price')??0}};
+		var max_price = {{\Session::get('max_price')??0}} || max;
+		var unit = 1000;
+		function format(num){
+			var unit = '';
+			if(num >= 1000) {
+				unit = "K";
+				num = (num/1000).toFixed(0)
+			}
+			if(num >= 1000) {
+				unit = "M";
+				num = (num/1000).toFixed(1)
+			}
+			return num + unit;
+		}
+		function slide(){
+			var min_price = $("#price-range").slider("values", 0);
+			var max_price = $("#price-range").slider("values", 1);
+			$(".price-amount").text(format(min_price) + '-' + format(max_price))
+			$('#min_price').val(min_price)
+			$('#max_price').val(max_price)
+		}
 		$("#price-range").slider({
 	        range: true,
 	        min: 0,
-	        max: {{App\Models\Product::max('price')}},
-	        values: [ $('#min_price').val(), $('#max_price').val() ],
-	        slide: function( event, ui ) {
-	            $(".price-amount").text("$"+ui.values[0]+" - $"+ui.values[1]);
-	            $('#min_price').val(ui.values[0])
-	            $('#max_price').val(ui.values[1])
-	        }
+	        max: max,
+			step: unit,
+	        values: [ min_price, max_price ],
+	        slide: slide
 	    });
-	    $(".price-amount").text("$"+$("#price-range").slider("values", 0)+" - $"+$("#price-range").slider("values", 1));
+		slide();
+	    //$(".price-amount").text("$"+$("#price-range").slider("values", 0)+" - $"+$("#price-range").slider("values", 1));
+		$('[name="categories[]"]').change(function(){
+			console.log(this.checked)
+			$(this).parent().next().find('[name="categories[]"]').prop("checked", this.checked)
+		})
 	})
 </script>
 @endsection

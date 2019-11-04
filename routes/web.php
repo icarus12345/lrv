@@ -34,6 +34,7 @@ Route::get('/product/detail/{id}', 'ProductController@detail')->where(['id'=>'[0
 
 Route::get('/shop', 'ProductController@index');
 Route::post('/shop', 'ProductController@index');
+Route::get('/add-to-cart', 'ShopController@addToCart');
 Route::get('/category/{id}', 'ProductController@category')->where(['id'=>'[0-9]+']);
 Route::post('/category/{id}', 'ProductController@category')->where(['id'=>'[0-9]+']);
 

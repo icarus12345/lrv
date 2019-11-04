@@ -77,26 +77,26 @@
                                 <p>{{$product->instock}} Items <span class="badge badge-success">In stock</span></p>
                             </div>
                             <div class="size-color-options">
+								@if($product->sizes->count())
                                 <div class="option">
                                     <label>Size</label>
                                     <select>
-                                        @if($product->sizes)
                                         @foreach($product->sizes as $size)
                                         <option value="{{$size->id}}">{{$size->name}}</option>
                                         @endforeach
-                                        @endif
                                     </select>
                                 </div>
+								@endif
+								@if($product->colors->count())
                                 <div class="option">
                                     <label>Color</label>
                                     <select>
-                                        @if($product->colors)
                                         @foreach($product->colors as $color)
                                         <option value="{{$color->id}}">{{$color->name}}</option>
                                         @endforeach
-                                        @endif
                                     </select>                                       
                                 </div>
+								@endif
                             </div>
                             <div class="actions">
                                 <div class="action single-product-quantity product-quantity">

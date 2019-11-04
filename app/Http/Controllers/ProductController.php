@@ -17,8 +17,9 @@ class ProductController extends Controller
     {
         if($request->min_price) \Session::put('min_price', $request->min_price);
         if($request->max_price) \Session::put('max_price', $request->max_price);
-        if($request->size) \Session::put('size', $request->size);
-        if($request->color) \Session::put('color', $request->color);
+        \Session::put('size', $request->size);
+        \Session::put('color', $request->color);
+        \Session::put('categories', $request->categories);
     }
 
     /**
@@ -29,16 +30,24 @@ class ProductController extends Controller
     public function index()
     {
 		$rows = Category::where('type', 'gid')->get();
-		$tree = Category::buildNested($rows);
-        $products = Product::feature(10)->get();
+        $tree = Category::buildNested($rows);
+		$colors = \Session::get('color');
+		$min_price = \Session::get('min_price');
+		$max_price = \Session::get('max_price');
+		$categories = \Session::get('categories');
+        $products = Product::categoryIn($categories)
+			->colorIn($colors)
+			->priceIn($min_price, $max_price)
+			->paginate(9);
         $sliders = Banner::where('type','slider')->offset(0)->limit(5)->get();
-		$banners = Banner::where('type','banner')->offset(0)->limit(5)->get();
-        return view('home',[
-			'categories'	=> $tree,
+        $banners = Banner::where('type','banner')->offset(0)->limit(5)->get();
+        return view('shop',[
+            'categories'    => $tree,
+           
             'products'  => $products,
             'sliders'   => $sliders,
-			'banners'	=> $banners,
-		]);
+            'banners'   => $banners,
+        ]);
     }
 
     /**
@@ -48,14 +57,19 @@ class ProductController extends Controller
      */
     public function category(Request $request, $category_id)
     {
-        //dd(\Session::get('color'));
         $rows = Category::where('type', 'gid')->get();
         $tree = Category::buildNested($rows);
         $category = Category::findOrFail($category_id);
-        $products = Product::byCategory($category)->paginate(9);
+		$colors = \Session::get('color');
+		$min_price = \Session::get('min_price');
+		$max_price = \Session::get('max_price');
+        $products = Product::byCategory($category)
+			->colorIn($colors)
+			->priceIn($min_price, $max_price)
+			->paginate(9);
         $sliders = Banner::where('type','slider')->offset(0)->limit(5)->get();
         $banners = Banner::where('type','banner')->offset(0)->limit(5)->get();
-        return view('category',[
+        return view('shop',[
             'categories'    => $tree,
             'category'    => $category,
             'products'  => $products,

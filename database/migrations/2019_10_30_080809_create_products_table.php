@@ -35,6 +35,7 @@ class CreateProductsTable extends Migration
 			$table->integer('sold')->default(0);
             $table->string('tags')->nullable();
             $table->string('label',50)->nullable();
+            $table->string('labels')->nullable();
 
 	
             $table->timestamps();

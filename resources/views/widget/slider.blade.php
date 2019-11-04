@@ -7,10 +7,14 @@
 				<div class="bend niceties preview-1">
 					<div id="ensign-nivoslider-3" class="slides"> 
 						@if($sliders[0])
-					   	<a href="{{$sliders[0]->link}}"><img src="{{$sliders[0]->image}}" alt="{{$sliders[0]->name}}"/></a>
+					   	<a href="{{$sliders[0]->link}}">
+							<div class="cover cell-1x1" style="background-image:url('{{$sliders[0]->image}}');"></div>
+						</a>
 					   	@endif
 						@if($sliders[1])
-					   	<a href="{{$sliders[1]->link}}"> <img src="{{$sliders[1]->image}}" alt="{{$sliders[1]->name}}"/></a>
+					   	<a href="{{$sliders[1]->link}}">
+							<div class="cover h1x" style="background-image:url('{{$sliders[1]->image}}');"></div>
+						</a>
 					  	 @endif
 					</div>
 				</div>
@@ -23,7 +27,9 @@
 				<div class="col-12">
 					<div class="banner-image">
 						@if($sliders[2])
-					   	<a href="{{$sliders[2]->link}}"><img src="{{$sliders[2]->image}}" alt="{{$sliders[2]->name}}"/></a>
+					   	<a href="{{$sliders[2]->link}}">
+							<div class="cover cell-2x1" style="background-image:url('{{$sliders[3]->image}}');"></div>
+						</a>
 					   	@endif
 					</div>
 				</div>
@@ -32,14 +38,18 @@
 						<div class="col-6">
 							<div class="banner-image">
 								@if($sliders[3])
-							   	<a href="{{$sliders[3]->link}}"><img src="{{$sliders[3]->image}}" alt="{{$sliders[3]->name}}"/></a>
+							   	<a href="{{$sliders[3]->link}}">
+									<div class="cover cell-1x1" style="background-image:url('{{$sliders[3]->image}}');"></div>
+								</a>
 							   	@endif
 							</div>                            
 						</div>
 						<div class="col-6">
 							<div class="banner-image">
 								@if($sliders[4])
-							   	<a href="{{$sliders[4]->link}}"><img src="{{$sliders[4]->image}}" alt="{{$sliders[4]->name}}"/></a>
+							   	<a href="{{$sliders[4]->link}}">
+									<div class="cover cell-1x1" style="background-image:url('{{$sliders[4]->image}}');"></div>
+								</a>
 							   	@endif
 							</div>                            
 						</div>

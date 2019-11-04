@@ -23,6 +23,7 @@ class Product extends BaseModel
 		'status',
         'type',
         'label',
+        'labels',
         'instock',
         'discount',
         'sold',
@@ -35,6 +36,7 @@ class Product extends BaseModel
         //'colors' => 'json',
         //'sizes' => 'json',
         'pictures' => 'array',
+        'labels' => 'array',
     ];
 
     public function category()
@@ -85,6 +87,7 @@ class Product extends BaseModel
         
         return $this->{"content_{$this->locale}"};
     }
+	
 	public function setPicturesAttribute($pictures)
 	{
 		if (is_array($pictures)) {
@@ -94,7 +97,19 @@ class Product extends BaseModel
 
 	public function getPicturesAttribute()
 	{
-		return json_decode($this->attributes['pictures'], true);
+		return json_decode($this->attributes['pictures'], true)??[];
+	}
+	
+	public function setLabelsAttribute($labels)
+	{
+		if (is_array($labels)) {
+			$this->attributes['labels'] = json_encode($labels,true);
+		}
+	}
+
+	public function getLabelsAttribute()
+	{
+		return json_decode($this->attributes['labels'], true)??[];
 	}
 
  //    public function setColorsAttribute($colors)
@@ -136,6 +151,7 @@ class Product extends BaseModel
         $attributes['name'] = $this->name;
         $attributes['desc'] = $this->desc;
         $attributes['pictures'] = $this->pictures;
+        $attributes['labels'] = $this->labels;
         $attributes['content'] = $this->content;
 		$attributes['image'] = $this->image;
 		//$attributes['colors'] = $this->colors;
@@ -170,6 +186,35 @@ class Product extends BaseModel
             });
     }
 
+	public function scopeCategoryIn($query, $category_ids)
+    {
+		if($category_ids) {
+			return $query->whereIn('category_id',$category_ids);
+		}
+		return $query;
+    }
+	
+	public function scopeColorIn($query, $color_ids)
+    {
+		
+		if($color_ids) {
+			return $query->whereHas('product_colors', function ($query) use ($color_ids) {
+				$query->whereIn('color_id', $color_ids);
+				
+			});
+		}
+		
+		return $query;
+    }
+	public function scopePriceIn($query, $min = 0, $max = 0)
+    {
+		
+		if($max) {
+			return $query->whereBetween(\DB::raw('price*(100-discount)/100'), [$min, $max]);
+		}
+		
+		return $query;
+    }
 
     /**
      * Scopes.
@@ -229,16 +274,30 @@ class Product extends BaseModel
         }
     }
 
-
-	
 	public function getPriceWithFormatAttribute()
 	{
-		return number_format($this->attributes['price']) . '<sup>₫</sup>';
+		$price = \App\Helpers::formatPrice($this->attributes['price']??0);
+		if($this->locale == 'vi'){
+			return $price . '<sup>₫</sup>';
+		} elseif($this->locale == 'en'){
+			return "$".$price;
+		} else {
+			return $price;
+		}
 	}
+	
+	
 
     public function getPriceWithDiscountFormatAttribute()
     {
-        return number_format($this->attributes['price'] - $this->attributes['price']*$this->attributes['discount']/100) . '<sup>₫</sup>';
+		$price = \App\Helpers::formatPrice($this->attributes['price'] - $this->attributes['price']*$this->attributes['discount']/100);
+		if($this->locale == 'vi'){
+			return $price . '<sup>₫</sup>';
+		} elseif($this->locale == 'en'){
+			return "$".$price;
+		} else {
+			return $price;
+		}
     }
 
     public function getStarAttribute()

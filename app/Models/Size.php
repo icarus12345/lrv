@@ -18,9 +18,9 @@ class Size extends Model
     public function scopeCountProduct($query)
     {
         return $query
-        	->select('sizes.*')
+        	->select(['sizes.id','sizes.name'])
         	->addSelect(\DB::raw('count(*) as total'))
             ->leftJoin('product_sizes','sizes.id','=','product_sizes.size_id')
-            ->groupBy('sizes.id');
+            ->groupBy(['sizes.id','sizes.name']);
     }
 }

@@ -19,9 +19,9 @@ class Color extends Model
     public function scopeCountProduct($query)
     {
         return $query
-        	->select('colors.*')
+        	->select(['colors.id','colors.name'])
         	->addSelect(\DB::raw('count(*) as total'))
             ->leftJoin('product_colors','colors.id','=','product_colors.color_id')
-            ->groupBy('colors.id');
+            ->groupBy(['colors.id','colors.name']);
     }
 }

@@ -22,7 +22,7 @@
 								</a>		                                    
 							</div>
 							@if($item->label)
-							<span class="new-label">{{$item->label}}</span>
+							<span class="{{$item->label}}-label">{{$item->label}}</span>
 							@endif
 							<!--Product Action-->
 							<div class="product-action">

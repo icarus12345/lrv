@@ -38,7 +38,8 @@ class ProductController extends AdminController
         $grid->column('id', __('Id'));
         $grid->column("name", __('Title'));
         $grid->column("category.name", __('Category')); // Here is the point.
-        $grid->label()->editable('select', ['' => 'None', 'new' => 'New', 'hot' => 'Hot']);
+        //$grid->label()->editable('select', ['' => 'None', 'new' => 'New', 'hot' => 'Hot', 'sale' => 'Sale']);
+		$grid->column('labels')->label();
         $grid->price()->editable();
         $grid->instock()->editable();
         $grid->discount()->editable();
@@ -96,8 +97,17 @@ class ProductController extends AdminController
 				->disableHorizontal();
 		});
 		$form->column(6, function($form){
+			/*
 			$form->select('label', 'Label')
 				->options(['' => 'None', 'new' => 'New', 'hot' => 'Hot'])
+				->disableHorizontal();
+			*/
+			$form->checkbox('labels')
+				->options([
+					'new' => 'New',
+					'hot' => 'Hot',
+					'sale' => 'Sale',
+				])
 				->disableHorizontal();
 		});
 		  

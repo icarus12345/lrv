@@ -1063,24 +1063,26 @@ input[type="submit"]:hover {
 .product-img a img {
     width: 100%;
 }
-span.new-label, span.sale-label {
-    background: #3db54a none repeat scroll 0 0;
-    color: #ffffff;
-    display: block;
-    font-weight: 500;
-    height: 26px;
-    left: 0;
-    line-height: 26px;
-    position: absolute;
-    text-align: center;
+span.labels>span, 
+span.new-label, 
+span.hot-label, 
+span.sale-label {
     text-transform: uppercase;
-    top: 8px;
     transform: rotate(90deg);
-    width: 55px;
+    position: relative;
+    display: inline-block;
+    width: 58px;
+    text-align: center;
+    margin-left: -32px;
 }
 span.sale-label {
     background: #a2c147 none repeat scroll 0 0;
-    left: 35px;
+}
+span.hot-label {
+    background: orange;
+}
+span.new-label {
+    background: #3db54a;
 }
 .product-action {
     background: #3db54a none repeat scroll 0 0;
@@ -1239,7 +1241,20 @@ span.old-price {
     background: #3db54a none repeat scroll 0 0;
     color: #ffffff;
 }
-.deal-single-product span.new-label, .deal-single-product span.sale-label {
+.product-labels{
+    color: #ffffff;
+    display: block;
+    font-weight: 500;
+    height: 26px;
+    left: 24px;
+    line-height: 26px;
+    position: absolute;
+    text-align: center;
+    top: 8px;
+}
+.deal-single-product span.hot-label, 
+.deal-single-product span.new-label, 
+.deal-single-product span.sale-label {
     margin-left: 10px;
 }
 .left-item{
@@ -3262,6 +3277,15 @@ h3.widget-title-modal {
     -moz-background-size: cover;
     background-size: cover;
 }
-
-
-
+.cell-1x2{
+	padding-bottom:200%;
+	box-shadow: 0 0 2px rgba(0,0,0,.1)
+}
+.cell-2x1{
+	padding-bottom:50%;
+	box-shadow: 0 0 2px rgba(0,0,0,.1)
+}
+.cell-1x1{
+	padding-bottom:100%;
+	box-shadow: 0 0 2px rgba(0,0,0,.1)
+}
