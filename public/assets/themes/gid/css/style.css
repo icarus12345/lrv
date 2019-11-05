@@ -3260,6 +3260,9 @@ h3.widget-title-modal {
     padding-bottom: 130%;
     box-shadow: 0 0 2px rgba(0,0,0,.1)
 }
+.blog-thumb{
+	padding-bottom: 42.65%;
+}
 .h2x{
         padding-bottom: calc((100% + 30px)*174.5/100);
 }

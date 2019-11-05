@@ -5,8 +5,8 @@
         <div class="breadcrumbs-area">
             <div class="container">
                 <ul class="breadcrumbs">
-                    <li><a href="index.html"><i class="fa fa-home"></i>Home</a></li>
-                    <li class="active">About Us</li>
+                    <li><a href="/"><i class="fa fa-home"></i>{{__('common.home')}}</a></li>
+                    <li class="active">{{__('common.about')}}</li>
                 </ul>
             </div>
         </div>
@@ -15,7 +15,7 @@
         <div class="section-padding">
             <div class="container">
                 <div class="section-title text-center">
-                    <h3 class="title">About Us</h3>
+                    <h3 class="title">{{__('common.about')}}</h3>
                 </div>
                 <div class="row mb-n25">
                 

@@ -14,6 +14,19 @@ return [
     */
 
     'home' => 'Home',
+    'about' => 'About',
+    'shop' => 'Shop',
+    'blog' => 'Blog',
+    'contact' => 'Contact',
+    'category' => 'Category',
+    'recent_post' => 'Recent Post',
+    'popular_tags' => 'POPULAR TAGS',
+    'archives' => 'Archives',
+    'price' => 'Price',
+    'size' => 'Size',
+    'color' => 'Color',
+    'range' => 'Range',
+    'search' => 'Search',
 	'locales' => [
 		'en' => "English",
 		'vi' => "Tiếng việt",

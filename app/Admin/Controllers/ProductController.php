@@ -63,16 +63,19 @@ class ProductController extends AdminController
         $show->field('id', __('Id'));
 		$locales = \Config::get('app.locales');
         foreach ($locales as $locale) {
-            $show->field("name_{$locale}", trans('admin.title')."(".__("common.locales.{$locale}").")")->rules('required');
+			$lang = "(".__("common.locales.{$locale}").")";
+            $show->field("name_{$locale}", trans('admin.title').$lang)->rules('required');
         }
 		$show->image()->image();
 		$show->pictures()->label();
 		$show->price();
         foreach ($locales as $locale) {
-            $show->field("desc_{$locale}", trans('Description')."(".__("common.locales.{$locale}").")")->rules('required');
+			$lang = "(".__("common.locales.{$locale}").")";
+            $show->field("desc_{$locale}", trans('Description').$lang)->rules('required');
         }
 		foreach ($locales as $locale) {
-            $show->field("content_{$locale}", trans('Content')."(".__("common.locales.{$locale}").")")->rules('required');
+			$lang = "(".__("common.locales.{$locale}").")";
+            $show->field("content_{$locale}", trans('Content').$lang)->rules('required');
         }
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));

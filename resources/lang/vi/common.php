@@ -14,6 +14,19 @@ return [
     */
 
     'home' => 'Trang chủ',
+	'about' => 'Về chúng tôi',
+    'shop' => 'Shop',
+    'blog' => 'Tin tức',
+    'contact' => 'Liên hệ',
+    'category' => 'Danh mục',
+	'recent_post' => 'Bài viết mới',
+	'popular_tags' => 'Từ khóa nổi bật',
+	'archives' => 'Bài viết cũ',
+	'price' => 'Giá',
+    'size' => 'Kích cỡ',
+    'color' => 'Màu sắc',
+    'range' => 'Khoảng',
+	'search' => 'Tìm kiếm',
 	'locales' => [
 		'en' => "English",
 		'vi' => "Tiếng việt",

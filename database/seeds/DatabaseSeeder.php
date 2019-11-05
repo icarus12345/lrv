@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
         DB::unprepared(file_get_contents(database_path('seeds/size-color.sql')));
 
         factory(App\Models\Product::class, 20)->create();
+        factory(App\Models\Post::class, 20)->create();
 
 		/*
         Schema::disableForeignKeyConstraints();
