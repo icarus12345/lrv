@@ -319,5 +319,9 @@ class Product extends BaseModel
             ->offset(0)
             ->limit($num);
     }
-
+	
+	public function scopeNewest($query)
+    {
+        return $query->orderBy('id','desc');
+    }
 }

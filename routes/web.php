@@ -34,8 +34,12 @@ Route::get('/product/detail/{id}', 'ProductController@detail')->where(['id'=>'[0
 
 Route::get('/shop', 'ProductController@index');
 Route::post('/shop', 'ProductController@index');
-Route::get('/add-to-cart', 'ShopController@addToCart');
-Route::get('/category/{id}', 'ProductController@category')->where(['id'=>'[0-9]+']);
-Route::post('/category/{id}', 'ProductController@category')->where(['id'=>'[0-9]+']);
+Route::get('/shop/add-to-cart', 'ShopController@addToCart');
+Route::get('/shop/category/{id}', 'ProductController@category')->where(['id'=>'[0-9]+']);
+Route::post('/shop/category/{id}', 'ProductController@category')->where(['id'=>'[0-9]+']);
+Route::get('/blog', 'PostController@index');
+Route::post('/blog', 'PostController@index');
+Route::get('/blog/category/{id}', 'PostController@category')->where(['id'=>'[0-9]+']);
+Route::post('/blog/category/{id}', 'PostController@category')->where(['id'=>'[0-9]+']);
 
 Route::get('locale/{locale}', 'HomeController@locale')->name('locale');

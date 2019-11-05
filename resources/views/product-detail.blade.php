@@ -5,7 +5,7 @@
 	<div class="breadcrumbs-area">
 		<div class="container">
 			<ul class="breadcrumbs">
-				<li><a href="index.html"><i class="fa fa-home"></i>Home</a></li>
+				<li><a href="index.html"><i class="fa fa-home"></i>{{__('common.home')}}</a></li>
 				<li class="active">{{$product->name}}</li>
 			</ul>
 		</div>

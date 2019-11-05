@@ -35,7 +35,8 @@ class ProductController extends Controller
 		$min_price = \Session::get('min_price');
 		$max_price = \Session::get('max_price');
 		$categories = \Session::get('categories');
-        $products = Product::categoryIn($categories)
+        $products = Product::newest()
+			->categoryIn($categories)
 			->colorIn($colors)
 			->priceIn($min_price, $max_price)
 			->paginate(9);
@@ -63,7 +64,8 @@ class ProductController extends Controller
 		$colors = \Session::get('color');
 		$min_price = \Session::get('min_price');
 		$max_price = \Session::get('max_price');
-        $products = Product::byCategory($category)
+        $products = Product::newest()
+			->byCategory($category)
 			->colorIn($colors)
 			->priceIn($min_price, $max_price)
 			->paginate(9);

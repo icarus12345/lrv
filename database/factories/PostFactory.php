@@ -9,9 +9,11 @@ use Faker\Generator as Faker;
 $factory->define(Post::class, function (Faker $faker) {
     return [
         'category_id' => Category::inRandomOrder()->first()->id, 
-        'title_vi' => $faker->name, 
-		'title_en' => $faker->name,
-		'content_vi' => $faker->text,
-		'content_en' => $faker->text,
+        'title_vi' => $faker->paragraph(1), 
+		'title_en' => $faker->paragraph(1),
+		'desc_vi' => $faker->text(191),
+		'desc_en' => $faker->text(191),
+		'content_vi' => $faker->paragraph(5),
+		'content_en' => $faker->paragraph(5),
     ];
 });

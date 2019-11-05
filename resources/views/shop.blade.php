@@ -4,12 +4,12 @@
 		<div class="breadcrumbs-area">
             <div class="container">
                 <ul class="breadcrumbs">
-                    <li><a href="/"><i class="fa fa-home"></i>Home</a></li>
+                    <li><a href="/"><i class="fa fa-home"></i>{{__('common.home')}}</a></li>
 					@if(isset($category))
                     <li><a href="/shop">Shop</a></li>
                     <li class="active">{{$category->name}}</li>
 					@else
-					<li class="active">Shop</li>
+					<li class="active">{{__('common.shop')}}</li>
 					@endif
                 </ul>
             </div>
@@ -164,7 +164,7 @@
 								<!--Category Start-->
 	                            <div class="sidebar">
 	                               
-	                                <h6 class="sidebar-title">Categories</h6>
+	                                <h6 class="sidebar-title">{{__('common.category')}}</h6>
 	                                
 	                                <div class="sidebar-selects">
 	                                    <ul>
@@ -203,10 +203,10 @@
 	                            <!--Sidebar Start-->
 	                            <div class="sidebar">
 	                               
-	                                <h6 class="sidebar-title">Price</h6>
+	                                <h6 class="sidebar-title">{{__('common.price')}}</h6>
 	                                
 	                                <div class="sidebar-price">
-	                                    <span class="price-label">Range: <span class="price-amount"></span></span>
+	                                    <span class="price-label">{{__('common.range')}}: <span class="price-amount"></span></span>
 	                                    <div class="price-range-wrap">
 	                                        <div id="price-range"></div>
 	                                        <input type="hidden" id="min_price" name="min_price" value="{{\Session::get('min_price')}}">
@@ -219,7 +219,7 @@
 	                            <!--Sidebar Start-->
 	                            <div class="sidebar">
 	                               
-	                                <h6 class="sidebar-title">Size</h6>
+	                                <h6 class="sidebar-title">{{__('common.size')}}</h6>
 	                                
 	                                <div class="sidebar-selects">
 	                                    <ul>
@@ -243,7 +243,7 @@
 	                            <!--Sidebar Start-->
 	                            <div class="sidebar">
 	                               
-	                                <h6 class="sidebar-title">Color</h6>
+	                                <h6 class="sidebar-title">{{__('common.color')}}</h6>
 	                                
 	                                <div class="sidebar-selects">
 	                                    <ul>
@@ -264,7 +264,7 @@
 	                                
 	                            </div><!--Sidebar End-->
 
-	                            <button type="submit" class="btn btn-sm btn-block">Search</button>
+	                            <button type="submit" class="btn btn-sm btn-block">{{__('common.search')}}</button>
 	                        </form>
                             
                         </div><!--Sidebar Wrap End-->

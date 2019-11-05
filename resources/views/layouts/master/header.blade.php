@@ -47,16 +47,16 @@
 					<nav class="main-menu">
 						<ul>
 							<li><a href="/home">{{__('common.home')}}</a></li>
-							<li><a href="/about">About</a></li>
-							<li><a href="/shop">Shop</a>
+							<li><a href="/about">{{__('common.about')}}</a></li>
+							<li><a href="/shop">{{__('common.shop')}}</a>
 								<ul class="mega-menu">
 									@foreach($categories as $item)
 									<li>
-										<a class="mega-title" href="/category/{{$item->id}}">{{$item->name}}</a>
+										<a class="mega-title" href="/shop/category/{{$item->id}}">{{$item->name}}</a>
 										
 										<ul>
 											@foreach($item->children as $subitem)
-											<li><a href="/category/{{$subitem->id}}">{{$subitem->name}}</a></li>
+											<li><a href="/shop/category/{{$subitem->id}}">{{$subitem->name}}</a></li>
 											@endforeach
 										</ul>
 									</li>
@@ -66,8 +66,8 @@
 									</li>
 								</ul>
 							</li>
-							<li><a href="/blog">Blog</a></li>
-							<li><a href="/contact">Contact</a></li>
+							<li><a href="/blog">{{__('common.blog')}}</a></li>
+							<li><a href="/contact">{{__('common.contact')}}</a></li>
 						</ul>
 					</nav>
 				</div>

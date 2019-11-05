@@ -18,8 +18,12 @@ class CreatePostsTable extends Migration
             $table->integer('category_id');
             $table->string('title_vi');
             $table->string('title_en');
-            $table->text('content_vi');
-            $table->text('content_en');
+			$table->string('desc_vi')->nullable();
+            $table->string('desc_en')->nullable();
+            $table->string('image')->nullable();
+            $table->string('tags')->nullable();
+            $table->text('content_vi')->nullable();
+            $table->text('content_en')->nullable();
 
             $table->timestamps();
         });
