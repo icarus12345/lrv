@@ -180,6 +180,7 @@
 												</label>
 												<ul style="padding-left: 24px">
 													@foreach($item->children as $subitem)
+													<li>
 														<label>
 															<input 
 																type="checkbox" 
@@ -188,6 +189,7 @@
 																@if(in_array($subitem->id,\Session::get('categories')??[])) checked @endif>
 															<span> {{$subitem->name}}</span>
 														</label>
+													</li>
 													@endforeach
 												</ul>
 											</li>
