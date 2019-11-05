@@ -21,7 +21,14 @@ class Helpers
 			// At least a billion
 			$format = number_format($number / 1000000000, 2) . 'B';
 		}
-
-		echo $format;
+		$locale = \App::getLocale();
+		if($locale == 'vi'){
+			return $format . '<sup>₫</sup>';
+		} elseif($locale == 'en'){
+			return "$".$format;
+		} else {
+			return $format;
+		}
+		return $format;
 	}
 }

@@ -95,6 +95,22 @@ class Post extends BaseModel
     {
         return $query->orderBy('id','desc');
     }
+
+    public function scopeGetArchive($query)
+    {
+        $column = "DATE_FORMAT(created_at, '%M %Y')";
+        $column2 = "DATE_FORMAT(created_at, '%Y-%m')";
+        return $query->select([\DB::raw("$column as 'archive_title'"), \DB::raw("$column2 as 'month'")])
+            ->groupBy([\DB::raw("$column"), \DB::raw("$column2")])
+            ->orderBy(\DB::raw("$column"),'desc');
+    }
+
+    public function scopeByArchive($query, $month)
+    {
+        
+        $column = "DATE_FORMAT(created_at, '%Y-%m')";
+        return $query->where(\DB::raw("$column"), $month);
+    }
 	
 	public function toArray() 
 	{

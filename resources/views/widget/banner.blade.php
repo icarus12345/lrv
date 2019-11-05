@@ -1,6 +1,8 @@
+<div class="container">
+
 <!--Banner Area Start-->
 <div class="banner-area section-padding pt-0">
-	<div class="container-fluid">
+	<div class="-container-fluid">
 		<div class="row mb-n30">
 			<div class="col-md-3 col-12 mb-30">
 				<div class="banner-image">
@@ -48,5 +50,6 @@
 			</div>			
 		</div>
 	</div>
+</div>
 </div>
 <!--Banner Area End-->

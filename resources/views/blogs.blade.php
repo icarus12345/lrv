@@ -5,8 +5,14 @@
         <div class="breadcrumbs-area">
             <div class="container">
                 <ul class="breadcrumbs">
-                    <li><a href="index.html"><i class="fa fa-home"></i>{{__('common.home')}}</a></li>
+                    <li><a href="/"><i class="fa fa-home"></i>{{__('common.home')}}</a></li>
+                    
+                    @if(isset($category))
+                    <li ><a href="/blog">{{__('common.blog')}}</a></li>
+                    <li class="active">{{$category->name}}</li>
+                    @else
                     <li class="active">{{__('common.blog')}}</li>
+                    @endif
                 </ul>
             </div>
         </div>
@@ -18,8 +24,9 @@
                 <div class="row mb-n40">
                     
                     <div class="col-12 col-lg-9 order-lg-2 mb-40">
+                        @if($posts->count())
                         <div class="row mb-n40">
-							@foreach($posts as $item)
+                            @foreach($posts as $item)
                             <div class="single-blog col-12 mb-40">
                                 <div class="thumbnail">
                                     <a href="/blog/detail/{{$item->id}}">
@@ -61,6 +68,9 @@
                             </div>
                             
                         </div>
+                        @else
+                        <div class="no-data">{{__('common.no_data')}}</div>
+                        @endif
                     </div>
                    
                     <div class="col-12 col-lg-3 mb-40">
@@ -86,36 +96,7 @@
                             
                         </div><!--Blog Sidebar End-->
                     
-                        <!--Blog Sidebar Start-->
-                        <div class="blog-sidebar">
-                            
-                            <h6 class="blog-sidebar-title"><span>{{__('common.recent_post')}}</span></h6>
-                            
-                            <ul class="blog-sidebar-post">
-                                <li>
-                                    <a href="blog-details.html" class="thumbnail"><img src="img/blog/single/s1.jpg" alt="" /></a>
-                                    <div class="content">
-                                        <a href="blog-details.html" class="title">Blog image post layout</a>
-                                        <span class="date">March 10, 2019</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <a href="blog-details.html" class="thumbnail"><img src="img/blog/single/s2.jpg" alt="" /></a>
-                                    <div class="content">
-                                        <a href="blog-details.html" class="title">Blog image post layout</a>
-                                        <span class="date">March 10, 2019</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <a href="blog-details.html" class="thumbnail"><img src="img/blog/single/s3.jpg" alt="" /></a>
-                                    <div class="content">
-                                        <a href="blog-details.html" class="title">Blog image post layout</a>
-                                        <span class="date">March 10, 2019</span>
-                                    </div>
-                                </li>
-                            </ul>
-                            
-                        </div><!--Blog Sidebar End-->
+                        @include('widget.recent-blog')
                     
                         <!--Blog Sidebar Start-->
                         <div class="blog-sidebar">
@@ -134,21 +115,9 @@
                             </div>
                             
                         </div><!--Blog Sidebar End-->
-                    
-                        <!--Blog Sidebar Start-->
-                        <div class="blog-sidebar">
-                            
-                            <h6 class="blog-sidebar-title"><span>{{__('common.archives')}}</span></h6>
-                            
-                            <ul class="blog-sidebar-list">
-                                <li><a href="#">January 2016</a></li>
-                                <li><a href="#">December 2015</a></li>
-                                <li><a href="#">November 2015</a></li>
-                                <li><a href="#">September 2015</a></li>
-                                <li><a href="#">August 2015</a></li>
-                            </ul>
-                            
-                        </div><!--Blog Sidebar End-->
+                        
+                        @include('widget.archive-blog')
+                        
                     </div>
                
                 </div>

@@ -209,8 +209,8 @@ class Product extends BaseModel
 	public function scopePriceIn($query, $min = 0, $max = 0)
     {
 		
-		if($max) {
-			return $query->whereBetween(\DB::raw('price*(100-discount)/100'), [$min, $max]);
+		if((float)$min>=0 && (float)$max>0) {
+			return $query->whereBetween(\DB::raw('price*(100-discount)/100'), [(float)$min, (float)$max]);
 		}
 		
 		return $query;
@@ -277,13 +277,14 @@ class Product extends BaseModel
 	public function getPriceWithFormatAttribute()
 	{
 		$price = \App\Helpers::formatPrice($this->attributes['price']??0);
-		if($this->locale == 'vi'){
-			return $price . '<sup>₫</sup>';
-		} elseif($this->locale == 'en'){
-			return "$".$price;
-		} else {
-			return $price;
-		}
+		// if($this->locale == 'vi'){
+		// 	return $price . '<sup>₫</sup>';
+		// } elseif($this->locale == 'en'){
+		// 	return "$".$price;
+		// } else {
+        //  return $price;
+        // }
+		return $price;
 	}
 	
 	
@@ -291,13 +292,14 @@ class Product extends BaseModel
     public function getPriceWithDiscountFormatAttribute()
     {
 		$price = \App\Helpers::formatPrice($this->attributes['price'] - $this->attributes['price']*$this->attributes['discount']/100);
-		if($this->locale == 'vi'){
-			return $price . '<sup>₫</sup>';
-		} elseif($this->locale == 'en'){
-			return "$".$price;
-		} else {
-			return $price;
-		}
+		// if($this->locale == 'vi'){
+		// 	return $price . '<sup>₫</sup>';
+		// } elseif($this->locale == 'en'){
+		// 	return "$".$price;
+		// } else {
+		// 	return $price;
+		// }
+        return $price;
     }
 
     public function getStarAttribute()

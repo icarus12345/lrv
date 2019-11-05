@@ -6,7 +6,7 @@
                 <ul class="breadcrumbs">
                     <li><a href="/"><i class="fa fa-home"></i>{{__('common.home')}}</a></li>
 					@if(isset($category))
-                    <li><a href="/shop">Shop</a></li>
+                    <li><a href="/shop">{{__('common.shop')}}</a></li>
                     <li class="active">{{$category->name}}</li>
 					@else
 					<li class="active">{{__('common.shop')}}</li>
@@ -55,6 +55,7 @@
                         
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane active" id="grid">
+                            	@if($products->count())
                                 <div class="row mb-n30">
                                 	@foreach($products as $item)
                                     <div class="col-md-4 col-12 mb-30">
@@ -76,7 +77,7 @@
 												@endif
                                                 <!--Product Action-->
                                                 <div class="product-action">
-                                                    <a href="#" title="Add to cart"><i class="fa fa-shopping-cart"></i></a>
+                                                    <a href="JavaScript:Helper.Cart.add({{$item->id}})" title="Add to cart"><i class="fa fa-shopping-cart"></i></a>
                                                     <a href="#" title="Quick view" data-toggle="modal" data-target="#productModal"><i class="fa fa-expand"></i></a>
                                                 </div>
                                             </div>
@@ -102,8 +103,12 @@
                                     </div>
                                     @endforeach
                                 </div>
+                                @else
+	                            <div class="no-data">{{__('common.no_data')}}</div>
+	                            @endif
                             </div>
                             <div role="tabpanel" class="tab-pane" id="list">
+                            	@if($products->count())
                                 <div class="row mb-n30">
                                 	@foreach($products as $item)
                                     <div class="single-shop-product col-12 mb-30">
@@ -133,7 +138,7 @@
                                                     <!--Product Action-->
                                                     <p>{{$item->desc}}</p>
                                                     <div class="deal-product-action">
-                                                        <a href="#" title="Add to cart"><i class="fa fa-shopping-cart"></i></a>
+                                                        <a href="JavaScript:Helper.Cart.add({{$item->id}})" title="Add to cart"><i class="fa fa-shopping-cart"></i></a>
                                                         <a href="#" title="Quick view" data-toggle="modal" data-target="#productModal"><i class="fa fa-expand"></i></a>
                                                     </div>
                                                 </div>
@@ -142,14 +147,16 @@
                                     </div>
                                     @endforeach
                                 </div>
+                                @else
+	                            <div class="no-data">{{__('common.no_data')}}</div>
+	                            @endif
                             </div>
                         </div>
-                        
+                        @if($products->count())
                         <div class="shop-toolbar mt-30">
-                            
                             {{$products->links('widget.paginator')}}
                         </div>
-                        
+                        @endif
                     </div>
                    
                     <!--Shop Sidebar Start-->
@@ -162,7 +169,7 @@
 							<form method="POST" id="search">                            
                           		@csrf
 								<!--Category Start-->
-	                            <div class="sidebar">
+	                            <div class="sidebar" @if($category??null) style="display:none" @endif>
 	                               
 	                                <h6 class="sidebar-title">{{__('common.category')}}</h6>
 	                                
@@ -320,6 +327,9 @@
 		$('[name="categories[]"]').change(function(){
 			console.log(this.checked)
 			$(this).parent().next().find('[name="categories[]"]').prop("checked", this.checked)
+		})
+		$('.deal-product-action a').click(function(event){
+			event.preventDefault()
 		})
 	})
 </script>

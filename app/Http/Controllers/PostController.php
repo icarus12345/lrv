@@ -57,4 +57,38 @@ class PostController extends Controller
             'posts'  => $posts,
         ]);
     }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function archive(Request $request, $month)
+    {
+        $rows = Category::where('type', 'gid')->get();
+        $tree = Category::buildNested($rows);
+        $posts = Post::byArchive($month)
+            ->newest()
+            ->paginate(9);
+        return view('blogs',[
+            'categories'    => $tree,
+            'posts'  => $posts,
+        ]);
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function detail(Request $request, $id)
+    {
+        $rows = Category::where('type', 'gid')->get();
+        $tree = Category::buildNested($rows);
+        $post = Post::findOrFail($id);
+        return view('blog-detail',[
+            'categories'    => $tree,
+            'post'  => $post,
+        ]);
+    }
 }

@@ -76,35 +76,7 @@
 				<div class="col-auto d-flex">   
 					<!--Header Mini Cart Start-->
 					<div class="header-cart dropdown">
-						<button data-toggle="dropdown" class="dropdown-toggle"><i class="fa fa-shopping-cart"></i><span class="num">2</span></button>
-						<div class="header-cart-dropdown dropdown-menu dropdown-menu-right">
-							<ul class="header-cart-product">
-								<li>
-									<a href="product-details.html" class="image"><img src="/assets/themes/gid/img/img-cart/1.jpg" alt=""></a>
-									<div class="content">
-										<a href="product-details.html" class="title">Printed Dress</a>
-										<span class="details">S, Orange</span>
-										<span class="price">1 x ’ 16.00</span>
-										<a href="#" class="remove"><i class="fa fa-close"></i></a>
-									</div>
-								</li>
-								<li>
-									<a href="product-details.html" class="image"><img src="/assets/themes/gid/img/img-cart/2.jpg" alt=""></a>
-									<div class="content">
-										<a href="product-details.html" class="title">Printed Summer Dress</a>
-										<span class="details">S, Orange</span>
-										<span class="price">2 x ’ 36.00</span>
-										<a href="#" class="remove"><i class="fa fa-close"></i></a>
-									</div>
-								</li>
-							</ul>
-							<div class="header-cart-total">
-								<h6 class="total">Total: <span class="total">’ 86.00</span></h6>
-							</div>
-							<div class="header-cart-buttons">
-								<a class="button" href="shopping_cart.html">Checkout<i class="fa fa-angle-right"></i></a>
-							</div>
-						</div>
+						@include('cart')
 					</div>
 					<!--Header Mini Cart End-->
 				</div>

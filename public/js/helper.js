@@ -1,0 +1,111 @@
+var Helper = (function(){
+	var self = {};
+	$.ajaxSetup({
+	    headers: {
+	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	    },
+	    beforeSend: function(xhr) {
+            
+        },
+        complete: function(xhr, stat) {
+            console.log(xhr, stat)
+            console.log(xhr.status)
+            console.log(xhr.statusText)
+        }
+	});
+	self.Cart = {
+        add: function(product_id) {
+    		Swal.fire({
+    			"type": "question",
+    		    "showCancelButton": true,
+    		    "showLoaderOnConfirm": true,
+    		    "confirmButtonText": "Add To Cart",
+    		    "cancelButtonText": "Cancel",
+    		    "title": "Are you sure to add this item to your cart?",
+    		    "text": "",
+    	    	"confirmButtonColor": "#a2c147",
+                preConfirm: function(input) {
+                    return new Promise(function(resolve, reject) {
+                        $.ajax({
+    			            url : "/shop/add-to-cart",
+    			            type : "POST",
+    			            data : {
+    			              product_id: product_id
+    			            },
+    			            success: function (data) {
+                                resolve(data);
+                            },
+                            error:function(request){
+                                reject(request);
+                            }
+    			        });
+                    });
+                }
+            }).then(function(result) {
+                if (typeof result.dismiss !== 'undefined') {
+                    return Promise.reject();
+                }
+                
+                if (typeof result.status === "boolean") {
+                    var response = result;
+                } else {
+                    var response = result.value;
+                }
+                console.log(response)
+                if(response.code == 1) {
+                  Swal.fire('System Notification', response.message, 'success');
+                  $('.header-cart').html(response.view)
+                } else {
+                  Swal.fire('System Error', response.message, 'error');
+                }
+            });
+		},
+        remove: function(product_id) {
+            Swal.fire({
+                "type": "question",
+                "showCancelButton": true,
+                "showLoaderOnConfirm": true,
+                "confirmButtonText": "Remove this",
+                "cancelButtonText": "Cancel",
+                "title": "Are you sure to remove this item from your cart?",
+                "text": "",
+                "confirmButtonColor": "rgb(221, 51, 51)",
+                preConfirm: function(input) {
+                    return new Promise(function(resolve, reject) {
+                        $.ajax({
+                            url : "/shop/remove-from-cart",
+                            type : "POST",
+                            data : {
+                              product_id: product_id
+                            },
+                            success: function (data) {
+                                resolve(data);
+                            },
+                            error:function(request){
+                                reject(request);
+                            }
+                        });
+                    });
+                }
+            }).then(function(result) {
+                if (typeof result.dismiss !== 'undefined') {
+                    return Promise.reject();
+                }
+                
+                if (typeof result.status === "boolean") {
+                    var response = result;
+                } else {
+                    var response = result.value;
+                }
+                console.log(response)
+                if(response.code == 1) {
+                  Swal.fire('System Notification', response.message, 'success');
+                  $('.header-cart').html(response.view)
+                } else {
+                  Swal.fire('System Error', response.message, 'error');
+                }
+            });
+        }
+	}
+	return self
+}())

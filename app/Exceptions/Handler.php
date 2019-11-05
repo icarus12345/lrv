@@ -35,12 +35,15 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
+
 		if ($exception instanceof CustomException) {
-			return response()->json([
-				'code'=>-1,
-				'message'=> 'Fail !',
-				//'error'=>$exception
-			]);
+			if(request()->ajax()){
+                return response()->json([
+                    'code'=>$exception->getCode(),
+                    'message'=> $exception->getMessage()
+                //     //'error'=>$exception
+                ]);
+            }
 		}
         parent::report($exception);
     }
@@ -52,8 +55,17 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $exception
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $exception)
+    public function render($request, $exception)
     {
+        if ($exception instanceof CustomException) {
+            if($request->ajax()){
+                return response()->json([
+                    'code'=>$exception->getCode(),
+                    'message'=> $exception->getMessage()
+                //     //'error'=>$exception
+                ]);
+            }
+        }
         return parent::render($request, $exception);
     }
 }

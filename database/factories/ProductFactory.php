@@ -18,7 +18,7 @@ $factory->define(Product::class, function (Faker $faker) {
 		'price' => rand(100,500)*1000,
 		'content_en' => $faker->paragraph(),
 		'content_vi' => $faker->paragraph(),
-		'label' => $faker->randomElement(['new','hot',null]),
+		'labels' => [$faker->randomElement(['new','hot','sale'])],
 		'type' => 'gid',
     ];
 });

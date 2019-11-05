@@ -14,7 +14,6 @@ class CustomException extends Exception
      */
     public function report(Exception $exception)
     {
-		dd($exception);
         parent::report($exception);
     }
 
@@ -25,14 +24,8 @@ class CustomException extends Exception
      * @param  \Exception  $exception
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $exception)
+    public function render($request, $exception = null)
     {
-		dd($exception);
-		return response()->json([
-				'code'=>-1,
-				'message'=> 'Fail !',
-				//'error'=>$exception
-			]);
         return parent::render($request, $exception);
     }
 }

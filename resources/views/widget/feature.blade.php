@@ -1,6 +1,8 @@
+<div class="container">
+
 <!--Featured Area Start-->
 <div class="featured-area section-padding">
-	<div class="container-fluid">
+	<div class="-container-fluid">
 	
 		<div class="section-title title-shape text-center">
 			<h4 class="title">Featured products</h4>
@@ -21,8 +23,12 @@
 									<div class="cover prod-thumb" style="background-image:url('{{$item->image_path}}')" ></div>
 								</a>		                                    
 							</div>
-							@if($item->label)
-							<span class="{{$item->label}}-label">{{$item->label}}</span>
+							@if($item->labels)
+								<span class="product-labels">
+								@foreach($item->labels as $label) 
+								<span class="{{$label}}-label">{{$label}}</span>
+								@endforeach
+								</span>
 							@endif
 							<!--Product Action-->
 							<div class="product-action">
@@ -53,5 +59,6 @@
 			<!--Product Slider End-->
 		</div>
 	</div>
+</div>
 </div>
 <!--Featured Area End-->

@@ -27,6 +27,7 @@ return [
     'color' => 'Màu sắc',
     'range' => 'Khoảng',
 	'search' => 'Tìm kiếm',
+    'no_data' => 'Không có dữ liệu.',
 	'locales' => [
 		'en' => "English",
 		'vi' => "Tiếng việt",

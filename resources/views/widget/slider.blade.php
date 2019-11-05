@@ -1,3 +1,5 @@
+<div class="container">
+
 <!-- Slider With Banner Area -->
 <div class="slider-with-banner-area">
 	<div class="row no-gutters">
@@ -59,5 +61,6 @@
 			<!--Banner Area End-->                  
 		</div>         
 	</div>
+</div>
 </div>
 <!-- Slider With Banner Area End -->

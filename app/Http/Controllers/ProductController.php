@@ -15,11 +15,13 @@ class ProductController extends Controller
      */
     public function __construct(Request $request)
     {
-        if($request->min_price) \Session::put('min_price', $request->min_price);
-        if($request->max_price) \Session::put('max_price', $request->max_price);
-        \Session::put('size', $request->size);
-        \Session::put('color', $request->color);
-        \Session::put('categories', $request->categories);
+        if($request->isMethod('post')){
+            if($request->min_price) \Session::put('min_price', $request->min_price);
+            if($request->max_price) \Session::put('max_price', $request->max_price);
+            \Session::put('size', $request->size);
+            \Session::put('color', $request->color);
+            \Session::put('categories', $request->categories);
+        }
     }
 
     /**

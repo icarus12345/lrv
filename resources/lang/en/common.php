@@ -27,6 +27,7 @@ return [
     'color' => 'Color',
     'range' => 'Range',
     'search' => 'Search',
+    'no_data' => 'No data to display',
 	'locales' => [
 		'en' => "English",
 		'vi' => "Tiếng việt",
