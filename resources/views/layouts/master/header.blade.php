@@ -76,7 +76,7 @@
 				<div class="col-auto d-flex">   
 					<!--Header Mini Cart Start-->
 					<div class="header-cart dropdown">
-						@include('cart')
+						@include('cart.cart-widget')
 					</div>
 					<!--Header Mini Cart End-->
 				</div>

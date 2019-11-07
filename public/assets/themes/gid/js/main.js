@@ -198,8 +198,8 @@
     /*----------------------------
         Input Plus Minus Button
     ------------------------------ */ 
-    $(".qtybtn").on("click", function() {
-        var $btn = $(this),
+    $("body").on('click', ".qtybtn", (e) => {
+        var $btn = $(e.target),
             $oldValue = $btn.parent().find("input").val();
         if ($btn.text() == "+") {
             var $newVal = parseFloat($oldValue) + 1;

@@ -31,4 +31,8 @@ class Helpers
 		}
 		return $format;
 	}
+
+	public static function getFlatRate(){
+		return \App\Models\Setting::getByName('flat_rate')->value;
+	}
 }

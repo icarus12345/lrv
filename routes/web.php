@@ -34,9 +34,14 @@ Route::get('/product/detail/{id}', 'ProductController@detail')->where(['id'=>'[0
 
 Route::get('/shop', 'ProductController@index');
 Route::post('/shop', 'ProductController@index');
+
+Route::get('/shop/cart', 'ShopController@index');
 Route::get('/shop/add-to-cart', 'ShopController@addToCart');
 Route::post('/shop/add-to-cart', 'ShopController@addToCart');
 Route::post('/shop/remove-from-cart', 'ShopController@removeFromCart');
+Route::post('/shop/update-to-cart', 'ShopController@updateToCart');
+Route::post('/shop/update-shiping-type', 'ShopController@updateShipingType');
+
 Route::get('/shop/category/{id}', 'ProductController@category')->where(['id'=>'[0-9]+']);
 Route::post('/shop/category/{id}', 'ProductController@category')->where(['id'=>'[0-9]+']);
 

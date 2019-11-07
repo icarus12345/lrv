@@ -15,30 +15,30 @@ var Helper = (function(){
 	});
 	self.Cart = {
         add: function(product_id) {
-    		Swal.fire({
-    			"type": "question",
-    		    "showCancelButton": true,
-    		    "showLoaderOnConfirm": true,
-    		    "confirmButtonText": "Add To Cart",
-    		    "cancelButtonText": "Cancel",
-    		    "title": "Are you sure to add this item to your cart?",
-    		    "text": "",
-    	    	"confirmButtonColor": "#a2c147",
+            Swal.fire({
+                "type": "question",
+                "showCancelButton": true,
+                "showLoaderOnConfirm": true,
+                "confirmButtonText": "Add To Cart",
+                "cancelButtonText": "Cancel",
+                "title": "Are you sure to add this item to your cart?",
+                "text": "",
+                "confirmButtonColor": "#a2c147",
                 preConfirm: function(input) {
                     return new Promise(function(resolve, reject) {
                         $.ajax({
-    			            url : "/shop/add-to-cart",
-    			            type : "POST",
-    			            data : {
-    			              product_id: product_id
-    			            },
-    			            success: function (data) {
+                            url : "/shop/add-to-cart",
+                            type : "POST",
+                            data : {
+                              product_id: product_id
+                            },
+                            success: function (data) {
                                 resolve(data);
                             },
                             error:function(request){
                                 reject(request);
                             }
-    			        });
+                        });
                     });
                 }
             }).then(function(result) {
@@ -59,6 +59,30 @@ var Helper = (function(){
                   Swal.fire('System Error', response.message, 'error');
                 }
             });
+        },
+        updateAjaxs: {},
+        update: function(key, quanlity) {
+            if(self.Cart.updateAjaxs[key]) self.Cart.updateAjaxs[key].abort();
+            self.Cart.updateAjaxs[key] = $.ajax({
+	            url : "/shop/update-to-cart",
+	            type : "POST",
+	            data : {
+                  key: key,
+	              quanlity: quanlity,
+	            },
+	            success: function (response) {
+                    if(response.code == 1) {
+                      //Swal.fire('System Notification', response.message, 'success');
+                      $('.header-cart').html(response.view)
+                      $('#cart-sumary').html(response.form)
+                    } else {
+                      Swal.fire('System Error', response.message, 'error');
+                    }
+                },
+                error:function(request){
+                    //reject(request);
+                }
+	        });
 		},
         remove: function(product_id) {
             Swal.fire({
@@ -99,13 +123,36 @@ var Helper = (function(){
                 }
                 console.log(response)
                 if(response.code == 1) {
-                  Swal.fire('System Notification', response.message, 'success');
-                  $('.header-cart').html(response.view)
+                    Swal.fire('System Notification', response.message, 'success');
+                    $('.header-cart').html(response.view)
+                    $('#cart-sumary').html(response.form)
+
                 } else {
-                  Swal.fire('System Error', response.message, 'error');
+                    Swal.fire('System Error', response.message, 'error');
                 }
             });
-        }
+        },
+        updateShipingType: function(flat_rate) {
+            $.ajax({
+                url : "/shop/update-shiping-type",
+                type : "POST",
+                data : {
+                  flat_rate: flat_rate,
+                },
+                success: function (response) {
+                    if(response.code == 1) {
+                      //Swal.fire('System Notification', response.message, 'success');
+                      $('#cart-sumary').html(response.form)
+                    } else {
+                      Swal.fire('System Error', response.message, 'error');
+                    }
+                },
+                error:function(request){
+                    //reject(request);
+                }
+            });
+        },
+
 	}
 	return self
 }())

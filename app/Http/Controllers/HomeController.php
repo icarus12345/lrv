@@ -17,11 +17,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $rows = Category::where('type', 'gid')->get();
-        $tree = Category::buildNested($rows);
-        $this->data = [
-            'categories'    => $tree,
-        ];
+        parent::__construct();
     }
 
     /**
@@ -34,11 +30,12 @@ class HomeController extends Controller
         $products = Product::feature()->offset(0)->limit(10)->get();
         $sliders = Banner::where('type','slider')->offset(0)->limit(5)->get();
 		$banners = Banner::where('type','banner')->offset(0)->limit(5)->get();
-        return view('home', array_merge([
+        $this->setData([
             'products'  => $products,
             'sliders'   => $sliders,
-			'banners'	=> $banners,
-		], $this->data));
+            'banners'   => $banners,
+        ]);
+        return view('home', $this->data);
     }
 
     /**
