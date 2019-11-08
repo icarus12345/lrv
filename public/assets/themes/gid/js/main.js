@@ -200,20 +200,23 @@
     ------------------------------ */ 
     $("body").on('click', ".qtybtn", (e) => {
         var $btn = $(e.target),
-            $oldValue = $btn.parent().find("input").val(),
+            $oldValue = parseInt($btn.parent().find("input").val()),
 			$maxValue = +$btn.parent().find("input").attr('max')
         if ($btn.text() == "+") {
-            var $newVal = parseFloat($oldValue) + 1;
+            var $newVal = parseInt($oldValue) + 1;
 			if($newVal > $maxValue) $newVal = $maxValue;
         } else {
             // Don't allow decrementing below zero
             if ($oldValue > 1) {
-                var $newVal = parseFloat($oldValue) - 1;
+                var $newVal = parseInt($oldValue) - 1;
             } else {
                 $newVal = 1;
             }
         }
-        $btn.parent().find("input").val($newVal);
+		$btn.parent().find("input").val($newVal);
+		if($oldValue != $newVal){
+			$btn.parent().find("input").trigger('change');
+		}
     });
     
     /*----------------------------

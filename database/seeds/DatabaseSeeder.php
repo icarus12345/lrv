@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(SettingTableSeeder::class);
+        //$this->call(SettingTableSeeder::class);
         $this->call(AdminTablesSeeder::class);
 
         DB::unprepared(file_get_contents(database_path('seeds/category.sql')));

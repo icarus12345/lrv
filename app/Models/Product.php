@@ -277,28 +277,19 @@ class Product extends BaseModel
 	public function getPriceWithFormatAttribute()
 	{
 		$price = \App\Helpers::formatPrice($this->attributes['price']??0);
-		// if($this->locale == 'vi'){
-		// 	return $price . '<sup>₫</sup>';
-		// } elseif($this->locale == 'en'){
-		// 	return "$".$price;
-		// } else {
-        //  return $price;
-        // }
 		return $price;
 	}
 	
 	
-
+	public function getPriceWithDiscountAttribute()
+    {
+		$price = $this->attributes['price'] - $this->attributes['price']*$this->attributes['discount']/100;
+        return $price;
+    }
+	
     public function getPriceWithDiscountFormatAttribute()
     {
 		$price = \App\Helpers::formatPrice($this->attributes['price'] - $this->attributes['price']*$this->attributes['discount']/100);
-		// if($this->locale == 'vi'){
-		// 	return $price . '<sup>₫</sup>';
-		// } elseif($this->locale == 'en'){
-		// 	return "$".$price;
-		// } else {
-		// 	return $price;
-		// }
         return $price;
     }
 

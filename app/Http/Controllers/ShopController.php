@@ -32,6 +32,16 @@ class ShopController extends Controller
     {
         return view('cart.home', $this->data);
     }
+	
+	/**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function checkout()
+    {
+        return view('cart.checkout', $this->data);
+    }
 
     /**
      * Show the application dashboard.

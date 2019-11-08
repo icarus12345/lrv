@@ -25,9 +25,11 @@ class CommentRequest extends FormRequest
     public function rules()
     {
         $rules = [
+            //'topic_type' => 'required',
+            //'topic_id' => 'required|numeric',
             'name' => 'required',
             'email' => 'required|email',
-            'comment' => ['required'],
+            'message' => ['required'],
         ];
         return $rules;
     }

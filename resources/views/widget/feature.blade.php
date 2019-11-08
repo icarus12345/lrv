@@ -32,7 +32,7 @@
 							@endif
 							<!--Product Action-->
 							<div class="product-action">
-								<a href="#" title="Add to cart"><i class="fa fa-shopping-cart"></i></a>
+								<a href="JavaScript:Helper.Cart.add({{$item->id}})" title="Add to cart"><i class="fa fa-shopping-cart"></i></a>
 								<a href="#" title="Quick view" data-toggle="modal" data-target="#productModal"><i class="fa fa-expand"></i></a>
 							</div>
 						</div>

@@ -57,6 +57,8 @@ class Cart
                 'name'=>$product->name,
                 'image_path'=>$product->image_path,
                 'price'=>$product->price,
+                'discount'=>$product->discount,
+                'price_with_discount'=>$product->price_with_discount,
                 'color'=>$color_name??null,
                 'size'=>$size_name??null,
                 'quanlity' => 0
@@ -64,16 +66,16 @@ class Cart
             $this->total_item ++;
         }
         $this->items[$key]['quanlity'] += $quanlity;
-        $this->total_amount += $product->price * $quanlity;
+        $this->total_amount += $product->price_with_discount * $quanlity;
         $this->save();
     }
 
     public function update($key, $quanlity) {
         if(!empty($this->items[$key])){
-            $this->total_amount-=$this->items[$key]['price'] * $this->items[$key]['quanlity'];
+            $this->total_amount-=$this->items[$key]['price_with_discount'] * $this->items[$key]['quanlity'];
 
             $this->items[$key]['quanlity'] = $quanlity;
-            $this->total_amount+=$this->items[$key]['price'] * $this->items[$key]['quanlity'];
+            $this->total_amount+=$this->items[$key]['price_with_discount'] * $this->items[$key]['quanlity'];
             if($quanlity == 0) {
                 $this->total_item --;
                 unset($this->items[$key]);
@@ -84,7 +86,7 @@ class Cart
 
     public function remove($key) {
         if(!empty($this->items[$key])){
-            $this->total_amount-=$this->items[$key]['price'] * $this->items[$key]['quanlity'];
+            $this->total_amount-=$this->items[$key]['price_with_discount'] * $this->items[$key]['quanlity'];
             $this->total_item --;
             unset($this->items[$key]);
             $this->save();

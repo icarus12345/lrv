@@ -177,7 +177,10 @@
                                 {!!$product->data_set!!}
                             </div>
                             <div class="tab-pane" id="reviews">
-                                <a href="#" class="comment-btn"><span>Be the first to write your review!</span></a>
+                                @include('widget.comment.home',[
+									'topic_type'=>'product', 
+									'topic_id'=>$product->id
+									])
                             </div>
                         </div>
                     </div>

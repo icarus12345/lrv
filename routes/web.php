@@ -36,6 +36,7 @@ Route::get('/shop', 'ProductController@index');
 Route::post('/shop', 'ProductController@index');
 
 Route::get('/shop/cart', 'ShopController@index');
+Route::get('/shop/checkout', 'ShopController@checkout');
 Route::get('/shop/add-to-cart', 'ShopController@addToCart');
 Route::post('/shop/add-to-cart', 'ShopController@addToCart');
 Route::post('/shop/remove-from-cart', 'ShopController@removeFromCart');
@@ -49,6 +50,9 @@ Route::get('/blog', 'PostController@index');
 Route::get('/blog/category/{id}', 'PostController@category')->where(['id'=>'[0-9]+']);
 Route::get('/blog/archive/{month}', 'PostController@archive')->where(['month'=>'[0-9-]+']);
 Route::get('/blog/detail/{id}', 'PostController@detail')->where(['month'=>'[0-9]+']);
-Route::post('/blog/{id}/comment', 'PostController@comment')->where(['id'=>'[0-9]+']);
+
+Route::post('/comment/{topic_type}/{topic_id}/add', 'CommentController@add')->where([
+	'topic_id'=>'[0-9]+'
+]);
 
 Route::get('locale/{locale}', 'HomeController@locale')->name('locale');

@@ -93,36 +93,5 @@ class PostController extends Controller
         ]);
     }
 	
-	/**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function comment(CommentRequest $request, $id)
-    {
-        $post = Post::findOrFail($id);
-        try {
-            if($request->isMethod('post')){
-				
-                \App\Models\Comment::create([
-					'post_id' => $post->id,
-					'name' => $request->name,
-					'email' => $request->email,
-					'comment' => $request->comment,
-				]);
-                return response()->json([
-                        'code'=> 1,
-                        'message'=> __('cart.remove_from_cart_success'),
-                    ]);
-            }
-            
-
-            // throw new \Exception('Loiox roi',1000);
-        } catch (\Exception $e) {
-            return response()->json([
-                    'code'=>$e->getCode(),
-                    'message'=> $e->getMessage()
-                ]);
-        }
-    }
+	
 }

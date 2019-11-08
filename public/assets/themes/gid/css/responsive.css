@@ -136,7 +136,7 @@
         top: 100% !important;
     }
     .header-cart-dropdown {
-        transform: translate3d(-42px, 0, 0)!important;
+        transform: translate3d(0px, 0, 0)!important;
     }
     /*Subscribe Section*/
     .letter-box {

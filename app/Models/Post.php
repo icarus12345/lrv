@@ -24,7 +24,8 @@ class Post extends BaseModel
 	
     public function comments()
     {
-        return $this->hasMany(\App\Models\Comment::class);
+        return $this->hasMany(\App\Models\Comment::class,'topic_id')
+			->orderBy('created_at','desc');
     }
 
     public function category()

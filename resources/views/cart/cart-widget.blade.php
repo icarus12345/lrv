@@ -3,14 +3,24 @@
 <div class="header-cart-dropdown dropdown-menu dropdown-menu-right">
 	<ul class="header-cart-product">
 		@if(count($cart->items))
-		@foreach($cart->items as $item)
+		@foreach($cart->items as $key=>$item)
 		<li> 
 			<a href="/product/detail/{{ $item['id']}}" class="image"><img src="{{ $item['image_path']}}" alt=""></a>
 			<div class="content">
 				<a href="/product/detail/{{ $item['id']}}" class="title">{{ $item['name']}}</a>
-				<span class="details">S, Orange</span>
-				<span class="price">{{ $item['quanlity']}} x {!! \App\Helpers::formatPrice($item['price'])!!}</span>
-				<a href="JavaScript:Helper.Cart.remove({{ $item['id']}})" class="remove"><i class="fa fa-close"></i></a>
+				@if($item['size'] || $item['color'])
+				<span class="details">
+				@if($item['size']){{$item['size']}}, @endif
+				@if($item['color']){{$item['color']}}@endif
+				</span>
+				@endif
+				<span class="price">{{ $item['quanlity']}} x 
+					<span class="new-price">{!! \App\Helpers::formatPrice($item['price_with_discount'])!!}</span>
+					@if($item['discount'])
+					<span class="old-price">{!! \App\Helpers::formatPrice($item['price'])!!}</span>
+					@endif
+				</span>
+				<a href="JavaScript:Helper.Cart.remove('{{$key}}')" class="remove"><i class="fa fa-close"></i></a>
 			</div>
 		</li>
 		@endforeach

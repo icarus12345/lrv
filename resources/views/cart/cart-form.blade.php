@@ -19,20 +19,30 @@
                             @if(count($cart->items))
                             @foreach($cart->items as $key=>$item)
                             <tr data-key="{{$key}}">
-                                <td><a href="product-details.html"><img src="{{$item['image_path']}}" width="60" alt="" /></a></td>
-                                <td><a href="product-details.html">{{$item['name']}}</a></td>
+                                <td><a href="/product/detail/{{$item['id']}}"><img src="{{$item['image_path']}}" width="60" alt="" /></a></td>
                                 <td>
-                                    {!! \App\Helpers::formatPrice($item['price'])!!}
+									<a href="/product/detail/{{$item['id']}}">{{$item['name']}}</a>
+									<div>
+									@if($item['size']){{$item['size']}}, @endif
+									@if($item['color']){{$item['color']}}@endif
+									</div>
+								</td>
+                                <td>
+									<span class="new-price">{!! \App\Helpers::formatPrice($item['price_with_discount'])!!}</span>
+									@if($item['discount'])
+									<span class="old-price">{!! \App\Helpers::formatPrice($item['price'])!!}</span>
+									@endif
+                                    
                                 </td>
                                 <td>
                                     <div class="cart-quantity product-quantity">
                                         <button class="dec qtybtn">-</button>
-                                        <input type="text" value="{{$item['quanlity']}}">
+                                        <input type="text" value="{{$item['quanlity']}}" class="qtyinput">
                                         <button class="inc qtybtn">+</button>	
                                     </div>
                                 </td>
-                                <td>{!! \App\Helpers::formatPrice($item['price'] * $item['quanlity'])!!}</td>
-                                <td><a href="JavaScript:Helper.Cart.remove({{ $item['id']}})"><i class="fa fa-times"></i></a></td>
+                                <td>{!! \App\Helpers::formatPrice($item['price_with_discount'] * $item['quanlity'])!!}</td>
+                                <td><a href="JavaScript:Helper.Cart.remove('{{ $key}}')"><i class="fa fa-times"></i></a></td>
                             </tr>
                             @endforeach
                             @else
@@ -56,7 +66,7 @@
                             <p>Enter your coupon code if you have one.</p>
                             <div class="row mb-n20">
                                 <div class="col-xl-4 col-lg-5 col-md-6 col-12 mb-20">
-                                    <input type="text" placeholder="Coupon code">
+                                    <input type="text" placeholder="Coupon code" class="form-control">
                                 </div>
                                 <div class="col-md-6 col-12 mb-20">
                                     <input type="submit" value="Apply Coupon">
@@ -75,24 +85,36 @@
                                     <tbody>
                                         <tr>
                                             <th>Subtotal</th>
-                                            <td><strong>{!! \App\Helpers::formatPrice($cart->total_amount)!!}</strong></td>
+                                            <td -width="160"><strong>{!! \App\Helpers::formatPrice($cart->total_amount)!!}</strong></td>
                                         </tr>
                                         <tr>
                                             <th>Shipping</th>
                                             <td>
-                                                <ul>
-                                                    <li>
-                                                        <label class="checkbox" onclick="Helper.Cart.updateShipingType(1)">
-                                                            <input type="radio" name="shiping_type" @if($cart->flat_rate) checked @endif value="1" />
-                                                            Flat Rate: <strong>{!! \App\Helpers::formatPrice(\App\Helpers::getFlatRate())!!}</strong>
-                                                        </label>
-                                                    </li>
-                                                    <li>
-                                                        <label class="checkbox" onclick="Helper.Cart.updateShipingType(0)">
-                                                            <input type="radio" name="shiping_type" @if(!$cart->flat_rate) checked @endif value="0" />Free Shipping
-                                                        </label>
-                                                    </li>
-                                                </ul>
+                                                
+												<div class="custom-control custom-radio">
+													<input type="radio"  
+														class="custom-control-input" 
+														id="flatShip" 
+														name="shiping_type" required
+														onclick="Helper.Cart.updateShipingType(1)"
+														@if($cart->flat_rate) checked @endif 
+														>
+													<label class="custom-control-label" for="flatShip">
+														Flat Rate: <strong>{!! \App\Helpers::formatPrice(\App\Helpers::getFlatRate())!!}</strong>
+													</label>
+												</div>
+												<div class="custom-control custom-radio mb-3">
+													<input type="radio"  
+														class="custom-control-input" 
+														id="freeShip" 
+														name="shiping_type" required
+														onclick="Helper.Cart.updateShipingType(0)"
+														@if(!$cart->flat_rate) checked @endif 
+														>
+													<label class="custom-control-label" for="freeShip">
+														Free Shipping
+													</label>
+												</div>
                                             </td>
                                         </tr>
                                         <tr>
@@ -102,7 +124,7 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="2" class="pb-0"><a class="btn" href="checkout.html">Proceed to Checkout</a></td>
+                                            <td colspan="2" class="pb-0"><a class="btn" href="/shop/checkout">Proceed to Checkout</a></td>
                                         </tr>
                                     </tfoot>
                                 </table>
