@@ -200,9 +200,11 @@
     ------------------------------ */ 
     $(".qtybtn").on("click", function() {
         var $btn = $(this),
-            $oldValue = $btn.parent().find("input").val();
+            $oldValue = $btn.parent().find("input").val(),
+			$maxValue = +$btn.parent().find("input").attr('max')
         if ($btn.text() == "+") {
             var $newVal = parseFloat($oldValue) + 1;
+			if($newVal > $maxValue) $newVal = $maxValue;
         } else {
             // Don't allow decrementing below zero
             if ($oldValue > 1) {

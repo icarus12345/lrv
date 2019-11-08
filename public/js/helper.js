@@ -14,7 +14,7 @@ var Helper = (function(){
         }
 	});
 	self.Cart = {
-        add: function(product_id) {
+        add: function(product_id, quanlity, size_id, color_id) {
     		Swal.fire({
     			"type": "question",
     		    "showCancelButton": true,
@@ -30,7 +30,10 @@ var Helper = (function(){
     			            url : "/shop/add-to-cart",
     			            type : "POST",
     			            data : {
-    			              product_id: product_id
+    			              product_id: product_id,
+    			              quanlity: quanlity || 1,
+    			              size_id: size_id || null,
+    			              color_id: color_id || null,
     			            },
     			            success: function (data) {
                                 resolve(data);
@@ -60,7 +63,7 @@ var Helper = (function(){
                 }
             });
 		},
-        remove: function(product_id) {
+        remove: function(key) {
             Swal.fire({
                 "type": "question",
                 "showCancelButton": true,
@@ -76,7 +79,7 @@ var Helper = (function(){
                             url : "/shop/remove-from-cart",
                             type : "POST",
                             data : {
-                              product_id: product_id
+                              key: key
                             },
                             success: function (data) {
                                 resolve(data);

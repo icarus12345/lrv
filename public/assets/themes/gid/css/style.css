@@ -52,7 +52,7 @@ html, body {
 }
 body {
   color: #777777;
-  font-family: "Poppins",sans-serif;
+  font-family: "Roboto",sans-serif;
   font-size: 14px;
   font-weight: 400;
   height: 100%;
@@ -329,16 +329,17 @@ blockquote {
 
 label {
     display: block;
-    line-height: 1;
     margin-bottom: 10px;
 }
 input:not([type="submit"]):not([type="checkbox"]):not([type="radio"]) {
     width: 100%;
-    border: none;
+    
     background-color: #f1f2f3;
     line-height: 24px;
     padding: 10px 20px;
     margin-bottom: 15px;
+	height: auto;
+    border-radius: 0;
 }
 input:not([type="submit"]):not([type="checkbox"]):not([type="radio"]):last-child {
     margin-bottom: 0;
@@ -349,15 +350,15 @@ input:not([type="submit"]):not([type="checkbox"]):not([type="radio"]):-ms-input-
 input:not([type="submit"]):not([type="checkbox"]):not([type="radio"]):-moz-placeholder {
     opacity: 1;
 }
-textarea {
+textarea.form-control{
     width: 100%;
-    border: none;
+    
     background-color: #f1f2f3;
     line-height: 24px;
     padding: 10px 20px;
-    height: 100%;
     min-height: 150px;
     resize: none;
+	border-radius: 0;
 }
 label + textarea {
     height: calc(100% - 24px);

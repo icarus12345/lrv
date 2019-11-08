@@ -156,16 +156,24 @@
                                 </div>
                                 <div class="comment-form">
                                     <h5>Leave a Reply</h5>
-                                    <form action="#">
+                                    <form id="comment_form" name="comment_form" class="needs-validation" novalidate>
                                         <p>Your email address will not be published. Required fields are marked <span class="required">*</span></p>
                                         <div class="row mb-n20">
                                             <div class="col-md-4 col-12 mb-20">
                                                 <label>Name<span class="required">*</span></label>
-                                                <input type="text">
+                                                <input type="text" name="name" id="name" required class="form-control">
+												
+												<div class="invalid-feedback">
+												  Name is required.
+												</div>
                                             </div>
                                             <div class="col-md-4 col-12 mb-20">
                                                 <label>Email<span class="required">*</span></label>
-                                                <input type="text">
+                                                <input type="email" name="email" id="email" required class="form-control">
+												
+												<div class="invalid-feedback">
+												  Email is required.
+												</div>
                                             </div>
                                             <!-- <div class="col-md-4 col-12 mb-20">
                                                 <label>Website<span class="required">*</span></label>
@@ -173,7 +181,10 @@
                                             </div> -->
                                             <div class="col-12 mb-20">
                                                 <label>Comment</label>
-                                                <textarea></textarea>
+                                                <textarea name="comment" id="comment" required class="form-control" rows="3"></textarea>
+												<div class="invalid-feedback">
+												  Comment is required.
+												</div>
                                             </div>
                                             <div class="col-12 mb-20">
                                                 <input type="submit" value="Leave a Comment">
@@ -239,4 +250,97 @@
         <!-- Blog Page End -->
 		
 		@include('widget.brand')
+@endsection
+@section('js')
+<script type="text/javascript">
+	(function() {
+		'use strict';
+		window.addEventListener('load', function() {
+			// Fetch all the forms we want to apply custom Bootstrap validation styles to
+			var forms = document.getElementsByClassName('needs-validation');
+			// Loop over them and prevent submission
+			var validation = Array.prototype.filter.call(forms, function(form) {
+				form.addEventListener('submit', function(event) {
+					if (form.checkValidity() === false) {
+						
+						event.preventDefault();
+						event.stopPropagation();
+					}
+					form.classList.add('was-validated');
+				}, false);
+			});
+		}, false);
+		/*
+		$( "#comment_form" ).validate({
+			errorClass: 'has-error',
+			rules: {
+				name: {
+					required: true
+				},
+				email: {
+					required: true,
+					email: true,
+				},
+				comment: {
+				  required: true
+				}
+			}
+		});
+		*/
+		$('#comment_form').on('submit', (e)=>{
+			if(e.target.checkValidity() === false){
+				return false;
+			}
+			e.preventDefault();
+			e.stopPropagation();
+			Swal.fire({
+				"type": "question",
+				"showCancelButton": true,
+				"showLoaderOnConfirm": true,
+				"confirmButtonText": "Post",
+				"cancelButtonText": "Cancel",
+				"title": "Are you sure to leave a reply?",
+				"text": "",
+				"confirmButtonColor": "#a2c147",
+				preConfirm: function(input) {
+					return new Promise(function(resolve, reject) {
+						$.ajax({
+							url : "/blog/{{$post->id}}/comment",
+							type : "POST",
+							data : {
+								name: $('#name').val(),
+								email: $('#email').val(),
+								comment: $('#comment').val(),
+							},
+							success: function (data) {
+								resolve(data);
+							},
+							error:function(request){
+								reject(request);
+							}
+						});
+					});
+				}
+			}).then(function(result) {
+				if (typeof result.dismiss !== 'undefined') {
+					return Promise.reject();
+				}
+				
+				if (typeof result.status === "boolean") {
+					var response = result;
+				} else {
+					var response = result.value;
+				}
+				console.log(response)
+				if(response.code == 1) {
+					Swal.fire('System Notification', response.message, 'success');
+					e.target.reset();
+				  // $('.header-cart').html(response.view)
+				} else {
+				  Swal.fire('System Error', response.message, 'error');
+				}
+			});
+		});
+	}())
+</script>
 @endsection

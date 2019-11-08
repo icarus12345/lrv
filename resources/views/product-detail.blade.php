@@ -80,7 +80,7 @@
 								@if($product->sizes->count())
                                 <div class="option">
                                     <label>Size</label>
-                                    <select>
+                                    <select id="size">
                                         @foreach($product->sizes as $size)
                                         <option value="{{$size->id}}">{{$size->name}}</option>
                                         @endforeach
@@ -90,7 +90,7 @@
 								@if($product->colors->count())
                                 <div class="option">
                                     <label>Color</label>
-                                    <select>
+                                    <select id="color">
                                         @foreach($product->colors as $color)
                                         <option value="{{$color->id}}">{{$color->name}}</option>
                                         @endforeach
@@ -101,10 +101,10 @@
                             <div class="actions">
                                 <div class="action single-product-quantity product-quantity">
                                     <button class="dec qtybtn">-</button>
-                                    <input type="text" value="1">
+                                    <input type="text" value="1" id="quanlity" max="{{$product->instock??0}}" min="1">
                                     <button class="inc qtybtn">+</button>   
                                 </div>
-                                <a href="cart.html" class="action btn add-to-cart-btn"><i class="fa fa-shopping-cart"></i><span>Add to Cart</span></a>
+                                <a href="JavaScript:addTocart()" class="action btn add-to-cart-btn"><i class="fa fa-shopping-cart"></i><span>Add to Cart</span></a>
                                 <a href="#" class="action btn box"><i class="fa fa-envelope"></i></a>
                                 <a href="#" class="action btn box"><i class="fa fa-print"></i></a>
                             </div>
@@ -189,4 +189,14 @@
 
         @include('widget.similar')
         @include('widget.brand')
+@endsection
+@section('js')
+<script type="text/javascript">
+	function addTocart(){
+		var size = $('#size').val();
+		var color = $('#color').val();
+		var quanlity = $('#quanlity').val();
+		Helper.Cart.add({{$product->id}}, quanlity, size, color)
+	}
+</script>
 @endsection

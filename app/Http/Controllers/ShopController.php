@@ -44,7 +44,8 @@ class ShopController extends Controller
                 $product_id = $request->product_id;
                 $color_id = $request->color_id;
                 $size_id = $request->size_id;
-                $this->cart->add($product_id, $size_id, $color_id );
+                $quanlity = $request->quanlity;
+                $this->cart->add($product_id,$quanlity, $size_id, $color_id );
                 return response()->json([
                         'code'=> 1,
                         'message'=> __('cart.add_to_cart_success'),
@@ -71,10 +72,8 @@ class ShopController extends Controller
     {
         try {
             if($request->isMethod('post')){
-                $product_id = $request->product_id;
-                $color_id = $request->color_id;
-                $size_id = $request->size_id;
-                $this->cart->remove($product_id, $size_id, $color_id );
+                $key = $request->key;
+                $this->cart->remove($key);
                 return response()->json([
                         'code'=> 1,
                         'message'=> __('cart.remove_from_cart_success'),

@@ -44,5 +44,6 @@ Route::get('/blog', 'PostController@index');
 Route::get('/blog/category/{id}', 'PostController@category')->where(['id'=>'[0-9]+']);
 Route::get('/blog/archive/{month}', 'PostController@archive')->where(['month'=>'[0-9-]+']);
 Route::get('/blog/detail/{id}', 'PostController@detail')->where(['month'=>'[0-9]+']);
+Route::post('/blog/{id}/comment', 'PostController@comment')->where(['id'=>'[0-9]+']);
 
 Route::get('locale/{locale}', 'HomeController@locale')->name('locale');

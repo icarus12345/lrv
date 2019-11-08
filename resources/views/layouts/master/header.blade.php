@@ -17,6 +17,13 @@
 				<div class="col-lg-auto col-12 d-flex justify-content-center">
 					<ul class="header-top-menu">
 						<li class="dropdown">
+							<a href="#" data-toggle="dropdown" class="dropdown-toggle">VND</a>
+							<ul class="dropdown-menu header-top-dropdown">
+								<li><a href="#">Dollar (USD)</a></li>
+								<li><a href="#">Việt Nam Đồng (VND)</a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
 							<a href="#" data-toggle="dropdown" class="dropdown-toggle">
 							{{__("common.locales")[\Session::get('locale')]}}
 							</a>
@@ -24,7 +31,19 @@
 								<li><a href="/locale/en">English</a></li>
 								<li><a href="/locale/vi">Tiếng Việt</a></li>
 							</ul>
+							
 						</li>
+						
+						<!--<li><a href="wishlist.html"><i class="fa fa-heart"></i>My wishlist</a></li>-->
+						@auth
+						<li><a href="/account"><i class="fa fa-user"></i>My account</a></li>
+						@else
+							<li><a href="{{ route('login') }}"><i class="fa fa-unlock-alt"></i>Login</a></li>
+							@if (Route::has('register'))
+							<li><a href="{{ route('register') }}"><i class="fa fa-unlock-alt"></i>Register</a></li>
+							@endif
+						@endauth
+						<li><a href="checkout.html"><i class="fa fa-share-square-o"></i>Check out</a></li>
 					</ul>
 				</div><!--Right End-->
 				

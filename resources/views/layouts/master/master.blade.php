@@ -14,7 +14,7 @@
 	<link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">		
 	<!-- Google Fonts
 	============================================ -->
-	<link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">    
+	<link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&display=swap&subset=vietnamese" rel="stylesheet">
 	<!-- Bootstrap CSS
 	============================================ -->		
 	<!-- <link rel="stylesheet" href="/vendor/laravel-admin/AdminLTE/bootstrap/css/bootstrap.min.css"> -->
@@ -50,6 +50,7 @@
 	============================================ -->
 	<link rel="stylesheet" href="/assets/themes/gid/css/responsive.css">
 	<link rel="stylesheet" href="/vendor/laravel-admin/sweetalert2/dist/sweetalert2.css">
+	
 	<!-- modernizr JS
 	============================================ -->		
 	<script src="/assets/themes/gid/js/modernizr-2.8.3.min.js"></script>
@@ -96,6 +97,7 @@
 	============================================ -->		
 	<script src="/assets/themes/gid/js/plugins.js"></script>
 	<script src="/vendor/laravel-admin/sweetalert2/dist/sweetalert2.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 	<!-- main JS
 	============================================ -->		
 	<script src="/js/helper.js"></script>

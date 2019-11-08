@@ -32,30 +32,39 @@ class Cart
         ]);
     }
 
-    public function add($product_id, $size_id = null, $color_id = null) {
+    public function add($product_id, $quanlity = 1, $size_id = null, $color_id = null) {
         $product = Product::findOrFail($product_id);
-        $size = Size::find($size_id);
-        $color = Color::find($color_id);
-        $key = "$product_id-$color_id-$size_id";
+		
+		$size = Size::find($size_id)??$product->sizes()->first();
+        $color = Color::find($color_id)??$product->colors()->first();
+		if($size) {
+			$size_name = $size->name??null;
+			$size_id = $size->id??null;
+		}
+		if($color) {
+			$color_name = $color->name??null;
+			$color_id = $color->id??null;
+		}
+		
+        $key = "$product_id-{$color_id}-{$size_id}";
         if(empty($this->items[$key])){
             $this->items[$key] = [
                 'id'=>$product->id,
                 'name'=>$product->name,
                 'image_path'=>$product->image_path,
                 'price'=>$product->price,
+                'color'=>$color_name??null,
+                'size'=>$size_name??null,
                 'quanlity' => 0
             ];
             $this->total_item ++;
         }
-        $this->items[$key]['quanlity']++;
-        $this->total_amount+=$product->price;
+        $this->items[$key]['quanlity'] += $quanlity;
+        $this->total_amount += $product->price * $quanlity;
         $this->save();
     }
 
-    public function remove($product_id, $size_id = null, $color_id = null) {
-        $size = Size::find($size_id);
-        $color = Color::find($color_id);
-        $key = "$product_id-$color_id-$size_id";
+    public function remove($key) {
         if(!empty($this->items[$key])){
             $this->total_amount-=$this->items[$key]['price'] * $this->items[$key]['quanlity'];
             $this->total_item --;
