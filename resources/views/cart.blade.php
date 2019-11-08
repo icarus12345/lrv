@@ -1,4 +1,4 @@
-			<?php $cart = new \App\Services\Cart() ?>
+<?php $cart = new \App\Services\Cart() ?>
 <button data-toggle="dropdown" class="dropdown-toggle"><i class="fa fa-shopping-cart"></i><span class="num">{{$cart->total_item}}</span></button>
 	<div class="header-cart-dropdown dropdown-menu dropdown-menu-right">
 		<ul class="header-cart-product">

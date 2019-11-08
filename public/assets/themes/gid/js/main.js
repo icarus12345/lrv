@@ -198,8 +198,8 @@
     /*----------------------------
         Input Plus Minus Button
     ------------------------------ */ 
-    $(".qtybtn").on("click", function() {
-        var $btn = $(this),
+    $("body").on('click', ".qtybtn", (e) => {
+        var $btn = $(e.target),
             $oldValue = $btn.parent().find("input").val(),
 			$maxValue = +$btn.parent().find("input").attr('max')
         if ($btn.text() == "+") {

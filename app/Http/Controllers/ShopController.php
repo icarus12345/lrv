@@ -20,7 +20,7 @@ class ShopController extends Controller
     public function __construct(Request $request)
     {
 		$this->cart = new Cart();
-
+        parent::__construct();
     }
 
     /**
@@ -30,6 +30,7 @@ class ShopController extends Controller
      */
     public function index()
     {
+        return view('cart.home', $this->data);
     }
 
     /**
@@ -49,7 +50,7 @@ class ShopController extends Controller
                 return response()->json([
                         'code'=> 1,
                         'message'=> __('cart.add_to_cart_success'),
-                        'view' => view('cart')->render()
+                        'view' => view('cart.cart-widget')->render()
                     ]);
             }
             
@@ -68,16 +69,18 @@ class ShopController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function removeFromCart(Request $request)
+    public function updateToCart(Request $request)
     {
         try {
             if($request->isMethod('post')){
                 $key = $request->key;
-                $this->cart->remove($key);
+                $quanlity = $request->quanlity;
+                $this->cart->update($key, $quanlity );
                 return response()->json([
                         'code'=> 1,
-                        'message'=> __('cart.remove_from_cart_success'),
-                        'view' => view('cart')->render()
+                        'message'=> __('cart.update_to_cart_success'),
+                        'view' => view('cart.cart-widget')->render(),
+                        'form' => view('cart.cart-form')->render(),
                     ]);
             }
             
@@ -89,5 +92,63 @@ class ShopController extends Controller
                     'message'=> $e->getMessage()
                 ]);
         }
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function removeFromCart(Request $request)
+    {
+        try {
+            if($request->isMethod('post')){
+                $key = $request->key;
+                $this->cart->remove($key);
+                return response()->json([
+                        'code'=> 1,
+                        'message'=> __('cart.remove_from_cart_success'),
+                        'view' => view('cart.cart-widget')->render(),
+                        'form' => view('cart.cart-form')->render(),
+                    ]);
+            }
+            
+
+            // throw new \Exception('Loiox roi',1000);
+        } catch (\Exception $e) {
+            return response()->json([
+                    'code'=>$e->getCode(),
+                    'message'=> $e->getMessage()
+                ]);
+        }
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function updateShipingType(Request $request)
+    {
+        // try {
+            if($request->isMethod('post')){
+                $flat_rate = $request->flat_rate;
+                $this->cart->setShipingType($flat_rate);
+                return response()->json([
+                        'code'=> 1,
+                        'message'=> __('cart.update_shiping_type_success'),
+                        // 'view' => view('cart.cart-widget')->render(),
+                        'form' => view('cart.cart-form')->render(),
+                    ]);
+            }
+            
+
+            // throw new \Exception('Loiox roi',1000);
+        // } catch (\Exception $e) {
+        //     return response()->json([
+        //             'code'=>$e->getCode(),
+        //             'message'=> $e->getMessage()
+        //         ]);
+        // }
     }
 }

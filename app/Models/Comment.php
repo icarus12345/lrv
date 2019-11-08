@@ -8,11 +8,16 @@ class Comment extends Model
 {
     //
     protected $fillable = [
-        'post_id', 'comment','name','email'
+        'post_id', 'content', 'name', 'email', 'user_id'
     ];
 
     public function post()
     {
         return $this->belongsTo(\App\Models\Post::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(\App\User::class);
     }
 }
