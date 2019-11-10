@@ -8,7 +8,7 @@
 				<div class="banner-image">
 					@if($banners[0])
 					   	<a href="{{$banners[0]->link}}">
-					   		<div class="cover h2x" style="background-image:url('{{$banners[0]->image}}')" ></div>
+					   		<div class="cover h2x" style="background-image:url('{{$banners[0]->image_path}}')" ></div>
 					   	</a>
 				   	@endif
 				</div>
@@ -17,7 +17,7 @@
 				<div class="banner-image mb-30">
 					@if($banners[1])
 					   	<a href="{{$banners[1]->link}}">
-					   		<div class="cover w2x" style="background-image:url('{{$banners[1]->image}}')"></div>
+					   		<div class="cover w2x" style="background-image:url('{{$banners[1]->image_path}}')"></div>
 					   	</a>
 				   	@endif
 				</div>
@@ -26,7 +26,7 @@
 						<div class="banner-image">
 							@if($banners[3])
 							   	<a href="{{$banners[3]->link}}">
-							   		<div class="cover h1x" style="background-image:url('{{$banners[3]->image}}')"></div>
+							   		<div class="cover h1x" style="background-image:url('{{$banners[3]->image_path}}')"></div>
 							   	</a>
 						   	@endif
 						</div>
@@ -34,7 +34,7 @@
 					<div class="col-md-6 col-12 mb-30"> 
 						@if($banners[4])
 						   	<a href="{{$banners[4]->link}}">
-						   		<div class="cover h1x" style="background-image:url('{{$banners[4]->image}}')"></div>
+						   		<div class="cover h1x" style="background-image:url('{{$banners[4]->image_path}}')"></div>
 						   	</a>
 					   	@endif
 					</div>
@@ -44,7 +44,7 @@
 				<div class="banner-image">
 					@if($banners[2])
 					   	<a href="{{$banners[2]->link}}">
-					   		<div class="cover h2x" style="background-image:url('{{$banners[2]->image}}')" ></div>
+					   		<div class="cover h2x" style="background-image:url('{{$banners[2]->image_path}}')" ></div>
 				   	@endif
 				</div>
 			</div>			

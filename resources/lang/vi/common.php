@@ -12,7 +12,13 @@ return [
     | these language lines according to your application's requirements.
     |
     */
-
+    'oops' => 'Oops! Hệ thống lỗi rồi, vui lòng thử lại sau.',
+    'system_notification'=>'Thông báo',
+    'system_error'=>'Thông báo lỗi',
+    'yes'=>'Có',
+    'remove'=>'Xoá',
+    'no'=>'Không',
+    'cancel'=>'Huỷ',
     'home' => 'Trang chủ',
 	'about' => 'Về chúng tôi',
     'shop' => 'Shop',
@@ -32,5 +38,20 @@ return [
 		'en' => "English",
 		'vi' => "Tiếng việt",
 	],
-
+    'feature_product' => 'Sản phẩm nổi bật',
+    'from_the_blog' => 'Tin tức mới',
+    'labels' => [
+        'hot' => 'Hot',
+        'new' => 'New',
+        'sale' => 'Sale',
+    ],
+    'more_info' => 'Thông tin chính',
+    'data_set' => 'Thông tin khác',
+    'reviews' => 'Bình luận',
+    'top_sale' => 'Sản phẩm bán chạy',
+    'similar_product' => 'Sản phẩm tương tự',
+    'send_a_message' => 'Gửi yêu cầu',
+    'send_message' => 'Gửi yêu cầu',
+    'newsletter' => 'Nhận thông báo',
+    'submit' => 'Đồng ý',
 ];

@@ -24,12 +24,14 @@ Route::group([
 		'middleware' => ['verified'],
 	], function () use ($router) {
 		// Route::get('/home', 'HomeController@index')->name('home');
+		// Route::post('/shop/checkout', 'ShopController@createOrder');
 	});
 	// Route::get('/demo', 'HomeController@demo')->name('demo');
 });
 
 Route::get('/home', 'HomeController@index');
 Route::get('/about', 'HomeController@about');
+Route::get('/contact', 'HomeController@contact');
 Route::get('/product/detail/{id}', 'ProductController@detail')->where(['id'=>'[0-9]+']);
 
 Route::get('/shop', 'ProductController@index');
@@ -37,6 +39,10 @@ Route::post('/shop', 'ProductController@index');
 
 Route::get('/shop/cart', 'ShopController@index');
 Route::get('/shop/checkout', 'ShopController@checkout');
+Route::post('/shop/checkout', 'ShopController@createOrder');
+Route::get('/order/ORD{no}', 'ShopController@orderDetail');
+
+
 Route::get('/shop/add-to-cart', 'ShopController@addToCart');
 Route::post('/shop/add-to-cart', 'ShopController@addToCart');
 Route::post('/shop/remove-from-cart', 'ShopController@removeFromCart');

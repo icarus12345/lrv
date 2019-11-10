@@ -45,9 +45,9 @@ class SettingController extends AdminController
     {
         $show = new Show(Setting::findOrFail($id));
         $show->field('id', __('ID'));
-        $show->field('created_at', __('Created at'));
         $show->field('name', __('Name'));
         $show->field('value', __('Value'));
+        $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
 
 
@@ -64,8 +64,8 @@ class SettingController extends AdminController
         $form = new Form(new Setting);
 
         $form->display('id', __('ID'));
-        $show->field("name", trans('Name'));
-        $show->field("value", trans('Value'));
+        $form->text("name", trans('Name'));
+        $form->text("value", trans('Value'));
         $form->display('created_at', __('Created At'));
         $form->display('updated_at', __('Updated At'));
 

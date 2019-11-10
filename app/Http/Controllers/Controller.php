@@ -22,12 +22,12 @@ class Controller extends BaseController
      */
     public function __construct()
     {
-        $rows = Category::where('type', 'gid')->get();
-        $tree = Category::buildNested($rows);
+        
         $this->flat_rate = Setting::getByName('flat_rate');
+        $this->tax = Setting::getByName('tax');
         $this->data = [
-            'categories'    => $tree,
             'flat_rate'    => $this->flat_rate,
+            'tax'    => $this->tax,
         ];
     }
 

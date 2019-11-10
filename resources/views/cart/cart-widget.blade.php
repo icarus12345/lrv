@@ -29,9 +29,9 @@
 		@endif
 	</ul>
 	<div class="header-cart-total">
-		<h6 class="total">Total: <span class="total">{!! \App\Helpers::formatPrice($cart->total_amount)!!}</span></h6>
+		<h6 class="total">{{__('checkout.total')}}: <span class="total">{!! \App\Helpers::formatPrice($cart->total_amount)!!}</span></h6>
 	</div>
 	<div class="header-cart-buttons">
-		<a class="button" href="/shop/cart">Checkout<i class="fa fa-angle-right"></i></a>
+		<a class="button" href="/shop/cart">{{__('cart.checkout')}}<i class="fa fa-angle-right"></i></a>
 	</div>
 </div>

@@ -24,9 +24,11 @@ Route::group([
 		Route::resource('banners', 'BannerController');
 		Route::resource('contents', 'ContentController');
 	});
+	Route::resource('setting', 'SettingController');
 	Route::resource('post', 'PostController');
 	Route::resource('categories', 'CategoryController');
 	Route::resource('product', 'ProductController');
 	Route::resource('banners', 'BannerController');
 	Route::resource('contents', 'ContentController');
+	Route::resource('orders', 'OrderController');
 });

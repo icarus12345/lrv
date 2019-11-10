@@ -12,5 +12,8 @@ return [
     | these language lines according to your application's requirements.
     |
     */
-	'add_comment_success' => 'Bình luận thành công !',
+    'add_comment_success' => 'Bình luận thành công !',
+    'comments' => 'Bình luận',
+    'leave_a_comment' => 'Viết bình luận',
+	'leave_a_reply' => 'Viết bình luận',
 ];

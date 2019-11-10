@@ -47,7 +47,7 @@
 /*  01. Theme default CSS
 /*----------------------------------------*/
 html, body {
-    height: 100%;
+    /*height: 100%;*/
 	overflow-x: hidden;
 }
 body {
@@ -55,7 +55,7 @@ body {
   font-family: "Roboto",sans-serif;
   font-size: 14px;
   font-weight: 400;
-  height: 100%;
+  /*height: 100%;*/
   line-height: 1.75;
   min-width: 320px;
 }
@@ -334,12 +334,12 @@ label {
     margin-bottom: 10px;
 }
 input:not([type="submit"]):not([type="checkbox"]):not([type="radio"]) {
-    width: 100%;
+    /*width: 100%;*/
     
     background-color: #f1f2f3;
     line-height: 24px;
     padding: 10px 20px;
-    margin-bottom: 15px;
+    /*margin-bottom: 15px;*/
 	height: auto;
     border-radius: 0;
 }
@@ -1539,7 +1539,12 @@ form.search-box {
     justify-content: center;
     padding: 0 15px;
 }
-.single-brand a {}
+.single-brand a {
+        display: block;
+    position: relative;
+    width: 100%;
+}
+}
 .single-brand a img {}
 /*----------------------------------------*/
 /*  10. Blog CSS
@@ -3273,6 +3278,9 @@ h3.widget-title-modal {
 .blog-thumb{
 	padding-bottom: 42.65%;
 }
+.blog-thumb2{
+    padding-bottom: 64.25%;
+}
 .h2x{
         padding-bottom: calc((100% + 30px)*174.5/100);
 }
@@ -3317,3 +3325,5 @@ h3.widget-title-modal {
     white-space: -o-pre-wrap; /* Opera 7 */ 
     word-wrap: break-word; /* Internet Explorer 5.5+ */
 }
+.line-clamp-1{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;max-height:1.5em;line-height:1.5em}
+.line-clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-height:3em;line-height:1.5em}

@@ -98,8 +98,25 @@ class Cart
             return $this->total_amount + \App\Helpers::getFlatRate();
         return $this->total_amount;
     }
+    public function getTaxAmount() {
+        return $this->total_amount * \App\Helpers::getTax() / 100;
+    }
+    public function getShippingAmount() {
+        if($this->flat_rate)
+            return \App\Helpers::getFlatRate();
+        return 0;
+    }
+    public function getBillingAmount() {
+        return $this->getTotalAmountWithShiping() + $this->getTaxAmount();
+    }
     public function setShipingType($flat_rate) {
         $this->flat_rate = $flat_rate;
         $this->save();
+    }
+    public function canCheckout(){
+        return $this->total_item > 0;
+    }
+    public function clear(){
+        \Session::forget('shoping_cart');
     }
 }

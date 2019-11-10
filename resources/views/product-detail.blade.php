@@ -24,7 +24,7 @@
 							@foreach($product->pictures as $i=>$image)
                             <div class="tab-pane @if($i==0) active @endif" id="view{{$i}}">
                                 <a class="venobox" href="/storage/{{$image}}" data-gall="gallery" title="">
-									<img src="/storage/{{$image}}" alt="">
+									<div class="cover prod-thumb" style="background-image:url('/storage/{{$image}}')" ></div>
 									<span>View larger<i class="fa fa-search-plus"></i></span>
 								</a>
                             </div>
@@ -32,7 +32,7 @@
 							@else
 							<div class="tab-pane active" id="view1">
                                 <a class="venobox" href="{{$product->image}}" data-gall="gallery" title="">
-									<img src="{{$product->image}}" alt="">
+									<div class="cover prod-thumb" style="background-image:url('{{$product->image_path}}')" ></div>
 									<span>View larger<i class="fa fa-search-plus"></i></span>
 								</a>
                             </div>
@@ -42,10 +42,14 @@
                             <div class="thumb-slider">
 								@if($product->pictures)
 								@foreach($product->pictures as $i=>$image)
-                                <a href="#view{{$i}}"><img src="/storage/{{$image}}" alt=""></a>
+                                <a href="#view{{$i}}">
+                                    <div class="cover prod-thumb" style="background-image:url('/storage/{{$image}}')" ></div>
+                                </a>
 								@endforeach
 								@else
-                                <a href="#view1"><img src="{{$product->image}}" alt=""></a>
+                                <a href="#view1">
+                                    <div class="cover prod-thumb" style="background-image:url('{{$product->image_path}}')" ></div>
+                                </a>
                                 @endif
                             </div>
                         </div>
@@ -67,14 +71,13 @@
                                     @endif
                                 </div>
                                 
-                                <p class="reference"><label>Reference: </label> <span>{{$product->category->name}}</span></p>
-                                <p class="condition"><label>Condition: </label> <span>{{$product->label}}</span></p>
+                                <p class="reference"><label>{{__('common.category')}}: </label> <span>{{$product->category->name}}</span></p>
                             </div>
                             <div class="description">
                                 <p>{{$product->desc}}</p>
                             </div>
                             <div class="stock-info">
-                                <p>{{$product->instock}} Items <span class="badge badge-success">In stock</span></p>
+                                <p>{{$product->instock}} {{__('cart.items')}} <span class="badge badge-success">{{__('cart.instock')}}</span></p>
                             </div>
                             <div class="size-color-options">
 								@if($product->sizes->count())
@@ -104,15 +107,12 @@
                                     <input type="text" value="1" id="quanlity" max="{{$product->instock??0}}" min="1">
                                     <button class="inc qtybtn">+</button>   
                                 </div>
-                                <a href="JavaScript:addTocart()" class="action btn add-to-cart-btn"><i class="fa fa-shopping-cart"></i><span>Add to Cart</span></a>
-                                <a href="#" class="action btn box"><i class="fa fa-envelope"></i></a>
-                                <a href="#" class="action btn box"><i class="fa fa-print"></i></a>
+                                <a href="JavaScript:addTocart()" class="action btn add-to-cart-btn"><i class="fa fa-shopping-cart"></i><span>{{__('cart.add_to_cart')}}</span></a>
                             </div>
                             <div class="social-sharing">
                                 <a href="#" class="btn btn-twitter"><i class="fa fa-twitter"></i>Tweet</a>
                                 <a href="#" class="btn btn-facebook"><i class="fa fa-facebook"></i> Share</a>
                                 <a href="#" class="btn btn-google-plus"><i class="fa fa-google-plus"></i> Google+</a>
-                                <a href="#" class="btn btn-pinterest"><i class="fa fa-pinterest"></i> Pinterest</a>
                             </div>
                         </div>
                         
@@ -120,7 +120,7 @@
                 
                     <div class="col-lg-3 col-md-12 col-12 mb-30">
                     
-                        <div class="block-title"><h5 class="title">Top sellers</h5></div>
+                        <div class="block-title"><h5 class="title">{{__('common.top_sale')}}</h5></div>
                        
                         <div class="product-slider-5">
                             @for ($i = 0; $i < $top_sales->count(); $i+=3)
@@ -163,9 +163,9 @@
                     
                     <div class="col-md-12 mb-30 mt-3">
                         <ul class="nav product-details-tab-list">
-                            <li><a class="active" href="#more-info" data-toggle="tab">MORE INFO</a></li>
-                            <li><a href="#data" data-toggle="tab">DATA SHEET</a></li>
-                            <li><a href="#reviews" data-toggle="tab">REVIEWS</a></li>
+                            <li><a class="active" href="#more-info" data-toggle="tab">{{__('common.more_info')}}</a></li>
+                            <li><a href="#data" data-toggle="tab">{{__('common.data_set')}}</a></li>
+                            <li><a href="#reviews" data-toggle="tab">{{__('common.reviews')}}</a></li>
                         </ul>
                         <div class="tab-content product-details-tab-content">
                             <div class="tab-pane active" id="more-info">

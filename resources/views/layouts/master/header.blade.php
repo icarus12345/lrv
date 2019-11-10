@@ -43,7 +43,7 @@
 							<li><a href="{{ route('register') }}"><i class="fa fa-unlock-alt"></i>Register</a></li>
 							@endif
 						@endauth
-						<li><a href="checkout.html"><i class="fa fa-share-square-o"></i>Check out</a></li>
+						<li><a href="shop/cart"><i class="fa fa-share-square-o"></i>{{__('cart.checkout')}}</a></li>
 					</ul>
 				</div><!--Right End-->
 				
@@ -69,7 +69,7 @@
 							<li><a href="/about">{{__('common.about')}}</a></li>
 							<li><a href="/shop">{{__('common.shop')}}</a>
 								<ul class="mega-menu">
-									@foreach($categories as $item)
+									@foreach(\App\Helpers::getCategories() as $item)
 									<li>
 										<a class="mega-title" href="/shop/category/{{$item->id}}">{{$item->name}}</a>
 										

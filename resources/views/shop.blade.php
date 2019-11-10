@@ -78,7 +78,7 @@
                                                 <!--Product Action-->
                                                 <div class="product-action">
                                                     <a href="JavaScript:Helper.Cart.add({{$item->id}})" title="Add to cart"><i class="fa fa-shopping-cart"></i></a>
-                                                    <a href="#" title="Quick view" data-toggle="modal" data-target="#productModal"><i class="fa fa-expand"></i></a>
+                                                    <a href="/product/detail/{{$item->id}}" title="Quick view" data-toggle="modal" data-target="#productModal"><i class="fa fa-expand"></i></a>
                                                 </div>
                                             </div>
                                             <div class="product-content">
@@ -139,7 +139,7 @@
                                                     <p>{{$item->desc}}</p>
                                                     <div class="deal-product-action">
                                                         <a href="JavaScript:Helper.Cart.add({{$item->id}})" title="Add to cart"><i class="fa fa-shopping-cart"></i></a>
-                                                        <a href="#" title="Quick view" data-toggle="modal" data-target="#productModal"><i class="fa fa-expand"></i></a>
+                                                        <a href="/product/detail/{{$item->id}}" title="Quick view" data-toggle="modal" data-target="#productModal"><i class="fa fa-expand"></i></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -175,7 +175,7 @@
 	                                
 	                                <div class="sidebar-selects">
 	                                    <ul>
-	                                    	@foreach($categories as $item)
+	                                    	@foreach(\App\Helpers::getCategories() as $item)
 	                                        <li>
 												<label>
 													<input 

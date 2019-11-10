@@ -64,4 +64,8 @@ class HomeController extends Controller
         $this->data['content'] = Content::findOrFail(1);
         return view('about',$this->data);
     }
+
+    public function contact(){
+        return view('contact',$this->data);
+    }
 }

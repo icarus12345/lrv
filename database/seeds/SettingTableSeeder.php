@@ -17,5 +17,9 @@ class SettingTableSeeder extends Seeder
             'name' => 'flat_rate',
             'value' => 150000,
         ]);
+        DB::table('settings')->insert([
+            'name' => 'tax',
+            'value' => 10,
+        ]);
     }
 }

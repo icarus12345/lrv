@@ -5,7 +5,7 @@
 	<div class="-container-fluid">
 	
 		<div class="section-title title-shape text-center">
-			<h4 class="title">Featured products</h4>
+			<h4 class="title">{{__('common.feature_product')}}</h4>
 		</div>
 	
 		<div class="row">
@@ -33,7 +33,7 @@
 							<!--Product Action-->
 							<div class="product-action">
 								<a href="JavaScript:Helper.Cart.add({{$item->id}})" title="Add to cart"><i class="fa fa-shopping-cart"></i></a>
-								<a href="#" title="Quick view" data-toggle="modal" data-target="#productModal"><i class="fa fa-expand"></i></a>
+								<a href="/product/detail/{{$item->id}}" title="Quick view" -data-toggle="modal" -data-target="#productModal"><i class="fa fa-expand"></i></a>
 							</div>
 						</div>
 						<div class="product-content">

@@ -50,6 +50,7 @@
 	============================================ -->
 	<link rel="stylesheet" href="/assets/themes/gid/css/responsive.css">
 	<link rel="stylesheet" href="/vendor/laravel-admin/sweetalert2/dist/sweetalert2.css">
+	<link rel="stylesheet" href="/assets/lib/toastr/toastr.css">
 	
 	<!-- modernizr JS
 	============================================ -->		
@@ -64,6 +65,7 @@
     @include('layouts.master.footer')
 	<!-- jquery
 	============================================ -->		
+	<script src="/js/messages.js"></script>
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 	<!-- bootstrap JS
 	============================================ -->		
@@ -97,6 +99,7 @@
 	============================================ -->		
 	<script src="/assets/themes/gid/js/plugins.js"></script>
 	<script src="/vendor/laravel-admin/sweetalert2/dist/sweetalert2.min.js"></script>
+	<script src="/assets/lib/toastr/toastr.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 	<!-- main JS
 	============================================ -->		

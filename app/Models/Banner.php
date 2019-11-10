@@ -49,36 +49,23 @@ class Banner extends BaseModel
 	}
 	
 	
-	public function setImageAttribute($binary)
-    {
-        $disk = 'public/banner';
-
-        if (isset($this->attributes['id'])) {
-            $path = \Storage::disk($disk)->putFile($this->attributes['id'], $binary, 'public');
-        } else {
-            $path = $binary;
-        }
-
-        $this->attributes['image'] = $path;
-    }
+	
 
     public function setNullToImage()
     {
         $this->attributes['image'] = null;
     }
 
-    public function getImageAttribute()
+    public function getImagePathAttribute()
     {
-        $disk = 'public';
-
-        if (!$this->getOriginal('image')) {
-            return 'images/no-image.svg';
+        $disk = 'local';
+        if (!$this->image) {
+            return '/images/no-image.svg';
         }
-
-        if (strpos($this->getOriginal('image'), 'http') !== false) {
-            return $this->getOriginal('image');
+        if (strpos($this->attributes['image'], 'http') !== false) {
+            return $this->attributes['image'];
         } else {
-            return \Storage::disk($disk)->url($this->getOriginal('image'));
+            return \Storage::disk($disk)->url($this->attributes['image']);
         }
     }
 	

@@ -6,8 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Banner;
 use App\Models\Product;
+use App\Models\Order;
 use App\Exceptions\CustomException;
 use App\Services\Cart;
+use App\Http\Requests\OrderRequest;
+use App\Workflows\CreateOrderWorkflow;
 
 class ShopController extends Controller
 {
@@ -160,5 +163,47 @@ class ShopController extends Controller
         //             'message'=> $e->getMessage()
         //         ]);
         // }
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function createOrder(OrderRequest $request)
+    {
+        try {
+            $workflow = new CreateOrderWorkflow($request);
+            $workflow->run();
+            if($workflow->succeeded()) {
+
+                return response()->json([
+                        'code'=> 1,
+                        'message'=> __('checkout.create_order_success'),
+                        'data' => $workflow->getResult(),
+
+                    ]);
+            }else{
+                return response()->json([
+                    'code'=>  -1,
+                    'message'=> $workflow->getMessage()
+                ]);
+            }
+            // throw new \Exception('Loiox roi',1000);
+        } catch (\Exception $e) {
+            return response()->json([
+                    'code'=>$e->getCode(),
+                    'message'=> $e->getMessage()
+                ]);
+        }
+    }
+
+    public function orderDetail(Request $request, $no){
+        $order = Order::findOrFail((int)$no);
+        if(!$order->checkToken($request->token)){
+            abort(403, 'Unauthorized action.');
+        }
+        $this->data['order'] = $order;
+        return view('order-detail', $this->data);
     }
 }

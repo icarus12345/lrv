@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Http\Request;
+use App\Models\Category;
 
 class Helpers
 {
@@ -13,7 +14,7 @@ class Helpers
 			$format = number_format($number);
 		} else if ($number < 1000000) {
 			// Anything less than a million
-			$format = (float)number_format($number / 1000, 2) . 'K';
+			$format = (float)number_format($number / 1000) . 'K';
 		} else if ($number < 1000000000) {
 			// Anything less than a billion
 			$format = (float)number_format($number / 1000000, 2) . 'M';
@@ -34,5 +35,13 @@ class Helpers
 
 	public static function getFlatRate(){
 		return \App\Models\Setting::getByName('flat_rate')->value;
+	}
+
+	public static function getTax(){
+		return \App\Models\Setting::getByName('tax')->value;
+	}
+	public static function getCategories(){
+		$rows = Category::where('type', 'gid')->get();
+        return Category::buildNested($rows);
 	}
 }

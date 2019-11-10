@@ -1,5 +1,17 @@
 var Helper = (function(){
 	var self = {};
+    let showErrors = (xhr)=>{
+        let errors = xhr.responseJSON.errors;
+        let message = xhr.responseJSON.message;
+        let messages = []
+        for(let field in errors) {
+            messages.push(errors[field])
+        }
+        toastr.error(messages.join('\r\n'), message,{"timeOut": "0",});
+        // setTimeout(()=>{
+        //     Swal.fire(message, messages.join('\r\n'), 'error');
+        // }, 150)
+    }
 	$.ajaxSetup({
 	    headers: {
 	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -11,6 +23,44 @@ var Helper = (function(){
             console.log(xhr, stat)
             console.log(xhr.status)
             console.log(xhr.statusText)
+            Swal.close()
+            switch(xhr.status){
+                case 419:
+                    // CSRF token mismatch.
+                    setTimeout(()=>{
+                        Swal.fire(xhr.statusText, xhr.responseJSON.message, 'error');
+                    }, 150)
+                    break;
+                case 401:
+                    // Unauthenticated
+                    setTimeout(()=>{
+                        Swal.fire({
+                          title: xhr.statusText,
+                          text: xhr.responseJSON.message,
+                          icon: 'warning',
+                          showCancelButton: true,
+                          confirmButtonColor: '#3085d6',
+                          cancelButtonColor: '#d33',
+                          confirmButtonText: 'Yes, Login!'
+                        }).then((result) => {
+                          if (result.value) {
+                            window.location = '/login'
+                          }
+                        })
+                    }, 150)
+                    break;
+                case 403:
+                case 404:
+                case 500:
+                    toastr.error(xhr.responseJSON.message||'',xhr.statusText,{"timeOut": "0",});
+                    // setTimeout(()=>{
+                    //     Swal.fire(xhr.statusText, xhr.responseJSON.message, 'error');
+                    // }, 150)
+                    break;
+                case 422:
+                    showErrors(xhr)
+                    break;
+            }
         }
 	});
 	window.addEventListener('load', function() {
@@ -34,9 +84,9 @@ var Helper = (function(){
                 "type": "question",
                 "showCancelButton": true,
                 "showLoaderOnConfirm": true,
-                "confirmButtonText": "Add To Cart",
-                "cancelButtonText": "Cancel",
-                "title": "Are you sure to add this item to your cart?",
+                "confirmButtonText": Lang.get('cart.add_to_cart'),
+                "cancelButtonText": Lang.get('common.cancel'),
+                "title": Lang.get('cart.add_to_cart_confirm_message'),
                 "text": "",
                 "confirmButtonColor": "#a2c147",
                 preConfirm: function(input) {
@@ -71,10 +121,10 @@ var Helper = (function(){
                 }
                 console.log(response)
                 if(response.code == 1) {
-                  Swal.fire('System Notification', response.message, 'success');
+                  Swal.fire(Lang.get('common.system_notification'), response.message, 'success');
                   $('.header-cart').html(response.view)
                 } else {
-                  Swal.fire('System Error', response.message, 'error');
+                  Swal.fire(Lang.get('common.system_error'), response.message, 'error');
                 }
             });
         },
@@ -90,11 +140,11 @@ var Helper = (function(){
 	            },
 	            success: function (response) {
                     if(response.code == 1) {
-                      //Swal.fire('System Notification', response.message, 'success');
+                      //Swal.fire(Lang.get('common.system_notification'), response.message, 'success');
                       $('.header-cart').html(response.view)
                       $('#cart-sumary').html(response.form)
                     } else {
-                      Swal.fire('System Error', response.message, 'error');
+                      Swal.fire(Lang.get('common.system_error'), response.message, 'error');
                     }
                 },
                 error:function(request){
@@ -107,9 +157,9 @@ var Helper = (function(){
                 "type": "question",
                 "showCancelButton": true,
                 "showLoaderOnConfirm": true,
-                "confirmButtonText": "Remove this",
-                "cancelButtonText": "Cancel",
-                "title": "Are you sure to remove this item from your cart?",
+                "confirmButtonText": Lang.get('cart.remove'),
+                "cancelButtonText": Lang.get('common.cancel'),
+                "title": Lang.get('cart.remove_from_cart_confirm_message'),
                 "text": "",
                 "confirmButtonColor": "rgb(221, 51, 51)",
                 preConfirm: function(input) {
@@ -141,12 +191,12 @@ var Helper = (function(){
                 }
                 console.log(response)
                 if(response.code == 1) {
-                    Swal.fire('System Notification', response.message, 'success');
+                    Swal.fire(Lang.get('common.system_notification'), response.message, 'success');
                     $('.header-cart').html(response.view)
                     $('#cart-sumary').html(response.form)
 
                 } else {
-                    Swal.fire('System Error', response.message, 'error');
+                    Swal.fire(Lang.get('common.system_error'), response.message, 'error');
                 }
             });
         },
@@ -159,10 +209,10 @@ var Helper = (function(){
                 },
                 success: function (response) {
                     if(response.code == 1) {
-                      //Swal.fire('System Notification', response.message, 'success');
+                      //Swal.fire(Lang.get('common.system_notification'), response.message, 'success');
                       $('#cart-sumary').html(response.form)
                     } else {
-                      Swal.fire('System Error', response.message, 'error');
+                      Swal.fire(Lang.get('common.system_error'), response.message, 'error');
                     }
                 },
                 error:function(request){

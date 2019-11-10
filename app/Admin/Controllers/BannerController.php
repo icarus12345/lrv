@@ -29,7 +29,7 @@ class BannerController extends AdminController
 
         $grid->column('id', __('Id'));
         $grid->column('name', __('Name'));
-        $grid->column('image', __('Image'))->image('/', 60, 40);;
+        $grid->column('image', __('Image'))->image('/storage', 60, 40);;
         $grid->column('link', __('Link'));
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));

@@ -5,7 +5,7 @@
 	<div class="-container-fluid">
 	
 		<div class="section-title title-shape text-center">
-			<h4 class="title">Similar products</h4>
+			<h4 class="title">{{__('common.similar_product')}}</h4>
 		</div>
 	
 		<div class="row">
@@ -32,12 +32,12 @@
 							@endif
 							<!--Product Action-->
 							<div class="product-action">
-								<a href="#" title="Add to cart"><i class="fa fa-shopping-cart"></i></a>
-								<a href="#" title="Quick view" data-toggle="modal" data-target="#productModal"><i class="fa fa-expand"></i></a>
+								<a href="JavaScript:Helper.Cart.add({{$item->id}})" title="Add to cart"><i class="fa fa-shopping-cart"></i></a>
+								<a href="/product/detail/{{$item->id}}" title="Quick view" -data-toggle="modal" -data-target="#productModal"><i class="fa fa-expand"></i></a>
 							</div>
 						</div>
 						<div class="product-content">
-							<h5><a href="product-details.html" title="{{$item->name}}">{{$item->name}}</a></h5>
+							<h5><a href="/product/detail/{{$item->id}}" title="{{$item->name}}">{{$item->name}}</a></h5>
 							<!--Product Rating-->
 							<div class="rating-icon">
 								{!!$item->star!!}

@@ -12,7 +12,13 @@ return [
     | these language lines according to your application's requirements.
     |
     */
-
+    'oops' => 'Oops! Something wrong with the system.',
+    'system_notification'=>'System Notification',
+    'system_error'=>'System Error',
+    'yes'=>'Yes',
+    'no'=>'No',
+    'remove'=>'Remove',
+    'cancel'=>'Cancel',
     'home' => 'Home',
     'about' => 'About',
     'shop' => 'Shop',
@@ -32,4 +38,21 @@ return [
 		'en' => "English",
 		'vi' => "Tiếng việt",
 	],
+    'feature_product' => 'Feature Product',
+    'from_the_blog' => 'From The Blog',
+    'labels' => [
+        'hot' => 'Hot',
+        'new' => 'New',
+        'sale' => 'Sale',
+    ],
+    'more_info' => 'More Info',
+    'data_set' => 'Data Set',
+    'reviews' => 'Reviews',
+    'top_sale' => 'Top Sales',
+    'similar_product' => 'Similar Product',
+    'send_a_message' => 'Send A Message',
+    'send_message' => 'Send Message',
+    'newsletter' => 'Newsletter',
+    'submit' => 'Submit',
+
 ];

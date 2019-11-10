@@ -1,18 +1,18 @@
 <?php $comments = \App\Models\Comment::byTopic($topic_id, $topic_type)->get(); ?>
 <div class="comment-box" data-topic-id="{{$topic_id}}" data-topic-type="{{$topic_type}}" >
 	<div class="comment-list">
-		<h5>{{$comments->count()}} comments</h5>
+		<h5>{{$comments->count()}} {{__('comment.comments')}}</h5>
 		@foreach($comments as $comment)
 		@include('widget.comment.detail')
 		@endforeach
 	</div>
 	<div class="comment-form">
-		<h5>Leave a Reply</h5>
+		<h5>{{__('comment.leave_a_comment')}}</h5>
 		<form id="comment-form-{{$topic_id}}-{{$topic_type}}" name="comment-form-{{$topic_id}}-{{$topic_type}}" class="needs-validation" novalidate>
 			<p>Your email address will not be published. Required fields are marked <span class="required">*</span></p>
 			<div class="row mb-n20">
 				<div class="col-md-4 col-12 mb-20">
-					<label>Name<span class="required">*</span></label>
+					<label>{{__('validation.attributes.full_name')}}<span class="required">*</span></label>
 					<input type="text" name="name" required class="form-control">
 					
 					<div class="invalid-feedback">
@@ -32,14 +32,14 @@
 					<input type="text">
 				</div> -->
 				<div class="col-12 mb-20">
-					<label>Comment</label>
+					<label>{{__('validation.attributes.message')}}</label>
 					<textarea name="message" required class="form-control" rows="3"></textarea>
 					<div class="invalid-feedback">
 					  Comment is required.
 					</div>
 				</div>
 				<div class="col-12 mb-20">
-					<input type="submit" value="Leave a Comment">
+					<input type="submit" value="{{__('comment.leave_a_comment')}}">
 				</div>
 			</div>
 		</form>
