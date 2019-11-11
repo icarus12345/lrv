@@ -185,6 +185,7 @@ return [
         'company'                  => 'Company',
         'state_city'                  => 'State/Country',
         'postcode_zip'                  => 'Postcode/Zip',
+        'status'                  => 'Status',
     ],
 
 ];

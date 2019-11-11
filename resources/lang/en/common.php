@@ -39,6 +39,10 @@ return [
 		'en' => "English",
 		'vi' => "Tiếng việt",
 	],
+	'currency' => [
+		'VND' => "VND",
+		'USD' => "USD",
+	],
     'feature_product' => 'Feature Product',
     'from_the_blog' => 'From The Blog',
     'labels' => [

@@ -39,6 +39,10 @@ return [
 		'en' => "English",
 		'vi' => "Tiếng việt",
 	],
+	'currency' => [
+		'VND' => "VND",
+		'USD' => "USD",
+	],
     'feature_product' => 'Sản phẩm nổi bật',
     'from_the_blog' => 'Tin tức mới',
     'labels' => [

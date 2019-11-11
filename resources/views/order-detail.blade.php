@@ -17,7 +17,12 @@
     		<div class="check-out-area section-padding-sm">
     			<div class="container">
                     <div class="block-title">
-                        <h4 class="title">{{__('order.order_detail')}} #{{$order->no}}</h4>
+                        <h4 class="title">
+							{{__('order.order_detail')}} #{{$order->no}}
+							<span class="pull-right">
+								{{ \Carbon\Carbon::parse($order->created_at)->format('M, d Y') }}
+							</span>
+						</h4>
                     </div>
     				<div class="row">
                         
@@ -85,7 +90,7 @@
                             <div class="row mb-n20">
                                 <div class="col-md-12 col-12 mb-20">
                                     <label>{{__('validation.attributes.full_name')}}</label>
-                                    <input type="text"  class="form-control" value="{{$order->full_name}}" disabled="" />
+                                    <input type="text"  class="form-control" value="{{$order->name}}" disabled="" />
                                 </div>
                                 <div class="col-md-12 col-12 mb-20">
                                     <label>{{__('validation.attributes.company')}}</label>
@@ -98,11 +103,12 @@
                                 </div>
                                 <div class="col-md-12 col-12 mb-20">
                                     <label>{{__('validation.attributes.city')}}</label>
-                                    <input type="text" name="city" placeholder="{{__('validation.attributes.city')}}" class="form-control" required />
+                                    <input type="text" name="city" placeholder="{{__('validation.attributes.city')}}" 
+									class="form-control" required disabled/>
                                 </div>
                                 <div class="col-md-12 col-12 mb-20">
                                     <label>{{__('validation.attributes.country')}} </label>
-                                    <select class="form-control" required name="country">
+                                    <select class="form-control" required name="country" disabled>
                                         <option value="vn" @if($order->country == 'vn') selected @endif>Viet Nam</option>
                                     </select>								
                                 </div>

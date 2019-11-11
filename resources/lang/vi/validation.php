@@ -185,6 +185,7 @@ return [
         'state_city'                  => 'Tiểu bang',
         'street_address'                  => 'Địa chỉ đường phố',
         'postcode_zip'                  => 'Mã vùng',
+        'status'                  => 'Trạng thái',
     ],
 
 ];

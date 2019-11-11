@@ -9,8 +9,7 @@ class Order extends Model
     //
     protected $fillable = [
         'user_id',
-        'first_name', 
-        'last_name', 
+        'name',  
         'company', 
         'email', 
         'street_address',
@@ -55,11 +54,6 @@ class Order extends Model
         return 'ORD' . sprintf('%06d', $this->id);
     }
 
-    public function getFullNameAttribute()
-    {
-        
-        return $this->attributes['first_name'] . ' ' . $this->attributes['last_name'];
-    }
 
     public function toArray() 
     {
@@ -82,5 +76,19 @@ class Order extends Model
     {
         
         return \Hash::check($this->no, $token);
+    }
+	
+	public function scopeByStatus($query, $status = null)
+    {
+		if($status == 'requested'){
+			$query->where('status','Requested');
+		}elseif($status == 'pending'){
+			$query->whereIn('status',['Requested','Approved','Unpaid','Paid','Shipping']);
+		}if($status == 'done'){
+			$query->where('status','Done');
+		}if($status == 'canceled'){
+			$query->where('status','Canceled');
+		}
+        return $query;
     }
 }

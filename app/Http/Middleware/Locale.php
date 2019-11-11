@@ -17,7 +17,10 @@ class Locale
     public function handle($request, Closure $next)
     {
         $raw_locale = $request->session()->get('locale');
-        
+        $raw_currency = $request->session()->get('currency');
+        if(!$raw_currency) {
+			\Session::put('currency', \Config::get('app.currency'));
+		}
         
         if (in_array($raw_locale, \Config::get('app.locales'))) {
             $locale = $raw_locale;

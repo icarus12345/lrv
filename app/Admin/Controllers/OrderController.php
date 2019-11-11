@@ -29,7 +29,8 @@ class OrderController extends AdminController
         $grid->column('id', __('Id'));
         $grid->column('no', __('No'))
 			->filter();
-        $grid->column('full_name', __('Customer'));
+        $grid->column('name', __('Customer'))
+			->filter();
         $grid->column('company', __('Company'))
 			->filter();
         $grid->column('email', __('Email'))
@@ -65,9 +66,8 @@ class OrderController extends AdminController
 				'VND' => 'VND',
                 'USD' => 'USD',
 			]);
-        $grid->column('created_at', __('Created at'))
-			->filter('range', 'datetime');;
-        $grid->column('updated_at', __('Updated at'));
+        
+        //$grid->column('updated_at', __('Updated at'));
         $grid->column('status', __('Status'))
             ->editable('select', [
                 'Requested' => 'Requested',
@@ -86,7 +86,9 @@ class OrderController extends AdminController
                 'Done' => 'Done',
                 'Canceled' => 'Canceled'
 			]);
-        $grid->fixColumns(4, -2);
+		$grid->column('created_at', __('Created at'))
+			->filter('range', 'datetime');;
+        $grid->fixColumns(4, -3);
         $grid->model()->orderBy('id', 'desc');
         $grid->disableCreateButton();
         $grid->actions(function ($actions) {

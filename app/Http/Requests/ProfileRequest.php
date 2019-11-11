@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class OrderRequest extends FormRequest
+class ProfileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,12 +28,10 @@ class OrderRequest extends FormRequest
             //'topic_type' => 'required',
             //'topic_id' => 'required|numeric',
             'name' => 'required',
-            'street_address' => 'required',
-            'city' => 'required',
-            'country' => 'required',
-            'postcode_zip' => 'required',
-            'email' => 'required|email',
-            'phone' => 'required',
+            //'email' => 'required|email',
+            'current_pwd' => ['nullable','min:8','max:255'],
+            'new_pwd' => ['nullable','min:8','max:255'],
+            'confirm_pwd' => ['nullable','same:new_pwd'],
         ];
         return $rules;
     }

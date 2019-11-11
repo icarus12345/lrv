@@ -48,6 +48,9 @@ class CreateOrderWorkflow implements WorkflowInterface
             $this->order->total_amount = $this->cart->getBillingAmount();
             $this->order->currency = 'VND';
 //            'coupon_id',
+			if(\Auth::user()){
+				$this->order->user_id = \Auth::user()->id;
+			}
             $this->order->save();
             foreach ($this->cart->items as $item) {
                 OrderDetail::create([
@@ -66,8 +69,8 @@ class CreateOrderWorkflow implements WorkflowInterface
             DB::commit();
             $this->success = true;
             $this->message = __('order.create_order_success');
-            \Notification::route('mail', config('mail.notification.address'))
-                ->notify(new MailOrderRequestNotification($this->order));
+            //\Notification::route('mail', config('mail.notification.address'))
+            //    ->notify(new MailOrderRequestNotification($this->order));
 
         } catch (\Exception $e) {
             \Log::error($e->getMessage());

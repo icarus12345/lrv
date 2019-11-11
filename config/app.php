@@ -81,7 +81,11 @@ return [
     */
 
     'locale' => 'vi',
-
+    'currency' => 'VND',
+	'currency_exchange_rate' => [
+		'USD' => env('CURRENCY_EXCHANGE_RATE_USD', 23203.68), 
+		'VND' => env('CURRENCY_EXCHANGE_RATE_VND', 1)
+	],
     'locales' => ['en', 'vi'],
 
     /*

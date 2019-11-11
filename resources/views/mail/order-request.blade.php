@@ -20,7 +20,7 @@
             <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                 <tr style="border-top: 1px solid #efefef; font-size: 13px;">
                     <td style="padding: 5px 5px 5px 5px;color: #999;">Customer</td>
-                    <td style="padding: 5px 5px 5px 5px;text-align: right;">{{$order->full_name}}</td>
+                    <td style="padding: 5px 5px 5px 5px;text-align: right;">{{$order->name}}</td>
                 </tr>
                 <tr style="border-top: 1px solid #efefef; font-size: 13px;">
                     <td style="padding: 5px 5px 5px 5px;color: #999;">Email</td>

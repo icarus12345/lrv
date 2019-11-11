@@ -17,10 +17,12 @@
 				<div class="col-lg-auto col-12 d-flex justify-content-center">
 					<ul class="header-top-menu">
 						<li class="dropdown">
-							<a href="#" data-toggle="dropdown" class="dropdown-toggle">VND</a>
+							<a href="#" data-toggle="dropdown" class="dropdown-toggle">
+							{{__("common.currency")[\Session::get('currency')]}}
+							</a>
 							<ul class="dropdown-menu header-top-dropdown">
-								<li><a href="#">Dollar (USD)</a></li>
-								<li><a href="#">Việt Nam Đồng (VND)</a></li>
+								<li><a href="/currency/USD">Dollar (USD)</a></li>
+								<li><a href="/currency/VND">Việt Nam Đồng (VND)</a></li>
 							</ul>
 						</li>
 						<li class="dropdown">
@@ -37,13 +39,23 @@
 						<!--<li><a href="wishlist.html"><i class="fa fa-heart"></i>My wishlist</a></li>-->
 						@auth
 						<li><a href="/account"><i class="fa fa-user"></i>My account</a></li>
+						<li>
+							<a 
+								href="{{ route('logout') }}"
+                                onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+								<i class="fa fa-sign-out"></i>Logout
+							</a>
+							<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+								@csrf
+							</form>
+						</li>
 						@else
 							<li><a href="{{ route('login') }}"><i class="fa fa-unlock-alt"></i>Login</a></li>
 							@if (Route::has('register'))
 							<li><a href="{{ route('register') }}"><i class="fa fa-unlock-alt"></i>Register</a></li>
 							@endif
 						@endauth
-						<li><a href="shop/cart"><i class="fa fa-share-square-o"></i>{{__('cart.checkout')}}</a></li>
+						<li><a href="/shop/cart"><i class="fa fa-share-square-o"></i>{{__('cart.checkout')}}</a></li>
 					</ul>
 				</div><!--Right End-->
 				

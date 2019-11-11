@@ -82,17 +82,18 @@
                             </div>
     							
                             <div class="row mb-n20">
-                                <div class="col-md-6 col-12 mb-20">
-                                    <label>{{__('validation.attributes.first_name')}}<span class="required">*</span></label>
+                                <div class="col-md-12 col-12 mb-20">
+                                    <label>{{__('validation.attributes.full_name')}}<span class="required">*</span></label>
                                     <input
-                                        name="first_name" 
-                                        type="text" placeholder="{{__('validation.attributes.first_name')}}" class="form-control" required 
+                                        name="name" 
+                                        type="text" 
+										placeholder="{{__('validation.attributes.full_name')}}" 
+										class="form-control" 
+										value="{{\Auth::user()->name??''}}"
+										required 
                                         />
                                 </div>
-                                <div class="col-md-6 col-12 mb-20">
-                                    <label>{{__('validation.attributes.last_name')}}<span class="required">*</span></label>
-                                    <input type="text" name="last_name"  placeholder="{{__('validation.attributes.last_name')}}" class="form-control" required />
-                                </div>
+                                
                                 <div class="col-md-12 col-12 mb-20">
                                     <label>{{__('validation.attributes.company')}}</label>
                                     <input type="text" name="company" placeholder="{{__('validation.attributes.company')}}" class="form-control"/>
@@ -122,7 +123,13 @@
                                 </div>
                                 <div class="col-md-8 col-12 mb-20">
                                     <label>{{__('validation.attributes.email')}}<span class="required">*</span></label>
-                                    <input type="email" name="email" placeholder="{{__('validation.attributes.email')}}" class="form-control" required />
+                                    <input 
+										type="email" name="email" 
+										placeholder="{{__('validation.attributes.email')}}" 
+										class="form-control" 
+										value="{{\Auth::user()->email??''}}"
+										required 
+										/>
                                 </div>
                                 <div class="col-md-4 col-12 mb-20">
                                     <label>{{__('validation.attributes.phone')}}<span class="required">*</span></label>

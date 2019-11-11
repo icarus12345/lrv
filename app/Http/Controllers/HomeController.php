@@ -61,6 +61,14 @@ class HomeController extends Controller
 
         return redirect()->back();
     }
+	
+	public function currency(string $currency)
+    {
+        
+        \Session::put('currency', $currency);
+
+        return redirect()->back();
+    }
 
     public function about(){
         $this->data['content'] = Content::findOrFail(1);
