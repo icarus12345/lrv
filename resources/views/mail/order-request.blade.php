@@ -19,55 +19,54 @@
             <p style="font-weight: bold; margin-top: 25px;">Customer Information</p>
             <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                 <tr style="border-top: 1px solid #efefef; font-size: 13px;">
-                    <td style="padding: 15px 5px 5px 5px;color: #999;">Customer</td>
-                    <td style="padding: 15px 5px 5px 5px;text-align: right;">{{$order->name}}</td>
+                    <td style="padding: 5px 5px 5px 5px;color: #999;">Customer</td>
+                    <td style="padding: 5px 5px 5px 5px;text-align: right;">{{$order->full_name}}</td>
                 </tr>
                 <tr style="border-top: 1px solid #efefef; font-size: 13px;">
-                    <td style="padding: 15px 5px 5px 5px;color: #999;">Email</td>
-                    <td style="padding: 15px 5px 5px 5px;text-align: right;">{{$order->email}}</td>
+                    <td style="padding: 5px 5px 5px 5px;color: #999;">Email</td>
+                    <td style="padding: 5px 5px 5px 5px;text-align: right;">{{$order->email}}</td>
                 </tr>
                 <tr style="border-top: 1px solid #efefef; font-size: 13px;">
-                    <td style="padding: 15px 5px 5px 5px;color: #999;">Phone</td>
-                    <td style="padding: 15px 5px 5px 5px;text-align: right;">{{$order->Phone}}</td>
+                    <td style="padding: 5px 5px 5px 5px;color: #999;">Phone</td>
+                    <td style="padding: 5px 5px 5px 5px;text-align: right;">{{$order->phone}}</td>
                 </tr>
-                <tr style="font-size: 13px;">
+                <tr style="font-size: 13px;border-top: 1px solid #efefef;">
                     <td style="padding: 5px;color: #999;">Company</td>
-                <td style="padding: 5px;text-align: right;">{{$order->company}}</td>
+					<td style="padding: 5px;text-align: right;">{{$order->company}}</td>
                 </tr>
-                <tr style="font-size: 13px;">
+                <tr style="font-size: 13px;border-top: 1px solid #efefef;">
                     <td style="padding: 5px;color: #999;">Address</td>
                     <td style="padding: 5px;text-align: right;">{{$order->street_address}}<br/>{{$order->other_address}}</td>
                 </tr>
-                <tr style="border-bottom: 1px solid #efefef;font-size: 13px;">
-                    <td style="padding:  5px 5px 15px 5px;color: #999;">City</td>
-                    <td style="padding:  5px 5px 15px 5px;text-align: right;">{{$order->city}}</td>
+                <tr style="border-top: 1px solid #efefef;font-size: 13px;">
+                    <td style="padding:  5px 5px 5px 5px;color: #999;">City</td>
+                    <td style="padding:  5px 5px 5px 5px;text-align: right;">{{$order->city}}</td>
                 </tr>
-                <tr style="border-bottom: 1px solid #efefef;font-size: 13px;">
-                    <td style="padding:  5px 5px 15px 5px;color: #999;">Country</td>
-                    <td style="padding:  5px 5px 15px 5px;text-align: right;">{{$order->country}}</td>
+                <tr style="border-top: 1px solid #efefef;font-size: 13px;">
+                    <td style="padding:  5px 5px 5px 5px;color: #999;">Country</td>
+                    <td style="padding:  5px 5px 5px 5px;text-align: right;">{{$order->country}}</td>
                 </tr>
-                <tr style="border-bottom: 1px solid #efefef;font-size: 13px;">
-                    <td style="padding:  5px 5px 15px 5px;color: #999;">State/City</td>
-                    <td style="padding:  5px 5px 15px 5px;text-align: right;">{{$order->state_city}}</td>
+                <tr style="border-top: 1px solid #efefef;font-size: 13px;">
+                    <td style="padding:  5px 5px 5px 5px;color: #999;">State/City</td>
+                    <td style="padding:  5px 5px 5px 5px;text-align: right;">{{$order->state_city}}</td>
                 </tr>
-                <tr style="border-bottom: 1px solid #efefef;font-size: 13px;">
-                    <td style="padding:  5px 5px 15px 5px;color: #999;">Postcode/Zip</td>
-                    <td style="padding:  5px 5px 15px 5px;text-align: right;">{{$order->postcode_zip}}</td>
+                <tr style="border-top: 1px solid #efefef;font-size: 13px;">
+                    <td style="padding:  5px 5px 5px 5px;color: #999;">Postcode/Zip</td>
+                    <td style="padding:  5px 5px 5px 5px;text-align: right;">{{$order->postcode_zip}}</td>
                 </tr>
             </table>
 
             <p style="font-weight: bold; margin-top: 25px;">Order Information</p>
             <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                 <tr style="border-top: 1px solid #efefef; font-size: 13px;">
-                    <td style="padding: 15px 5px 5px 5px;color: #999;">Products</td>
-                    <td style="padding: 15px 5px 5px 5px;color: #999;text-align: center;">Quanlity</td>
-                    <td style="padding: 15px 5px 5px 5px;color: #999;text-align: center;">Sale Price</td>
-                    <td style="padding: 15px 5px 5px 5px;color: #999;text-align: right">Total</td>
+                    <td style="padding: 5px 5px 5px 5px;color: #999;">Products</td>
+                    <td style="padding: 5px 5px 5px 5px;color: #999;text-align: center;" width="120" colspan="2">Qty * Sale Price</td>
+                    <td style="padding: 5px 5px 5px 5px;color: #999;text-align: right" width="100">Total</td>
                 </tr>
                 @foreach($order->order_details as $item)
-                <tr style="font-size: 13px;">
+                <tr style="font-size: 13px;border-top: 1px solid #efefef;">
                     <td style="padding: 5px 5px 5px 5px;">
-                        {{ $item->product->name}}
+                        <div>{{ $item->product->name}}</div>
                         @if($item->size || $item->color)
                         <span class="details">
                         @if($item->size){{$item->size}}, @endif
@@ -75,19 +74,18 @@
                         </span>
                         @endif
                     </td>
-                    <td style="padding: 5px 5px 5px 5px;text-align: center;">{{$item->qty}}</td>
-                    <td style="padding: 5px 5px 5px 5px;text-align: center;">{!!\App\Helpers::formatPrice($item->price_with_discount)!!}</td>
+                    <td style="padding: 5px 5px 5px 5px;text-align: center;" colspan="2">{{$item->qty}}x{!!\App\Helpers::formatPrice($item->price_with_discount)!!}</td>
                     <td style="padding: 5px 5px 5px 5px;text-align: right;">{!! \App\Helpers::formatPrice($item->amount)!!}</td>
                 </tr>
                 @endforeach
-                <tr style="font-size: 13px;">
-                    <td style="padding:5px;color: #999;">Subtotal</td>
+                <tr style="font-size: 13px;border-top: 3px double #efefef;">
+                    <td style="padding:5px;color: #999;font-weight: bold;">Subtotal</td>
                     <td style="padding: 5px;text-align: center;"></td>
                     <td style="padding: 5px;text-align: center;"></td>
                     <td style="padding: 5px;text-align: right;"><b>{!! \App\Helpers::formatPrice($order->amount)!!}</b></td>
                 </tr>
-                <tr style="font-size: 13px;">
-                    <td style="padding:5px;color: #999;">Shiping</td>
+                <tr style="font-size: 13px;border-top: 1px solid #efefef;">
+                    <td style="padding:5px;color: #999;font-weight: bold;">Shiping</td>
                     <td style="padding: 5px;text-align: center;"></td>
                     <td style="padding: 5px;text-align: center;"></td>
                     <td style="padding: 5px;text-align: right;">
@@ -98,14 +96,14 @@
                         @endif
                     </td>
                 </tr>
-                <tr style="font-size: 13px;">
-                    <td style="padding:5px;color: #999;">Tax</td>
+                <tr style="font-size: 13px;border-top: 1px solid #efefef;">
+                    <td style="padding:5px;color: #999;font-weight: bold;">Tax</td>
                     <td style="padding: 5px;text-align: center;"></td>
                     <td style="padding: 5px;text-align: center;"></td>
                     <td style="padding: 5px;text-align: right;">{!! \App\Helpers::formatPrice($order->tax_amount)!!}</td>
                 </tr>
                 <tr
-                    style="border-bottom: 1px solid #efefef;font-size: 13px;background: #efefef; font-weight: bold;">
+                    style="border-top: 1px solid #efefef;font-size: 13px;background: #efefef; font-weight: bold;">
                     <td style="padding:5px;color: #999;">Billing Total</td>
                     <td style="padding: 5px;text-align: center;"></td>
                     <td style="padding: 5px;text-align: center;"></td>

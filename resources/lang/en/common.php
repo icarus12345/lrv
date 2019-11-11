@@ -17,6 +17,7 @@ return [
     'system_error'=>'System Error',
     'yes'=>'Yes',
     'no'=>'No',
+    'success'=>'Success !',
     'remove'=>'Remove',
     'cancel'=>'Cancel',
     'home' => 'Home',
@@ -54,5 +55,6 @@ return [
     'send_message' => 'Send Message',
     'newsletter' => 'Newsletter',
     'submit' => 'Submit',
-
+    'meet_the_team' => 'Meet the team',
+	'send_request_confirm_message' => 'Do you want send request?',
 ];

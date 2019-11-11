@@ -42,6 +42,7 @@ Route::get('/shop/checkout', 'ShopController@checkout');
 Route::post('/shop/checkout', 'ShopController@createOrder');
 Route::get('/order/ORD{no}', 'ShopController@orderDetail');
 
+Route::post('/send-request', 'HomeController@sendRequest');
 
 Route::get('/shop/add-to-cart', 'ShopController@addToCart');
 Route::post('/shop/add-to-cart', 'ShopController@addToCart');

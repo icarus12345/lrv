@@ -246,7 +246,7 @@
     										
     									</tbody>
     									<tfoot>
-    										<tr>
+    										<tr style="border-top: 3px double #dee2e6;">
     											<th colspan="2">{{__('checkout.cart_subtotal')}}</th>
     											<td class="text-right text-nowrap"><strong>{!! \App\Helpers::formatPrice($cart->total_amount)!!}</strong></td>
     										</tr>

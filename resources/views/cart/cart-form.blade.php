@@ -85,7 +85,7 @@
                             <h4 class="title">Cart Totals</h4>
                         </div>
                         <div class="cart-total-wrap">
-                            <div class="table-responsive">
+                            <div class="table-responsive" style="overflow:hidden">
                                 <table class="table table-borderless text-right mb-0">
                                     <tbody>
                                         <tr>

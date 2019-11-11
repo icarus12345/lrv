@@ -212,6 +212,7 @@
                     <tr>
                         <td style="padding: 20px 15px 10px; text-align: left; background: #fff;">
                             {{ config('app.name', 'Laravel') }}
+							<span style="float:right;"><?php echo date('M, d Y'); ?></span>
                         </td>
                     </tr>
                     <!-- Email Header : END -->
@@ -223,7 +224,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="background-color: #333333;">
+                        <td style="background-color: #777;">
                             <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                                 <tr>
                                     <td

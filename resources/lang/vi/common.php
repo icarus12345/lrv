@@ -17,6 +17,7 @@ return [
     'system_error'=>'Thông báo lỗi',
     'yes'=>'Có',
     'remove'=>'Xoá',
+	'success'=>'Thành công !',
     'no'=>'Không',
     'cancel'=>'Huỷ',
     'home' => 'Trang chủ',
@@ -54,4 +55,6 @@ return [
     'send_message' => 'Gửi yêu cầu',
     'newsletter' => 'Nhận thông báo',
     'submit' => 'Đồng ý',
+	'meet_the_team' => 'Đội ngũ nhân viên',
+	'send_request_confirm_message' => 'Bạn có muốn gửi yêu cầu ?',
 ];

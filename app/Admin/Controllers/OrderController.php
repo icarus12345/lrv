@@ -27,27 +27,46 @@ class OrderController extends AdminController
         $grid = new Grid(new Order);
 
         $grid->column('id', __('Id'));
-        $grid->column('no', __('No'));
+        $grid->column('no', __('No'))
+			->filter();
         $grid->column('full_name', __('Customer'));
-        $grid->column('company', __('Company'));
-        $grid->column('email', __('Email'));
-        $grid->column('street_address', __('Street address'));
-        $grid->column('other_address', __('Other address'));
-        $grid->column('state_city', __('State city'));
-        $grid->column('country', __('Country'));
-        $grid->column('city', __('City'));
-        $grid->column('postcode_zip', __('Postcode zip'));
-        $grid->column('phone', __('Phone'));
-        $grid->column('coupon_id', __('Coupon id'));
-        $grid->column('amount', __('Amount'));
-        $grid->column('tax_amount', __('Tax amount'));
+        $grid->column('company', __('Company'))
+			->filter();
+        $grid->column('email', __('Email'))
+			->filter();
+        $grid->column('street_address', __('Street address'))
+			->filter();
+        $grid->column('other_address', __('Other address'))
+			->filter();
+        $grid->column('state_city', __('State city'))
+			->filter();
+        $grid->column('country', __('Country'))
+			->filter();
+        $grid->column('city', __('City'))
+			->filter();
+        $grid->column('postcode_zip', __('Postcode zip'))
+			->filter();
+        $grid->column('phone', __('Phone'))
+			->filter();
+        $grid->column('coupon_id', __('Coupon id'))
+			->filter();
+        $grid->column('amount', __('Amount'))
+			->filter('range');
+        $grid->column('tax_amount', __('Tax amount'))
+			->filter('range');
         $grid->column('flat_rate', __('Flat rate'));
         $grid->column('ship_amount', __('Ship amount'));
         $grid->column('discount_amount', __('Discount amount'));
-        $grid->column('total_amount', __('Total amount'));
+        $grid->column('total_amount', __('Total amount'))
+			->filter('range');
         $grid->column('total_item', __('Total item'));
-        $grid->column('currency', __('Currency'));
-        $grid->column('created_at', __('Created at'));
+        $grid->column('currency', __('Currency'))
+			->filter([
+				'VND' => 'VND',
+                'USD' => 'USD',
+			]);
+        $grid->column('created_at', __('Created at'))
+			->filter('range', 'datetime');;
         $grid->column('updated_at', __('Updated at'));
         $grid->column('status', __('Status'))
             ->editable('select', [
@@ -58,7 +77,15 @@ class OrderController extends AdminController
                 'Shipping' => 'Shipping',
                 'Done' => 'Done',
                 'Canceled' => 'Canceled'
-            ]);
+            ])->filter([
+				'Requested' => 'Requested',
+                'Approved' => 'Approved',
+                'Unpaid' => 'Unpaid',
+                'Paid' => 'Paid',
+                'Shipping' => 'Shipping',
+                'Done' => 'Done',
+                'Canceled' => 'Canceled'
+			]);
         $grid->fixColumns(4, -2);
         $grid->model()->orderBy('id', 'desc');
         $grid->disableCreateButton();
@@ -66,6 +93,21 @@ class OrderController extends AdminController
             // $actions->disableDelete();
             $actions->disableEdit();
         });
+		$grid->filter(function($filter){
+
+			// Remove the default id filter
+			$filter->disableIdFilter();
+
+			// Add a column filter
+			$filter->where(function ($query) {
+
+				$query->where('first_name', 'like', "%{$this->input}%")
+					->orWhere('last_name', 'like', "%{$this->input}%");
+
+			}, 'Full Name');
+			
+
+		});
         return $grid;
     }
 

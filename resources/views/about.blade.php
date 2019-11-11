@@ -38,81 +38,28 @@
         <div class="section-padding pt-0">
             <div class="container">
                 <div class="section-title text-center">
-                    <h3 class="title">Meet the team</h3>
+                    <h3 class="title">{{__('common.meet_the_team')}}</h3>
                 </div>
                 <div class="row">
-                
+					@foreach(\App\Models\Team::all() as $item)
                     <div class="col-md-3 col-sm-4">
                         <div class="team">
                             <div class="team-image">
-                                <img width="250" height="250" src="/assets/themes/gid/img/about/1.jpg" class="img-responsive" alt="team4">
+                                <img width="250" height="250" src="{{$item->image_path}}" class="img-responsive" alt="team4">
                                 <div class="mask">
                                     <div class="mask-inner">
-                                        <a href="#"><i class="fa fa-facebook"></i></a>
-                                        <a href="#"><i class="fa fa-twitter"></i></a>
+                                        <a href="{{$item->fb_link}}"><i class="fa fa-facebook"></i></a>
+                                        <a href="{{$item->tw_link}}"><i class="fa fa-twitter"></i></a>
                                     </div>
                                 </div>
                             </div>
                             <div class="team-info">
-                                <h5>Martin Demichelis</h5>
-                                <h6>PHP Developer</h6>
+                                <h5>{{$item->name}}</h5>
+                                <h6>{{$item->position}}</h6>
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="col-md-3 col-sm-4">
-                        <div class="team">
-                            <div class="team-image">
-                                <img width="250" height="250" src="/assets/themes/gid/img/about/2.jpg" class="img-responsive" alt="team4">
-                                <div class="mask">
-                                    <div class="mask-inner">
-                                        <a href="#"><i class="fa fa-facebook"></i></a>
-                                        <a href="#"><i class="fa fa-twitter"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="team-info">
-                                <h5>Luka Biglia</h5>
-                                <h6>Programmer</h6>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-3 col-sm-4">
-                        <div class="team">
-                            <div class="team-image">
-                                <img width="250" height="250" src="/assets/themes/gid/img/about/3.jpg" class="img-responsive" alt="team4">
-                                <div class="mask">
-                                    <div class="mask-inner">
-                                        <a href="#"><i class="fa fa-facebook"></i></a>
-                                        <a href="#"><i class="fa fa-twitter"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="team-info">
-                                <h5>Havier Macherano</h5>
-                                <h6>Developer</h6>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-3 hidden-sm">
-                        <div class="team">
-                            <div class="team-image">
-                                <img width="250" height="250" src="/assets/themes/gid/img/about/4.jpg" class="img-responsive" alt="team4">
-                                <div class="mask">
-                                    <div class="mask-inner">
-                                        <a href="#"><i class="fa fa-facebook"></i></a>
-                                        <a href="#"><i class="fa fa-twitter"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="team-info">
-                                <h5>Martin Demichelis</h5>
-                                <h6>PHP Developer</h6>
-                            </div>
-                        </div>
-                    </div>
+					@endforeach
                     
                 </div>
             </div>

@@ -7,6 +7,8 @@ use App\Models\Category;
 use App\Models\Banner;
 use App\Models\Product;
 use App\Models\Content;
+use App\Http\Requests\ContactRequest;
+use App\Workflows\ContactWorkflow;
 class HomeController extends Controller
 {
     public $data;
@@ -67,5 +69,38 @@ class HomeController extends Controller
 
     public function contact(){
         return view('contact',$this->data);
+    }
+	
+	/**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function sendRequest(ContactRequest $request)
+    {
+        try {
+            $workflow = new ContactWorkflow($request);
+            $workflow->run();
+            if($workflow->succeeded()) {
+
+                return response()->json([
+                        'code'=> 1,
+                        'message'=> __('common.success'),
+                        'data' => $workflow->getResult(),
+
+                    ]);
+            }else{
+                return response()->json([
+                    'code'=>  -1,
+                    'message'=> $workflow->getMessage()
+                ]);
+            }
+            // throw new \Exception('Loiox roi',1000);
+        } catch (\Exception $e) {
+            return response()->json([
+                    'code'=>$e->getCode(),
+                    'message'=> $e->getMessage()
+                ]);
+        }
     }
 }
