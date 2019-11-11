@@ -46,7 +46,7 @@ class CreateOrderWorkflow implements WorkflowInterface
             $this->order->flat_rate = $this->cart->flat_rate;
             $this->order->discount_amount = 0;
             $this->order->total_amount = $this->cart->getBillingAmount();
-            $this->order->currency = 'VND';
+            $this->order->currency = \App\Helpers::getCurrency();
 //            'coupon_id',
 			if(\Auth::user()){
 				$this->order->user_id = \Auth::user()->id;

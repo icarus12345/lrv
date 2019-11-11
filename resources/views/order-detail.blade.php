@@ -232,9 +232,9 @@
     												@if($item->color){{$item->color}}@endif
     												</span>
     												@endif
-                                                    <div>{{$item->qty}} x {!!\App\Helpers::formatPrice($item->price_with_discount)!!}</div>
+                                                    <div>{{$item->qty}} x {!!\App\Helpers::formatPrice($item->price_with_discount, $order->currency)!!}</div>
     											</td>
-    											<td class="text-right text-nowrap">{!! \App\Helpers::formatPrice($item->amount)!!}</td>
+    											<td class="text-right text-nowrap">{!! \App\Helpers::formatPrice($item->amount, $order->currency)!!}</td>
     										</tr>
     										@endforeach
     										
@@ -242,7 +242,7 @@
     									<tfoot>
     										<tr style="border-top: 3px double #dee2e6;">
     											<th colspan="2">{{__('checkout.cart_subtotal')}}</th>
-    											<td class="text-right text-nowrap"><strong>{!! \App\Helpers::formatPrice($order->amount)!!}</strong></td>
+    											<td class="text-right text-nowrap"><strong>{!! \App\Helpers::formatPrice($order->amount, $order->currency)!!}</strong></td>
     										</tr>
     										<tr>
     											<th colspan="">{{__('checkout.shipping')}}</th>
@@ -255,23 +255,23 @@
     											</td>
                                                 <td class="text-right text-nowrap">
                                                     @if($order->flat_rate)
-                                                    {!! \App\Helpers::formatPrice($order->ship_amount)!!}
+                                                    {!! \App\Helpers::formatPrice($order->ship_amount, $order->currency)!!}
                                                     @else
-                                                    {!! \App\Helpers::formatPrice(0) !!}
+                                                    {!! \App\Helpers::formatPrice(0, $order->currency) !!}
                                                     @endif
                                                 </td>
     										</tr>
                                             <tr>
                                                 <th colspan="2">Tax ({!! \App\Helpers::getTax()!!}%)</th>
                                                 <td class="text-right text-nowrap">
-                                                    {!! \App\Helpers::formatPrice($order->tax_amount)!!}
+                                                    {!! \App\Helpers::formatPrice($order->tax_amount, $order->currency)!!}
                                                 </td>
                                             </tr>
     										<tr>
     											<th colspan="2">{{__('checkout.order_total')}}</th>
     											<td class="h5 text-right text-nowrap">
                                                     <strong>
-                                                        {!! \App\Helpers::formatPrice($order->total_amount)!!}
+                                                        {!! \App\Helpers::formatPrice($order->total_amount, $order->currency)!!}
                                                     </strong>
                                                 </td>
     										</tr>								

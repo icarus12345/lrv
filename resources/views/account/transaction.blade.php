@@ -40,7 +40,7 @@
 												<tr>
 													<td><a href="/order/{{$item->no}}?token={{$item->token}}">{{ \Carbon\Carbon::parse($item->created_at)->format('M, d Y') }}</a></td>
 													<td><a href="/order/{{$item->no}}?token={{$item->token}}">{{$item->no}}</a></td>
-													<td class="text-right text-nowrap"><a href="/order/{{$item->no}}?token={{$item->token}}">{!! \App\Helpers::formatPrice($item->total_amount)!!}</a></td>
+													<td class="text-right text-nowrap"><a href="/order/{{$item->no}}?token={{$item->token}}">{!! \App\Helpers::formatPrice($item->total_amount, $item->currency)!!}</a></td>
 													<td class="text-right text-nowrap"><a href="/order/{{$item->no}}?token={{$item->token}}">{{__("order.status.{$item->status}")}}</a></td>
 												</tr>
 											@endforeach

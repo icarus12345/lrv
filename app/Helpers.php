@@ -7,16 +7,19 @@ use App\Models\Category;
 
 class Helpers
 {
-    public static function formatPrice($number){
+    public static function formatPrice($number,$currency = null){
 		$locale = \App::getLocale();
-		$currency = self::getCurrency();
-		
+		if(!$currency ) $currency = self::getCurrency();
+		$currency_exchange_rate = self::getExchangeRate($currency);
+		$number = $number / $currency_exchange_rate;
+		$round = 0;
+		if($currency == 'USD') $round = 2;
 		if ($number < 1000) {
 			// Anything less than a thousrand
-			$format = number_format($number);
+			$format = number_format($number, $round);
 		} else if ($number < 1000000) {
 			// Anything less than a million
-			$format = (float)number_format($number / 1000) . 'K';
+			$format = (float)number_format($number / 1000, $round) . 'K';
 		} else if ($number < 1000000000) {
 			// Anything less than a billion
 			$format = (float)number_format($number / 1000000, 2) . 'M';
@@ -25,9 +28,9 @@ class Helpers
 			$format = (float)number_format($number / 1000000000, 2) . 'B';
 		}
 		
-		if($locale == 'vi'){
+		if($currency == 'VND'){
 			return $format . '<sup>₫</sup>';
-		} elseif($locale == 'en'){
+		} elseif($currency == 'USD'){
 			return "$".$format;
 		} else {
 			return $format;
@@ -47,8 +50,8 @@ class Helpers
 		return $currency;
 	}
 	
-	public static function getExchangeRate(){
-		$currency = self::getCurrency();
+	public static function getExchangeRate($currency = null){
+		if(!$currency ) $currency = self::getCurrency();
 		return \Config::get('app.currency_exchange_rate')[$currency]??1;
 	}
 
