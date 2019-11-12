@@ -81,7 +81,7 @@
     					-->
     					<!--Login & Coupon End-->
                         
-    					<div class="col-lg-6 col-12">
+    					<div class="col-lg-6 col-12 mb-40">
                             
                             <div class="block-title w-100">
                                 <h5 class="title">{{__('checkout.billing_details')}} </h5>

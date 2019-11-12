@@ -55,7 +55,7 @@
                 
                 <div class="row mb-n30">
                    
-                    <div class="col-md-8 col-sm-7 col-xs-12 mb-30">
+                    <div class="col-md-7 col-sm-7 col-xs-12 mb-30">
                         <div class="d-flex flex-wrap mb-n2">
                             <!-- <input type="submit" value="Update Cart" class="mr-2 mb-2"> -->
                             <a class="btn mb-2" href="/shop">{{__('cart.continue_shopping')}}</a>
@@ -80,11 +80,11 @@
                         </div>
                     </div>
                     
-                    <div class="col-md-4 col-sm-5 col-xs-12 mb-30">
+                    <div class="col-md-5 col-sm-5 col-xs-12 mb-30">
                         <div class="block-title text-right mb-2">
                             <h4 class="title">Cart Totals</h4>
                         </div>
-                        <div class="cart-total-wrap">
+                        <div class="cart-total-wrap mb-40">
                             <div class="table-responsive" style="overflow:hidden">
                                 <table class="table table-borderless text-right mb-0">
                                     <tbody>
@@ -135,7 +135,7 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="2" class="pb-0"><a class="btn" href="/shop/checkout">{{__('checkout.place_order')}}</a></td>
+                                            <td colspan="2" class="pb-0"><a class="btn w-100" href="/shop/checkout">{{__('checkout.place_order')}}</a></td>
                                         </tr>
                                     </tfoot>
                                 </table>
