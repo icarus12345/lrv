@@ -39,7 +39,8 @@
 /* Large mobile : 480px. */
 @media (max-width: 767px) {
     .container {
-        max-width: 450px;
+		padding-right: 10px;
+		padding-left: 10px;
         width: 100%;
     }
     .section-padding {
@@ -118,7 +119,7 @@
 /* Small Mobile :480px. */
 @media only screen and (max-width: 479px) {
     .container {
-        max-width: 320px;
+        
         width: 100%;
     }
     /*Header*/
@@ -137,6 +138,9 @@
     }
     .header-cart-dropdown {
         transform: translate3d(0px, 0, 0)!important;
+		width: -webkit-calc(100vw - 20px);
+		width: -moz-calc(100vw - 20px);
+		width: calc(100vw - 20px);
     }
     /*Subscribe Section*/
     .letter-box {
@@ -176,6 +180,12 @@
 	.blog-share h6 {
 		margin-bottom: 10px;
 	}
-
+	.product-img-content{
+		max-width: 240px;
+		margin:auto;
+	}
+	.single-product-image{
+		padding:10px;
+	}
 }
  

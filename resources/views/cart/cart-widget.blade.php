@@ -1,5 +1,11 @@
 <?php $cart = new \App\Services\Cart() ?>
-<button data-toggle="dropdown" class="dropdown-toggle"><i class="fa fa-shopping-cart"></i><span class="num">{{$cart->total_item}}</span></button>
+<button 
+	data-toggle="dropdown" class="dropdown-toggle"
+	id="cart-btn"
+	>
+	<i class="fa fa-shopping-cart"></i>
+	<span class="num">{{$cart->total_item}}</span>
+</button>
 <div class="header-cart-dropdown dropdown-menu dropdown-menu-right">
 	<ul class="header-cart-product">
 		@if(count($cart->items))
@@ -20,7 +26,7 @@
 					<span class="old-price">{!! \App\Helpers::formatPrice($item['price'])!!}</span>
 					@endif
 				</span>
-				<a href="JavaScript:Helper.Cart.remove('{{$key}}')" class="remove"><i class="fa fa-close"></i></a>
+				<a href="JavaScript:Helper.Cart.removeAndShow('{{$key}}')" class="remove"><i class="fa fa-close"></i></a>
 			</div>
 		</li>
 		@endforeach

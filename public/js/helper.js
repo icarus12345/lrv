@@ -152,7 +152,14 @@ var Helper = (function(){
                 }
 	        });
 		},
-        remove: function(key) {
+		removeAndShow: function(key){
+			self.Cart.remove(key, ()=>{
+				setTimeout(()=>{
+					$('#cart-btn').trigger('click');
+				}, 250)
+			})
+		},
+        remove: function(key, callback) {
             Swal.fire({
                 "type": "question",
                 "showCancelButton": true,
@@ -181,6 +188,7 @@ var Helper = (function(){
                 }
             }).then(function(result) {
                 if (typeof result.dismiss !== 'undefined') {
+					if(callback) callback();
                     return Promise.reject();
                 }
                 
@@ -191,12 +199,18 @@ var Helper = (function(){
                 }
                 console.log(response)
                 if(response.code == 1) {
-                    Swal.fire(Lang.get('common.system_notification'), response.message, 'success');
+                    Swal.fire(Lang.get('common.system_notification'), response.message, 'success')
+						.then(()=>{
+							if(callback) callback();
+						});
                     $('.header-cart').html(response.view)
                     $('#cart-sumary').html(response.form)
 
                 } else {
-                    Swal.fire(Lang.get('common.system_error'), response.message, 'error');
+                    Swal.fire(Lang.get('common.system_error'), response.message, 'error')
+						.then(()=>{
+							if(callback) callback();
+						});
                 }
             });
         },

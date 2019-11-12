@@ -964,6 +964,8 @@ input[type="submit"]:hover {
     padding: 15px 18px;
     line-height: 18px;
     border-left: 1px solid #e8e8e8;
+	width: 48px;
+	text-align: center
 }
 /*Mobile Sub Menu*/
 .mean-nav .sub-menu,
