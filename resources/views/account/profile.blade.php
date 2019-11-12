@@ -1,34 +1,34 @@
 
 <div class="myaccount-content">
-	<h5>Your Profile</h5>
+	<h5>@lang('Your Profile')</h5>
 	<div class="account-details-form">
 		<form id="profile-frm" action="/account/profile/update" class="needs-validation" novalidate>
 			<div class="row">
 				
 				<div class="col-12 mb-30">
-					<input name="name" placeholder="Full Name" type="text" class="form-control" required value="{{\Auth::user()->name}}">
+					<input name="name" placeholder="@lang('Full name')" type="text" class="form-control" required value="{{\Auth::user()->name}}">
 				</div>
 
 				<div class="col-12 mb-30">
-					<input name="email" placeholder="Email Address" type="email" class="form-control" disabled value="{{\Auth::user()->email}}">
+					<input name="email" placeholder="@lang('E-Mail Address')" type="email" class="form-control" disabled value="{{\Auth::user()->email}}">
 				</div>
 
-				<div class="col-12 mb-30"><h6 class="mb-0">Password change</h6></div>
+				<div class="col-12 mb-30"><h6 class="mb-0">@lang('Password change')</h6></div>
 
 				<div class="col-12 mb-30">
-					<input name="current_pwd" placeholder="Current Password" type="password" class="form-control">
+					<input name="current_pwd" placeholder="@lang('Current Password')" type="password" class="form-control">
 				</div>
 
 				<div class="col-lg-6 col-12 mb-30">
-					<input name="new_pwd" placeholder="New Password" type="password" class="form-control">
+					<input name="new_pwd" placeholder="@lang('New Password')" type="password" class="form-control">
 				</div>
 
 				<div class="col-lg-6 col-12 mb-30">
-					<input name="confirm_pwd" placeholder="Confirm Password" type="password" class="form-control">
+					<input name="confirm_pwd" placeholder="@lang('Confirm Password')" type="password" class="form-control">
 				</div>
 
 				<div class="col-12">
-					<button type="submit" class="btn btn-round btn-lg">Save Changes</button>
+					<button type="submit" class="btn btn-round btn-lg">@lang('Save Changes')</button>
 				</div>
 
 			</div>

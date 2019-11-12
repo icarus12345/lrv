@@ -9,7 +9,7 @@
 	<div class="comment-form">
 		<h5>{{__('comment.leave_a_comment')}}</h5>
 		<form id="comment-form-{{$topic_id}}-{{$topic_type}}" name="comment-form-{{$topic_id}}-{{$topic_type}}" class="needs-validation" novalidate>
-			<p>Your email address will not be published. Required fields are marked <span class="required">*</span></p>
+			<p>@lang('Your email address will not be published. Required fields are marked') <span class="required">*</span></p>
 			<div class="row mb-n20">
 				<div class="col-md-4 col-12 mb-20">
 					<label>{{__('validation.attributes.full_name')}}<span class="required">*</span></label>

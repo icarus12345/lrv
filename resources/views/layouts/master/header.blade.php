@@ -38,24 +38,24 @@
 						
 						<!--<li><a href="wishlist.html"><i class="fa fa-heart"></i>My wishlist</a></li>-->
 						@auth
-						<li><a href="/account"><i class="fa fa-user"></i>My account</a></li>
+						<li><a href="/account"><i class="fa fa-user"></i>@lang('My account')</a></li>
 						<li>
 							<a 
 								href="{{ route('logout') }}"
                                 onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-								<i class="fa fa-sign-out"></i>Logout
+								<i class="fa fa-sign-out"></i>@lang('Logout')
 							</a>
 							<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
 								@csrf
 							</form>
 						</li>
 						@else
-							<li><a href="{{ route('login') }}"><i class="fa fa-unlock-alt"></i>Login</a></li>
+							<li><a href="{{ route('login') }}"><i class="fa fa-unlock-alt"></i>@lang('Login')</a></li>
 							@if (Route::has('register'))
-							<li><a href="{{ route('register') }}"><i class="fa fa-unlock-alt"></i>Register</a></li>
+							<li><a href="{{ route('register') }}"><i class="fa fa-unlock-alt"></i>@lang('Register')</a></li>
 							@endif
 						@endauth
-						<li><a href="/shop/cart"><i class="fa fa-share-square-o"></i>{{__('cart.checkout')}}</a></li>
+						<li><a href="/shop/cart"><i class="fa fa-share-square-o"></i>@lang('Checkout')</a></li>
 					</ul>
 				</div><!--Right End-->
 				
@@ -70,7 +70,7 @@
 			<div class="row position-relative justify-content-between align-items-center">
 				<!--Logo Start-->
 				<div class="header-logo col-auto">
-					<a href="home.html"><img src="/assets/themes/gid/img/logo.png" alt=""></a>
+					<a href="/"><img src="/assets/themes/gid/img/logo.png" alt=""></a>
 				</div>
 				<!--Logo End-->
 				<!--Main Menu Start-->

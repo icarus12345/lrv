@@ -5,8 +5,8 @@
         <div class="breadcrumbs-area">
             <div class="container">
                 <ul class="breadcrumbs">
-                    <li><a href="index.html"><i class="fa fa-home"></i>Home</a></li>
-                    <li class="active">My Account</li>
+                    <li><a href="index.html"><i class="fa fa-home"></i>@lang('Home')</a></li>
+                    <li class="active">@lang('My account')</li>
                 </ul>
             </div>
         </div>

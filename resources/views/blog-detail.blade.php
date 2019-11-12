@@ -35,7 +35,7 @@
                                         {{$post->title}}
                                     </h2>
                                     <div class="entry-meta">
-                                        Posted by
+                                        @lang('Posted by')
                                         <span class="author vcard">
                                             <a href="#" class="url fn n" title="View all posts by admin">admin</a>
                                         </span> 

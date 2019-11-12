@@ -10,13 +10,13 @@
 
 			<div class="mb-30" style="margin: auto; max-width: 480px">
 				<div class="block-title">
-					<h5 class="title">Create an account</h5>
+					<h5 class="title">@lang('Create an account')</h5>
 				</div>
 				<form method="POST" action="{{ route('register') }}">
 					@csrf
 					<div class="row mb-n20">
 						<div class="col-md-12 col-12 mb-20">
-							<label>{{ __('Name') }}</label>
+							<label>{{ __('Full name') }}</label>
 							<input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
 
 							@error('name')

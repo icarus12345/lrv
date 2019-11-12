@@ -40,8 +40,8 @@
                                                 <label>{{__('validation.attributes.subject')}}</label>
                                                 <select name="subject" class="form-control" required>
                                                     <option value="">-- Choose --</option>
-                                                    <option value="Customer service">Customer service</option>
-                                                    <option value="Webmaster">Webmaster</option>
+                                                    <option value="Customer service">@lang('Customer service')</option>
+                                                    <option value="Webmaster">@lang('Webmaster')</option>
                                                 </select>
                                             </div>
                                             

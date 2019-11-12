@@ -5,8 +5,8 @@
         <div class="breadcrumbs-area">
             <div class="container">
                 <ul class="breadcrumbs">
-                    <li><a href="index.html"><i class="fa fa-home"></i>Home</a></li>
-                    <li class="active">My Account</li>
+                    <li><a href="index.html"><i class="fa fa-home"></i>@lang('Home')</a></li>
+                    <li class="active">@lang('Orders History')</li>
                 </ul>
             </div>
         </div>
@@ -22,7 +22,7 @@
                     <!-- My Account Tab Content Start -->
                     <div class="col-lg-9 col-12 mb-30">
                         <div class="myaccount-content">
-							<h5>Orders History</h5>
+							<h5>@lang('Orders History')</h5>
 							<div class="account-details-form">
 								<div class="-table-responsive">
     								<table class="table m-0">

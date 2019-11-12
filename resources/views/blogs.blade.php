@@ -42,7 +42,7 @@
                                         <a href="/blog/detail/{{$item->id}}">{{$item->title}}</a>
                                     </h2>
                                     <div class="entry-meta">
-                                        Posted by
+                                        @lang('Posted by')
                                         <span class="author vcard">
                                             <a href="#" class="url fn n" title="View all posts by admin">admin</a>
                                         </span> 
@@ -52,7 +52,7 @@
                                     <div class="summary">
                                         <p>{!!$item->desc!!}</p>
                                     </div>
-                                    <a href="/blog/detail/{{$item->id}}" class="readmore">read more</a>
+                                    <a href="/blog/detail/{{$item->id}}" class="readmore">@lang('Read more')</a>
                                 </div>
                             </div>
 

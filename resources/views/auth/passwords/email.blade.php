@@ -1,6 +1,4 @@
-
-
-@extends('layouts.app')
+@extends('layouts.master.master')
 @section('content')
 
 
@@ -48,12 +46,6 @@
 		</div>
 	</div>
 </div>
-{{ var_dump(Session::all()) }}
-@if ($message = Session::get('error'))
-    <div class="alert alert-success">
-        <p>{{ $message }}</p>
-    </div>
-  @endif
 <!-- Account Area End -->
 @endsection
 

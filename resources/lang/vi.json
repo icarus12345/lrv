@@ -1,0 +1,44 @@
+{	
+	"Home": "Trang chủ",
+	"My account": "Tài khoản",
+	"Login": "Đăng nhập",
+	"Register": "Đăng ký",
+	"Logout": "Thoát",
+	"Checkout": "Đặt hàng",
+	
+	"Full name": "Họ và tên",
+	"Confirm Password": "Xác nhận mật khẩu",
+	"E-Mail Address": "Địa chỉ Email",
+	"Password": "Mật khẩu",
+	"Remember Me": "Nhớ trạng thái",
+	"Forgot Your Password?": "Quên mật khẩu ?",
+	"Already Register?": "Bạn đã có tài khoản?",
+	"Reset Password": "Reset mật khẩu",
+	"Send Password Reset Link": "Gửi Link reset mật khẩu",
+	"Create an account": "Tạo tài khoản",
+	
+	"Profile": "Thông tin cá nhân",
+	"Your Profile": "Thông tin cá nhân",
+	"All Orders": "Tất cả đơn hàng",
+	"Requested Orders": "Chờ duyệt",
+	"Pending Orders": "Đang chờ xử lý",
+	"Done Orders": "Đã hoàn thành",
+	"Canceled Orders": "Đã hủy",
+	"Payment Method": "Phương thức thanh toán",
+	"Address": "Thông tin cá nhân",
+	
+	"Password change": "Thay đổi mật khẩu",
+	"Current Password": "Mật khẩu cũ",
+	"New Password": "Mật khẩu mới",
+	"Save Changes": "Cập nhật",
+	
+	"Orders History": "Lịch sử mua hàng",
+	"Posted by": "Đăng bởi",
+	"Read more": "Xem chi tiết",
+	"Your email address will not be published. Required fields are marked": "Thông tin E-mail không được công khai, các thông tin bắt buộc được đánh dấu",
+	"Customer service": "Dịch vụ chăm sóc khách hàng",
+	"Webmaster": "Quản trị trang web",
+	
+	
+	"EOF": "EOF"
+}
