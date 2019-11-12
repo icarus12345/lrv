@@ -22,4 +22,5 @@ Encore\Admin\Form::forget(['map', 'editor']);
 use Encore\Admin\Form;
 use App\Admin\Extensions\Form\CKEditor;
 
+Admin::css('/css/admin.css');
 Form::extend('ckeditor', CKEditor::class);
