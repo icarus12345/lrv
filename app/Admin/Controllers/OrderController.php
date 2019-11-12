@@ -125,8 +125,7 @@ class OrderController extends AdminController
 
         $show->field('id', __('Id'));
         $show->field('user_id', __('User id'));
-        $show->field('first_name', __('First name'));
-        $show->field('last_name', __('Last name'));
+        $show->field('name', __('Full name'));
         $show->field('company', __('Company'));
         $show->field('email', __('Email'));
         $show->field('street_address', __('Street address'));
@@ -182,8 +181,7 @@ class OrderController extends AdminController
         $form = new Form(new Order);
 
         $form->number('user_id', __('User id'));
-        $form->text('first_name', __('First name'));
-        $form->text('last_name', __('Last name'));
+        $form->text('name', __('Full name'));
         $form->text('company', __('Company'));
         $form->email('email', __('Email'));
         $form->text('street_address', __('Street address'));

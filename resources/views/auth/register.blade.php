@@ -12,7 +12,7 @@
 				<div class="block-title">
 					<h5 class="title">@lang('Create an account')</h5>
 				</div>
-				<form method="POST" action="{{ route('register') }}">
+				<form method="POST" action="{{ route('register') }}" class="needs-validation" novalidate>
 					@csrf
 					<div class="row mb-n20">
 						<div class="col-md-12 col-12 mb-20">

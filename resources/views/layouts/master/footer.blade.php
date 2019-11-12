@@ -6,7 +6,7 @@
 				<div class="footer-border-right col-lg-5 col-12 mb-25">
 					<div class="footer-middle-content">
 						<a href="index.html"><img src="/assets/themes/gid/img/logo_footer.png" alt=""></a>
-						<p>Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit.</p>
+						<p></p>
 						<div class="social-icon">
 							<ul>
 								<li><a href="#"><i class="fa fa-facebook"></i></a></li>

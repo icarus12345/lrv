@@ -6,11 +6,11 @@
 				<div class="section-title white">
 					<h4 class="title">{{__('common.newsletter')}}</h4>                  
 				</div>
-				<p>Subscribe to our email newsletter & receive updates right in your inbox.</p>
+				<p>@lang('Subscribe to our email newsletter & receive updates right in your inbox.')</p>
 				<div class="letter-box2">
 					<form method="POST" action="#" class="search-box">
 						<div>
-							<input type="text" placeholder="Enter your e-mail" id="search-letter" name="s">
+							<input type="text" placeholder="@lang('E-Mail Address')" id="search-letter" name="s">
 							<button class="btn btn-search" id="search-letter-btn" type="submit">{{__('common.submit')}}</button>
 						</div>
 					</form>
