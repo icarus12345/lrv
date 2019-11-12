@@ -38,24 +38,24 @@
 						
 						<!--<li><a href="wishlist.html"><i class="fa fa-heart"></i>My wishlist</a></li>-->
 						@auth
-						<li><a href="/account"><i class="fa fa-user"></i>@lang('My account')</a></li>
+						<li><a href="/account"><i class="fa fa-user"></i>{{__('My account')}}</a></li>
 						<li>
 							<a 
 								href="{{ route('logout') }}"
                                 onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-								<i class="fa fa-sign-out"></i>@lang('Logout')
+								<i class="fa fa-sign-out"></i>{{__('Logout')}}
 							</a>
 							<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
 								@csrf
 							</form>
 						</li>
 						@else
-							<li><a href="{{ route('login') }}"><i class="fa fa-unlock-alt"></i>@lang('Login')</a></li>
+							<li><a href="{{ route('login') }}"><i class="fa fa-unlock-alt"></i>{{__('Login')}}</a></li>
 							@if (Route::has('register'))
-							<li><a href="{{ route('register') }}"><i class="fa fa-unlock-alt"></i>@lang('Register')</a></li>
+							<li><a href="{{ route('register') }}"><i class="fa fa-unlock-alt"></i>{{__('Register')}}</a></li>
 							@endif
 						@endauth
-						<li><a href="/shop/cart"><i class="fa fa-share-square-o"></i>@lang('Checkout')</a></li>
+						<li><a href="/shop/cart"><i class="fa fa-share-square-o"></i>{{__('Checkout')}}</a></li>
 					</ul>
 				</div><!--Right End-->
 				

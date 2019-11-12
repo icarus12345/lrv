@@ -55,7 +55,7 @@
                 
                 <div class="row mb-n30">
                    
-                    <div class="col-md-7 col-sm-7 col-xs-12 mb-30">
+                    <div class="col-md-5 col-sm-5 col-xs-12 mb-30">
                         <div class="d-flex flex-wrap mb-n2">
                             <!-- <input type="submit" value="Update Cart" class="mr-2 mb-2"> -->
                             <a class="btn mb-2" href="/shop">{{__('cart.continue_shopping')}}</a>
@@ -65,21 +65,26 @@
                             <p>{{__('cart.enter_coupon')}}</p>
 
 
-                            <div class="row mb-n20">
-                                <div class="col-xl-7 col-lg-7 col-md-7 col-12 mb-20">
-                                    <div class="input-group mb-3" >
-                                      <input type="text" class="form-control" placeholder="{{__('cart.coupon_code')}}" aria-label="Coupon code" aria-describedby="basic-addon2">
-                                      <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary" type="button">{{__('cart.apply_coupon')}}</button>
-                                      </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-12 mb-20">
-                                </div>
-                            </div>
+							<form id="coupon-form" name="coupon-form" method="POST" class="needs-validation" novalidate>
+								@csrf
+								<div class="input-group mb-3" >
+									<input 
+										type="text" 
+										class="form-control text-uppercase" 
+										name="coupon"
+										placeholder="{{__('cart.coupon_code')}}"
+										required
+										pattern="[0-9A-Za-z]{12,12}"
+										value="{{old('coupon')}}"
+										>
+									<div class="input-group-append">
+										<button class="btn btn-outline-secondary" type="submit">{{__('cart.apply_coupon')}}</button>
+									</div>
+								</div>
+							</form>
                         </div>
                     </div>
-                    
+                    <div class="col-md-2 col-sm-2 col-xs-12"></div>
                     <div class="col-md-5 col-sm-5 col-xs-12 mb-30">
                         <div class="block-title text-right mb-2">
                             <h4 class="title">Cart Totals</h4>

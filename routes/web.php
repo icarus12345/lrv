@@ -42,6 +42,7 @@
 	Route::post('/shop', 'ProductController@index');
 
 	Route::get('/shop/cart', 'ShopController@index');
+	Route::post('/shop/cart', 'ShopController@index');
 	Route::get('/shop/checkout', 'ShopController@checkout');
 	Route::post('/shop/checkout', 'ShopController@createOrder');
 	Route::get('/order/ORD{no}', 'ShopController@orderDetail');

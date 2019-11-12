@@ -17,7 +17,16 @@
 					<div class="row mb-n20">
 						<div class="col-md-12 col-12 mb-20">
 							<label>{{ __('Full name') }}</label>
-							<input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+							<input 
+								id="name" 
+								type="text" 
+								class="form-control @error('name') is-invalid @enderror" 
+								name="name" 
+								value="{{ old('name') }}" 
+								required 
+								autocomplete="name" 
+								pattern=".{2,100}"
+								autofocus>
 
 							@error('name')
 								<span class="invalid-feedback" role="alert">
@@ -27,7 +36,15 @@
 						</div>
 						<div class="col-md-12 col-12 mb-20">
 							<label>{{ __('E-Mail Address') }}</label>
-							<input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+							<input 
+								id="email" 
+								type="email" 
+								class="form-control @error('email') is-invalid @enderror" 
+								name="email" 
+								value="{{ old('email') }}" 
+								required 
+								pattern=".{5,191}"
+								autocomplete="email">
 
 							@error('email')
 								<span class="invalid-feedback" role="alert">
@@ -37,7 +54,14 @@
 						</div>
 						<div class="col-md-12 col-12 mb-20">
 							<label>{{ __('Password') }}</label>
-							<input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+							<input 
+								id="password" 
+								type="password" 
+								class="form-control @error('password') is-invalid @enderror" 
+								name="password" 
+								required 
+								pattern=".{8,191}"
+								autocomplete="new-password">
 
 							@error('password')
 								<span class="invalid-feedback" role="alert">
@@ -47,7 +71,13 @@
 						</div>
 						<div class="col-md-12 col-12 mb-20">
 							<label>{{ __('Confirm Password') }}</label>
-							<input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+							<input 
+								id="password-confirm" 
+								type="password" 
+								class="form-control" 
+								name="password_confirmation" 
+								required 
+								autocomplete="new-password">
 						</div>
 						<div class="col-12 mb-50">					
 							<button class="btn" type="submit">{{ __('Register') }}</button>

@@ -1,4 +1,6 @@
 {	
+	"OK": "Đồng ý",
+	"Cancel": "Hủy",
 	"Home": "Trang chủ",
 	"My account": "Tài khoản",
 	"Login": "Đăng nhập",
@@ -39,7 +41,7 @@
 	"Customer service": "Dịch vụ chăm sóc khách hàng",
 	"Webmaster": "Quản trị trang web",
 	"Subscribe to our email newsletter & receive updates right in your inbox.": "Đăng ký nhận thông báo mới từ hệ thống.",
-	
+	"Do you want use this coupon ?": "Bạn muốn sử dụng mã giảm giá này?",
 	
 	"EOF": "EOF"
 }

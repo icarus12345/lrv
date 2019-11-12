@@ -91,21 +91,48 @@
 										class="form-control" 
 										value="{{\Auth::user()->name??''}}"
 										required 
+										pattern=".{2,100}"
                                         />
                                 </div>
                                 
                                 <div class="col-md-12 col-12 mb-20">
                                     <label>{{__('validation.attributes.company')}}</label>
-                                    <input type="text" name="company" placeholder="{{__('validation.attributes.company')}}" class="form-control"/>
+                                    <input 
+										type="text" 
+										name="company" 
+										placeholder="{{__('validation.attributes.company')}}" 
+										class="form-control"
+										maxlength="191"
+										/>
                                 </div>
                                 <div class="col-md-12 col-12 mb-20">
                                     <label>{{__('validation.attributes.address')}}<span class="required">*</span></label>
-                                    <input type="text" name="street_address" placeholder="{{__('validation.attributes.street_address')}}" class="form-control mb-20" required />
-                                    <input type="text" name="other_address" placeholder="{{__('checkout.other_address')}}" class="form-control" />
+                                    <input 
+										type="text" 
+										name="street_address" 
+										placeholder="{{__('validation.attributes.street_address')}}" 
+										class="form-control mb-20" 
+										required 
+										pattern=".{10,191}"
+										/>
+                                    <input 
+										type="text" 
+										name="other_address" 
+										placeholder="{{__('checkout.other_address')}}" 
+										class="form-control" 
+										maxlength="191"
+										/>
                                 </div>
                                 <div class="col-md-12 col-12 mb-20">
                                     <label>{{__('validation.attributes.city')}}<span class="required">*</span></label>
-                                    <input type="text" name="city" placeholder="{{__('validation.attributes.city')}}" class="form-control" required />
+                                    <input 
+										type="text" 
+										name="city" 
+										placeholder="{{__('validation.attributes.city')}}" 
+										class="form-control" 
+										required 
+										pattern=".{2,100}"
+										/>
                                 </div>
                                 <div class="col-md-12 col-12 mb-20">
                                     <label>{{__('validation.attributes.country')}} <span class="required">*</span></label>
@@ -115,11 +142,24 @@
                                 </div>
                                 <div class="col-md-6 col-12 mb-20">
                                     <label>{{__('validation.attributes.state_city')}}</label>
-                                    <input type="text" name="state_city" placeholder="{{__('validation.attributes.state_city')}}" class="form-control" />
+                                    <input 
+										type="text" 
+										name="state_city" 
+										placeholder="{{__('validation.attributes.state_city')}}" 
+										class="form-control" 
+										maxlength="191"
+										/>
                                 </div>
                                 <div class="col-md-6 col-12 mb-20">
                                     <label>{{__('validation.attributes.postcode_zip')}}<span class="required">*</span></label>
-                                    <input type="text" name="postcode_zip" placeholder="{{__('validation.attributes.postcode_zip')}}" class="form-control" required />
+                                    <input 
+										type="text" 
+										name="postcode_zip" 
+										placeholder="{{__('validation.attributes.postcode_zip')}}" 
+										class="form-control" 
+										required 
+										pattern="[0-9]{1,12}"
+										/>
                                 </div>
                                 <div class="col-md-8 col-12 mb-20">
                                     <label>{{__('validation.attributes.email')}}<span class="required">*</span></label>
@@ -129,11 +169,19 @@
 										class="form-control" 
 										value="{{\Auth::user()->email??''}}"
 										required 
+										pattern=".{5,191}"
 										/>
                                 </div>
                                 <div class="col-md-4 col-12 mb-20">
                                     <label>{{__('validation.attributes.phone')}}<span class="required">*</span></label>
-                                    <input type="phone" name="phone" placeholder="{{__('validation.attributes.phone')}}" class="form-control" required />
+                                    <input 
+										type="phone" 
+										name="phone" 
+										placeholder="{{__('validation.attributes.phone')}}" 
+										class="form-control" 
+										required 
+										pattern="[0-9 +()]{8,12}"
+										/>
                                 </div>
     							<!--
                                 <div class="col-md-12 col-12 mb-20">

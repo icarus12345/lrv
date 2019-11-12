@@ -28,12 +28,24 @@
                                             
                                             <div class="col-12 mb-20">
                                                 <label>{{__('validation.attributes.full_name')}}</label>
-                                                <input type="text" name="name" class="form-control" required>
+                                                <input 
+													type="text" 
+													name="name" 
+													class="form-control" 
+													required
+													pattern=".{2,100}"
+													>
                                             </div>
                                             
                                             <div class="col-12 mb-20">
                                                 <label>{{__('validation.attributes.email')}}</label>
-                                                <input type="email" name="email" class="form-control" required>
+                                                <input 
+													type="email" 
+													name="email" 
+													class="form-control" 
+													required
+													pattern=".{5,191}"
+													>
                                             </div>
                                             
                                             <div class="col-12 mb-20">
@@ -50,7 +62,13 @@
                                     
                                     <div class="col-md-8 col-12 mb-20">
                                         <label>{{__('validation.attributes.message')}}</label>
-                                        <textarea name="message" class="form-control" rows="4" required></textarea>
+                                        <textarea 
+											name="message" 
+											class="form-control" 
+											rows="4" 
+											required
+											maxlength="1000"
+											></textarea>
                                         <div class="col-12 mb-50">
                                         
                                     </div>

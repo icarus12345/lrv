@@ -23,6 +23,7 @@
 								name="email" 
 								value="{{ old('email') }}" 
 								required 
+								pattern=".{5,191}"
 								autocomplete="email" autofocus
 								>
 
@@ -40,6 +41,7 @@
 								class="form-control @error('password') is-invalid @enderror" 
 								name="password" 
 								required 
+								pattern=".{8,191}"
 								autocomplete="current-password"
 								>
 

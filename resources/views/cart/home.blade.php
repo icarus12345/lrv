@@ -25,19 +25,20 @@
 @endsection
 
 @section('js')
+<script src="/assets/lib/serializeJSON/jquery.serializeJSON.min.js"></script>
 <script type="text/javascript">
     $(document).ready(()=>{
 		$('body').on('change','.qtyinput', (e)=>{
 			let quanlity  = $(e.target).val();
             let key  = $(e.target).parents('tr').data('key');
 			Helper.Cart.update(key, quanlity);
-		})
+		});
         $('body').on('click','.qtybtn', (e)=>{
             let quanlity  = $(e.target).parent().find("input").val();
             let key  = $(e.target).parents('tr').data('key');
 
             //Helper.Cart.update(key, quanlity);
-        })
+        });
     })
 </script>
 @endsection
