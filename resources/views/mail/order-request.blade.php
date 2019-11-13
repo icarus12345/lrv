@@ -79,15 +79,20 @@
                 </tr>
                 @endforeach
                 <tr style="font-size: 13px;border-top: 3px double #efefef;">
-                    <td style="padding:5px;color: #999;font-weight: bold;">Subtotal</td>
-                    <td style="padding: 5px;text-align: center;"></td>
-                    <td style="padding: 5px;text-align: center;"></td>
+                    <td colspan="2" style="padding:5px;color: #999;font-weight: bold;">Subtotal</td>
                     <td style="padding: 5px;text-align: right;"><b>{!! \App\Helpers::formatPrice($order->amount)!!}</b></td>
                 </tr>
+				@if($order->coupon_code)
+				<tr style="font-size: 13px;border-top: 3px double #efefef;">
+                    <td colspan="2" style="padding:5px;color: #999;font-weight: bold;">
+						Coupon Discount
+						<span style="font-weight: normal;">({{$order->coupon_code}})</span>
+					</td>
+                    <td style="padding: 5px;text-align: right;">-{!! \App\Helpers::formatPrice($order->discount_amount)!!}</td>
+                </tr>
+				@endif
                 <tr style="font-size: 13px;border-top: 1px solid #efefef;">
-                    <td style="padding:5px;color: #999;font-weight: bold;">Shiping</td>
-                    <td style="padding: 5px;text-align: center;"></td>
-                    <td style="padding: 5px;text-align: center;"></td>
+                    <td colspan="2" style="padding:5px;color: #999;font-weight: bold;">Shiping</td>
                     <td style="padding: 5px;text-align: right;">
                         @if($order->flat_rate)
                         {!! \App\Helpers::formatPrice($order->ship_amount)!!}
@@ -97,16 +102,12 @@
                     </td>
                 </tr>
                 <tr style="font-size: 13px;border-top: 1px solid #efefef;">
-                    <td style="padding:5px;color: #999;font-weight: bold;">Tax</td>
-                    <td style="padding: 5px;text-align: center;"></td>
-                    <td style="padding: 5px;text-align: center;"></td>
+                    <td colspan="2" style="padding:5px;color: #999;font-weight: bold;">Tax</td>
                     <td style="padding: 5px;text-align: right;">{!! \App\Helpers::formatPrice($order->tax_amount)!!}</td>
                 </tr>
                 <tr
                     style="border-top: 1px solid #efefef;font-size: 13px;background: #efefef; font-weight: bold;">
-                    <td style="padding:5px;color: #999;">Billing Total</td>
-                    <td style="padding: 5px;text-align: center;"></td>
-                    <td style="padding: 5px;text-align: center;"></td>
+                    <td colspan="2" style="padding:5px;color: #999;">Billing Total</td>
                     <td style="padding: 5px;text-align: right;">{!! \App\Helpers::formatPrice($order->total_amount)!!}</td>
                 </tr>
             

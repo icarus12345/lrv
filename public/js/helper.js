@@ -234,7 +234,49 @@ var Helper = (function(){
                 }
             });
         },
-
+		removeCoupon: ()=>{
+			Swal.fire({
+				"type": "question",
+				"showCancelButton": true,
+				"showLoaderOnConfirm": true,
+				"confirmButtonText": Lang.get('strings.OK'),
+				"cancelButtonText": Lang.get('strings.Cancel'),
+				"title": Lang.get('strings.Do you want remove this coupon ?'),
+				"text": "",
+				"confirmButtonColor": "#a2c147",
+				preConfirm: function(input) {
+					return new Promise(function(resolve, reject) {
+						$.ajax({
+							url : "/shop/remove-coupon",
+							type : "POST",
+							success: function (data) {
+								resolve(data);
+							},
+							error:function(request){
+								reject(request);
+							}
+						});
+					});
+				}
+			}).then(function(result) {
+				if (typeof result.dismiss !== 'undefined') {
+					return Promise.reject();
+				}
+				
+				if (typeof result.status === "boolean") {
+					var response = result;
+				} else {
+					var response = result.value;
+				}
+				console.log(response)
+				if(response.code == 1) {
+					Swal.fire(Lang.get('common.system_notification'), response.message, 'success')
+					$('#cart-sumary').html(response.form)
+				} else {
+				  Swal.fire(Lang.get('common.system_error'), response.message, 'error');
+				}
+			});
+		}
 	}
 	return self
 }())

@@ -38,5 +38,12 @@
   "Webmaster": "Webmaster",
   "Subscribe to our email newsletter & receive updates right in your inbox.": "Subscribe to our email newsletter & receive updates right in your inbox.",
   "Do you want use this coupon ?": "Do you want use this coupon ?",
+  "Do you want remove this coupon ?": "Do you want remove this coupon ?",
+  "Apply coupon code success.": "Apply coupon code success.",
+  "Remove coupon code success.": "Remove coupon code success.",
+  "The coupon code does not exist.": "The coupon code does not exist.",
+  "The coupon code has expired.": "The coupon code has expired.",
+  "Coupon Discount": "Coupon Discount",
+  "Create order success": "Create order success",
   "EOF": "EOF"
 }

@@ -26,7 +26,7 @@ class CreateOrdersTable extends Migration
             $table->string('city')->nullable();
             $table->string('postcode_zip')->nullable();
             $table->string('phone')->nullable();
-            $table->integer('coupon_id')->nullable();
+            $table->string('coupon_code',12)->nullable();
             $table->decimal('amount', 11, 2)->default(0);
             $table->decimal('tax_amount', 11, 2)->default(0);
             $table->boolean('flat_rate')->default(false);

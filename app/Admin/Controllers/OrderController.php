@@ -49,7 +49,7 @@ class OrderController extends AdminController
 			->filter();
         $grid->column('phone', __('Phone'))
 			->filter();
-        $grid->column('coupon_id', __('Coupon id'))
+        $grid->column('coupon_code', __('Coupon Code'))
 			->filter();
         $grid->column('amount', __('Amount'))
 			->filter('range');
@@ -135,7 +135,7 @@ class OrderController extends AdminController
         $show->field('city', __('City'));
         $show->field('postcode_zip', __('Postcode zip'));
         $show->field('phone', __('Phone'));
-        $show->field('coupon_id', __('Coupon id'));
+        $show->field('coupon_code', __('Coupon Code'));
         $show->field('amount', __('Amount'));
         $show->field('tax_amount', __('Tax amount'));
         $show->field('flat_rate', __('Flat rate'));
@@ -191,7 +191,7 @@ class OrderController extends AdminController
         $form->text('city', __('City'));
         $form->text('postcode_zip', __('Postcode zip'));
         $form->mobile('phone', __('Phone'));
-        $form->number('coupon_id', __('Coupon id'));
+        $form->number('coupon_code', __('Coupon Code'));
         $form->decimal('amount', __('Amount'))->default(0.00);
         $form->decimal('tax_amount', __('Tax amount'))->default(0.00);
         $form->switch('flat_rate', __('Flat rate'));

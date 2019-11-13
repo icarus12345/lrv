@@ -37,6 +37,8 @@ class Order extends Model
     {
         return $this->belongsTo(\App\User::class);
     }
+	
+	
 
     public function products()
     {

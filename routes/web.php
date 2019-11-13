@@ -54,6 +54,8 @@
 	Route::post('/shop/remove-from-cart', 'ShopController@removeFromCart');
 	Route::post('/shop/update-to-cart', 'ShopController@updateToCart');
 	Route::post('/shop/update-shiping-type', 'ShopController@updateShipingType');
+	Route::post('/shop/apply-coupon', 'ShopController@applyCoupon');
+	Route::post('/shop/remove-coupon', 'ShopController@removeCoupon');
 
 	Route::get('/shop/category/{id}', 'ProductController@category')->where(['id'=>'[0-9]+']);
 	Route::post('/shop/category/{id}', 'ProductController@category')->where(['id'=>'[0-9]+']);

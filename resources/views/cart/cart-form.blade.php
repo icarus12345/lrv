@@ -71,14 +71,14 @@
 									<input 
 										type="text" 
 										class="form-control text-uppercase" 
-										name="coupon"
+										name="coupon_code"
 										placeholder="{{__('cart.coupon_code')}}"
 										required
 										pattern="[0-9A-Za-z]{12,12}"
-										value="{{old('coupon')}}"
+										value="{{$cart->coupon['code']??''}}"
 										>
 									<div class="input-group-append">
-										<button class="btn btn-outline-secondary" type="submit">{{__('cart.apply_coupon')}}</button>
+										<button id="apply-coupon" class="btn btn-outline-secondary" type="button">{{__('cart.apply_coupon')}}</button>
 									</div>
 								</div>
 							</form>
@@ -91,15 +91,24 @@
                         </div>
                         <div class="cart-total-wrap mb-40">
                             <div class="table-responsive" style="overflow:hidden">
-                                <table class="table table-borderless text-right mb-0">
+                                <table class="table table-borderless mb-0">
                                     <tbody>
                                         <tr>
                                             <th>{{__('checkout.cart_subtotal')}}</th>
-                                            <td -width="160"><strong>{!! \App\Helpers::formatPrice($cart->total_amount)!!}</strong></td>
+                                            <td -width="160" class="text-right text-nowrap"><strong>{!! \App\Helpers::formatPrice($cart->total_amount)!!}</strong></td>
                                         </tr>
+										@if($cart->coupon)
+										<tr>
+                                            <th>{{__('Coupon Discount')}}</th>
+                                            <td -width="160" class="text-right text-nowrap">
+											-{!! \App\Helpers::formatPrice($cart->getCouponDiscoutAmount())!!}
+											<a href="JavaScript:Helper.Cart.removeCoupon('{{ $key}}')"><i class="fa fa-times"></i></a>
+											</td>
+                                        </tr>
+										@endif
                                         <tr>
                                             <th>{{__('checkout.shipping')}}</th>
-                                            <td>
+                                            <td class="text-right text-nowrap">
                                                 
 												<div class="custom-control custom-radio">
 													<input type="radio"  
@@ -129,13 +138,13 @@
                                         </tr>
                                         <tr>
                                             <th>Tax ({!! \App\Helpers::getTax()!!}%)</th>
-                                            <td>
+                                            <td class="text-right text-nowrap">
                                                 {!! \App\Helpers::formatPrice($cart->getTaxAmount())!!}
                                             </td>
                                         </tr>
                                         <tr>
                                             <th class="h5">{{__('checkout.order_total')}}</th>
-                                            <td class="h5"><strong>{!! \App\Helpers::formatPrice($cart->getBillingAmount())!!}</strong></td>
+                                            <td class="h5 text-right text-nowrap"><strong>{!! \App\Helpers::formatPrice($cart->getBillingAmount())!!}</strong></td>
                                         </tr>
                                     </tbody>
                                     <tfoot>

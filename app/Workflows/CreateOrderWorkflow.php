@@ -44,10 +44,12 @@ class CreateOrderWorkflow implements WorkflowInterface
             $this->order->tax_amount = $this->cart->getTaxAmount();
             $this->order->ship_amount = $this->cart->getShippingAmount();
             $this->order->flat_rate = $this->cart->flat_rate;
-            $this->order->discount_amount = 0;
+            $this->order->discount_amount = $this->cart->getCouponDiscoutAmount();
             $this->order->total_amount = $this->cart->getBillingAmount();
             $this->order->currency = \App\Helpers::getCurrency();
-//            'coupon_id',
+			if($this->cart->coupon){
+				$this->order->coupon_code = $this->cart->coupon['code'];
+			}
 			if(\Auth::user()){
 				$this->order->user_id = \Auth::user()->id;
 			}
@@ -68,9 +70,9 @@ class CreateOrderWorkflow implements WorkflowInterface
             $this->cart->clear();
             DB::commit();
             $this->success = true;
-            $this->message = __('order.create_order_success');
-            //\Notification::route('mail', config('mail.notification.address'))
-            //    ->notify(new MailOrderRequestNotification($this->order));
+            $this->message = __('Create order success');
+            \Notification::route('mail', config('mail.notification.address'))
+                ->notify(new MailOrderRequestNotification($this->order));
 
         } catch (\Exception $e) {
             \Log::error($e->getMessage());

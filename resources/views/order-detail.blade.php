@@ -244,6 +244,17 @@
     											<th colspan="2">{{__('checkout.cart_subtotal')}}</th>
     											<td class="text-right text-nowrap"><strong>{!! \App\Helpers::formatPrice($order->amount, $order->currency)!!}</strong></td>
     										</tr>
+											@if($order->coupon_code)
+											<tr>
+												<th colspan="2">
+													<div>{{__('Coupon Discount')}}</div>
+													<span style="font-weight:normal">({{$order->coupon_code}})</span>
+												</th>
+												<td class="text-right text-nowrap">
+												-{!! \App\Helpers::formatPrice($order->discount_amount)!!}
+												</td>
+											</tr>
+											@endif
     										<tr>
     											<th colspan="">{{__('checkout.shipping')}}</th>
     											<td colspan="">

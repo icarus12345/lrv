@@ -32,4 +32,5 @@ Route::group([
 	Route::resource('contents', 'ContentController');
 	Route::resource('orders', 'OrderController');
 	Route::resource('teams', 'TeamController');
+	Route::resource('coupons', 'CouponController');
 });

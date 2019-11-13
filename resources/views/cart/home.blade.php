@@ -39,6 +39,64 @@
 
             //Helper.Cart.update(key, quanlity);
         });
+		$('body').on('click','#apply-coupon', function(event) {
+			$('#coupon-form').unbind('submit')
+				.on('submit',(e)=>{					
+					e.preventDefault();
+					e.stopPropagation();
+					console.log(e.target.checkValidity());
+					if (e.target.checkValidity()) {
+						Swal.fire({
+							"type": "question",
+							"showCancelButton": true,
+							"showLoaderOnConfirm": true,
+							"confirmButtonText": "@lang('OK')",
+							"cancelButtonText": "@lang('Cancel')",
+							"title": "@lang('Do you want use this coupon ?')",
+							"text": "",
+							"confirmButtonColor": "#a2c147",
+							preConfirm: function(input) {
+								let params = $(e.target).serializeJSON();
+								console.log(params)
+								return new Promise(function(resolve, reject) {
+									$.ajax({
+										url : "/shop/apply-coupon",
+										type : "POST",
+										data : params,
+										success: function (data) {
+											resolve(data);
+										},
+										error:function(request){
+											reject(request);
+										}
+									});
+								});
+							}
+						}).then(function(result) {
+							if (typeof result.dismiss !== 'undefined') {
+								return Promise.reject();
+							}
+							
+							if (typeof result.status === "boolean") {
+								var response = result;
+							} else {
+								var response = result.value;
+							}
+							console.log(response)
+							if(response.code == 1) {
+								Swal.fire(Lang.get('common.system_notification'), response.message, 'success')
+								$('#cart-sumary').html(response.form)
+							} else {
+							  Swal.fire(Lang.get('common.system_error'), response.message, 'error');
+							}
+						});
+					}
+					e.target.classList.add('was-validated');
+				})
+			$('#coupon-form').trigger('submit');
+		});
+		
+		
     })
 </script>
 @endsection

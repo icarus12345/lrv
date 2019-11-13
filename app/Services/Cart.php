@@ -12,6 +12,7 @@ class Cart
     public $total_amount;
     public $total_item;
     public $flat_rate;
+    public $coupon;
 
     public function __construct() {
         $cart = \Session::get('shoping_cart') ?? 
@@ -20,19 +21,27 @@ class Cart
             'total_amount' => 0,
             'total_item' => 0,
             'flat_rate' => 0,
+            'coupon' => null,
         ];
         $this->items = $cart['items']??[];
         $this->total_amount = $cart['total_amount']??0;
         $this->total_item = $cart['total_item']??0;
         $this->flat_rate = $cart['flat_rate']??0;
+        $this->coupon = $cart['coupon']??null;
     }
-
+	
+	public function applyCoupon($coupon){
+		$this->coupon = $coupon;
+		$this->save();
+	}
+	
     public function save(){
         \Session::put('shoping_cart',[
             'items'=> $this->items,
             'total_amount' => $this->total_amount,
             'total_item' => $this->total_item,
             'flat_rate' => $this->flat_rate,
+            'coupon' => $this->coupon,
         ]);
     }
 
@@ -92,14 +101,40 @@ class Cart
             $this->save();
         }
     }
+	
+	public function getCouponDiscoutAmount() {
+		if($this->coupon) {
+			if($this->coupon['type'] == \App\Models\Coupon::STATUS_DISCOUNT){
+				return $this->total_amount * $this->coupon['value'] / 100;
+			}elseif($this->coupon['type'] == \App\Models\Coupon::STATUS_CASH){
+				return min($this->total_amount,$this->coupon['value']);
+			}elseif($this->coupon['type'] == \App\Models\Coupon::STATUS_COMPLIMENTARY){
+				return $this->total_amount;
+			}
+		}
+        return 0;
+    }
+	
+	public function getSubTotal() {
+		if($this->coupon) {
+			if($this->coupon['type'] == \App\Models\Coupon::STATUS_DISCOUNT){
+				return $this->total_amount - $this->total_amount * $this->coupon['value'] / 100;
+			}elseif($this->coupon['type'] == \App\Models\Coupon::STATUS_CASH){
+				return max(0,$this->total_amount - $this->coupon['value']);
+			}elseif($this->coupon['type'] == \App\Models\Coupon::STATUS_COMPLIMENTARY){
+				return 0;
+			}
+		}
+        return $this->total_amount;
+    }
 
     public function getTotalAmountWithShiping() {
         if($this->flat_rate)
-            return $this->total_amount + \App\Helpers::getFlatRate();
-        return $this->total_amount;
+            return $this->getSubTotal() + \App\Helpers::getFlatRate();
+        return $this->getSubTotal();
     }
     public function getTaxAmount() {
-        return $this->total_amount * \App\Helpers::getTax() / 100;
+        return $this->getSubTotal() * \App\Helpers::getTax() / 100;
     }
     public function getShippingAmount() {
         if($this->flat_rate)

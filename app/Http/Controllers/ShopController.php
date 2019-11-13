@@ -11,6 +11,7 @@ use App\Exceptions\CustomException;
 use App\Services\Cart;
 use App\Http\Requests\OrderRequest;
 use App\Workflows\CreateOrderWorkflow;
+use App\Workflows\ApplyCouponWorkflow;
 
 class ShopController extends Controller
 {
@@ -179,7 +180,7 @@ class ShopController extends Controller
 
                 return response()->json([
                         'code'=> 1,
-                        'message'=> __('checkout.create_order_success'),
+                        'message'=> $workflow->getMessage(),
                         'data' => $workflow->getResult(),
 
                     ]);
@@ -205,5 +206,49 @@ class ShopController extends Controller
         }
         $this->data['order'] = $order;
         return view('order-detail', $this->data);
+    }
+	
+	public function applyCoupon(Request $request)
+    {
+        try {
+			$workflow = new ApplyCouponWorkflow($request);
+            $workflow->run();
+            if($workflow->succeeded()) {
+
+                return response()->json([
+					'code'=> 1,
+					'message'=> $workflow->getMessage(),
+					'form' => view('cart.cart-form')->render(),
+
+				]);
+            }else{
+                return response()->json([
+                    'code'=>  -1,
+                    'message'=> $workflow->getMessage()
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                    'code'=>$e->getCode(),
+                    'message'=> $e->getMessage()
+                ]);
+        }
+    }
+	public function removeCoupon(Request $request)
+    {
+        try {
+			$this->cart->applyCoupon(null);
+			return response()->json([
+				'code'=> 1,
+				'message'=> __('Remove coupon code success.'),
+				'form' => view('cart.cart-form')->render(),
+
+			]);
+        } catch (\Exception $e) {
+            return response()->json([
+                    'code'=>$e->getCode(),
+                    'message'=> $e->getMessage()
+                ]);
+        }
     }
 }

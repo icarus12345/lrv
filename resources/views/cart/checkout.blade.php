@@ -305,6 +305,17 @@
     											<th colspan="2">{{__('checkout.cart_subtotal')}}</th>
     											<td class="text-right text-nowrap"><strong>{!! \App\Helpers::formatPrice($cart->total_amount)!!}</strong></td>
     										</tr>
+											@if($cart->coupon)
+											<tr>
+												<th colspan="2">
+													<div>{{__('Coupon Discount')}}</div>
+													<span style="font-weight:normal">({{$cart->coupon['code']}})</span>
+												</th>
+												<td class="text-right text-nowrap">
+												-{!! \App\Helpers::formatPrice($cart->getCouponDiscoutAmount())!!}
+												</td>
+											</tr>
+											@endif
     										<tr>
     											<th colspan="">{{__('checkout.shipping')}}</th>
     											<td colspan="">
@@ -380,11 +391,12 @@
 <script type="text/javascript">
     $(document).ready(()=>{
 		document.getElementById('checkout-form').addEventListener('submit', (e)=>{
+			e.preventDefault();
+            e.stopPropagation();
             if(e.target.checkValidity() === false){
                 return false;
             }
-            e.preventDefault();
-            e.stopPropagation();
+            
             Swal.fire({
                 "type": "question",
                 "showCancelButton": true,
