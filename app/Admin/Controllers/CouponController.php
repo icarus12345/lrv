@@ -67,14 +67,14 @@ class CouponController extends AdminController
     {
         $form = new Form(new Coupon);
 
-        $form->text('code', __('Code'));
+        $form->text('code', __('Code'))->rules('required|min:12|max:12');
         $form->date('expried', __('Expried'))->default(date('Y-m-d'));
         $form->decimal('value', __('Value'))->default(0.00);
         $form->select('type', __('Type'))->options([
 			'Discount'=>'Discount',
 			'Complimentary'=>'Complimentary',
 			'Cash'=>'Cash'
-		]);
+		])->rules('required');
 
         return $form;
     }
