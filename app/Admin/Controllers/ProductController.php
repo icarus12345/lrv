@@ -153,15 +153,13 @@ class ProductController extends AdminController
 				->disableHorizontal();
 		});
 		$form->column(12, function($form){
-			$form->image('image')
-				->move('product')
+			$form->browse('image')
 				->disableHorizontal();
 		});
 		$form->column(12, function($form){
-			$form->multipleImage('pictures')
-				->move('product')
-				->removable()
-				->sortable()
+			$form->browses('pictures')
+				//->removable()
+				//->sortable()
 				->disableHorizontal();
         });
 		$form->column(6, function($form){

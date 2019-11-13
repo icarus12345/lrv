@@ -1,4 +1,4 @@
-$.fn.browse = function() {
+$.fn.browses = function() {
 	let self = this;
 
 	let input = self.find('input[type="hidden"]');
@@ -6,17 +6,17 @@ $.fn.browse = function() {
 	let btn = self.find('button');
 	let name = fileInput.attr('name');
 
-	let dropify = fileInput.dropify()
-		.on('dropify.afterClear', function(event, element){
-		    input.attr('name',name)
-		    	.val('')
-			fileInput.attr('name',null)
-		})
-		.change((event) => {
-			input.attr('name',null)
-		    	.val('')
-			fileInput.attr('name',name)
-		})
+	let dropify = fileInput.DropifyMultiple()
+		// .on('dropify.afterClear', function(event, element){
+		//     input.attr('name',name)
+		//     	.val('')
+		// 	fileInput.attr('name',null)
+		// })
+		// .change((event) => {
+		// 	input.attr('name',null)
+		//     	.val('')
+		// 	fileInput.attr('name',name)
+		// })
 	console.log(dropify)
 	input.attr('name',null)
 	fileInput.attr('name',null)

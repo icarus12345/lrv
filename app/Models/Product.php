@@ -228,22 +228,32 @@ class Product extends BaseModel
             ->limit($num);
     }
 	
-	// public function setImageAttribute($binary)
- //    {
- //        $disk = 'public';
-
- //        if (isset($this->attributes['id'])) {
- //            $path = \Storage::disk($disk)->putFile('product', $binary);
- //        } else {
- //            $path = $binary;
- //        }
-
- //        $this->attributes['image'] = $path;
- //    }
-
-    public function setNullToImage()
+	public function setImageAttribute($binary)
     {
-        $this->attributes['image'] = null;
+        if (gettype($binary) == 'object') {
+
+            // Configs
+            $disk = 'public';
+            
+            $image = \Image::make($binary)
+            // ->resize(300, null, function ($constraint) {
+            //     $constraint->aspectRatio();
+            // })
+            // ->resizeCanvas(200, 200, 'center')
+            ->orientate()
+            ->encode('jpg');
+            $hash = md5($image->__toString());
+            $path = "{$hash}.jpg";
+            // Save image
+            \Storage::disk($disk)->put($path, $image->__toString(), 'public');
+            
+            
+            $this->attributes['image'] = \Storage::disk($disk)->url($path);
+        } else if (gettype($binary) == 'string') {
+            $this->attributes['image'] = $binary;
+        } else if (gettype($binary) == 'NULL') {
+            $this->attributes['image'] = null;
+        }
     }
 
     // public function getImageAttribute()

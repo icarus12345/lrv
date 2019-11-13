@@ -2,14 +2,15 @@
     <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
     <div class="{{$viewClass['field']}}">
         @include('admin::form.error')
-        <div class="browse" id="browse-{{$id}}">
+        <div class="browses" id="browses-{{$id}}">
             <div>
                 <input 
+                    multiple
                     type="file" 
                     class="dropify" 
                     name="{{$column}}"
                     accept="image/*"
-                    data-default-file="{{$value??''}}"
+                    -data-default-file="{{$value??''}}"
                     data-allowed-file-extensions="jpg jpeg png gif"
                     />
                 <button type="button" class="btn">

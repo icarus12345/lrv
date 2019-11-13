@@ -1,0 +1,42 @@
+.browse >div{
+	width: 160px;
+	position: relative;
+}
+.browse .dropify-wrapper{
+	height: 160px;
+	border-width: 1px;
+	padding: 0
+}
+.browse .dropify-wrapper .dropify-clear{
+	border-width: 1px;
+	font-weight: normal;
+	text-transform: none;
+	font-size: 11px;
+    padding: 4px 8px;
+    line-height: 16px;
+}
+.browse .dropify-message{
+	padding: 10px;font-size: 11px;
+	line-height: 16px;
+}
+.browse .dropify-wrapper+.btn{
+    border-radius: 0;
+    margin: auto;
+    z-index: 1;
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    right: 10px;
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    color: #333;
+    font-size: 11px;
+    padding: 4px 8px;
+    z-index: 12;
+
+}
+.browse .dropify-wrapper.has-preview:hover+.btn{
+	background: none;
+    border: 1px solid #FFF;
+    color: #fff;
+}

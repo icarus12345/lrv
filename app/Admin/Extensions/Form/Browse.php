@@ -9,6 +9,11 @@ class Browse extends Text
     public static $js = [
         '/js/ckfinder/ckfinder.js',
         '/packages/browse/browse.js',
+        '/js/dropify/js/dropify.js',
+    ];
+    public static $css = [
+        '/packages/browse/browse.css',
+        '/js/dropify/css/dropify.css',
     ];
 	protected $icon = 'fa-image';
     protected $view = 'admin.form.browse';

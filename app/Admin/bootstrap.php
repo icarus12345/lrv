@@ -25,7 +25,9 @@ Admin::js('/js/admin.js');
 use Encore\Admin\Form;
 use App\Admin\Extensions\Form\CKEditor;
 use App\Admin\Extensions\Form\Browse;
+use App\Admin\Extensions\Form\Browses;
 
 
 Form::extend('ckeditor', CKEditor::class);
 Form::extend('browse', Browse::class);
+Form::extend('browses', Browses::class);
