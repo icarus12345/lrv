@@ -15,7 +15,15 @@ class CKEditor extends Textarea
 
     public function render()
     {
-        $this->script = "$('textarea.{$this->getElementClassString()}').ckeditor();";
+        $this->script = "$('textarea.{$this->getElementClassString()}').ckeditor({
+			filebrowserBrowseUrl: '".route('ckfinder_browser')."',
+			'toolbar': [
+                ['ShowBlocks', 'Image'],
+                ['NumberedList', 'BulletedList'],['Outdent', 'Indent'],['Link', 'Unlink'],
+                ['JustifyLeft', 'JustifyCenter'], ['JustifyRight', 'JustifyBlock'],
+                ['Format'], ['TextColor', 'BGColor']
+            ],
+			});";
 
         return parent::render();
     }

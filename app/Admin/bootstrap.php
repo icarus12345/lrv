@@ -19,8 +19,13 @@
  */
 
 Encore\Admin\Form::forget(['map', 'editor']);
+Admin::css('/css/admin.css');
+Admin::js('/js/admin.js');
+
 use Encore\Admin\Form;
 use App\Admin\Extensions\Form\CKEditor;
+use App\Admin\Extensions\Form\Browse;
 
-Admin::css('/css/admin.css');
+
 Form::extend('ckeditor', CKEditor::class);
+Form::extend('browse', Browse::class);

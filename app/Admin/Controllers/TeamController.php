@@ -73,7 +73,7 @@ class TeamController extends AdminController
         $form->text('name', __('Name'));
         $form->text('position_vi', __('Position vi'));
         $form->text('position_en', __('Position en'));
-        $form->image('image', __('Image'));
+        $form->browse('image', __('Image'));
         $form->text('fb_link', __('Fb link'));
         $form->text('tw_link', __('Tw link'));
 

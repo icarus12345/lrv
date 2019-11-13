@@ -7,8 +7,9 @@
         @include('admin::form.error')
 
         <textarea rows="{{ $rows }}" class="form-control {{$class}}" id="{{$id}}" name="{{$name}}" placeholder="{{ $placeholder }}" {!! $attributes !!} >{{ old($column, $value) }}</textarea>
-
+		
         @include('admin::form.help-block')
 
     </div>
 </div>
+@include('ckfinder::setup')

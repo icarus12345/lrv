@@ -14,6 +14,7 @@ use Encore\Admin\Show;
 use Encore\Admin\Form\Tab;
 use Illuminate\Http\Request;
 use Encore\Admin\Widgets\Box;
+use Encore\Admin\Facades\Admin;
 
 class ProductController extends AdminController
 {
@@ -32,6 +33,7 @@ class ProductController extends AdminController
      */
     protected function grid()
     {
+		
         $grid = new Grid(new Product);
 		$grid->model()->where('type', $this->request->type);
 

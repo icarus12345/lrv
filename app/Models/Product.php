@@ -270,6 +270,9 @@ class Product extends BaseModel
         if (strpos($this->attributes['image'], 'http') !== false) {
             return $this->attributes['image'];
         } else {
+			if (strpos($this->attributes['image'], '/storage') === 0) {
+				return $this->attributes['image'];
+			}
             return \Storage::disk($disk)->url($this->attributes['image']);
         }
     }
