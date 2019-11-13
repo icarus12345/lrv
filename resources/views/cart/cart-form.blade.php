@@ -102,7 +102,7 @@
                                             <th>{{__('Coupon Discount')}}</th>
                                             <td -width="160" class="text-right text-nowrap">
 											-{!! \App\Helpers::formatPrice($cart->getCouponDiscoutAmount())!!}
-											<a href="JavaScript:Helper.Cart.removeCoupon('{{ $key}}')"><i class="fa fa-times"></i></a>
+											<a href="JavaScript:Helper.Cart.removeCoupon()"><i class="fa fa-times"></i></a>
 											</td>
                                         </tr>
 										@endif
