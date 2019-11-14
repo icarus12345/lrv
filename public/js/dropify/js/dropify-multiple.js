@@ -70,7 +70,9 @@ function DropifyMultiple(element, options) {
             clearButton:     '<button type="button" class="dropify-clear">{{ remove }}</button>',
             errorLine:       '<p class="dropify-error">{{ error }}</p>',
             errorsContainer: '<div class="dropify-errors-container"><ul></ul></div>'
-        }
+        },
+		onPreview: null,
+		onChange: null,
     };
     this.element            = element;
     this.input              = $(this.element);
@@ -186,7 +188,7 @@ DropifyMultiple.prototype.createElements = function()
  */
 DropifyMultiple.prototype.readFile = function(input)
 {
-
+	var self = this;
     // number of files dropped for upload in the input box
     var j = input.files.length; 
     var filesArrayLength = this.totalFiles;
@@ -216,6 +218,7 @@ DropifyMultiple.prototype.readFile = function(input)
     }        
 
     // read and process multiple files
+	var countReady = 0;
     for( var i=0; i < j; i++ ) {
         var reader         = new FileReader();
         var file           = input.files[i];
@@ -247,6 +250,12 @@ DropifyMultiple.prototype.readFile = function(input)
                     // set image soure from reader
                     image.src   = _file.target.result;
 
+                    image.onerror = function () {
+						countReady ++ 
+						if(countReady == j){
+							if(self.settings.onChange)	self.settings.onChange()
+						}
+					}
                     image.onload = function () {
                         // get the files array index for the image file
                         var fIndex = _this.findFileIndexBasedOnName(this.name);
@@ -255,13 +264,21 @@ DropifyMultiple.prototype.readFile = function(input)
                         _this.validateImage(fIndex);
                         console.log("image.onload:", fIndex, " - ", this.name);
                         _this.input.trigger(eventFileReady, [true, this]);
+						countReady ++ ;
+						if(countReady == j){
+							if(self.settings.onChange)	self.settings.onChange()
+						}
                     };
                 }.bind(this);
             })(file);
         } 
         else 
         {
+			countReady ++;
             this.onFileReady(false);
+			if(countReady == j){
+				if(self.settings.onChange)	self.settings.onChange()		
+			}
         }
     }
 };
@@ -371,6 +388,7 @@ DropifyMultiple.prototype.setPreview = function(previewable, src, fileName)
         }
 
         imgTag.appendTo(render);
+		if(this.settings.onPreview) this.settings.onPreview(previewable, src, fileName)
     } else {
         $('<i />').attr('class', 'dropify-font-file').appendTo(render);
         $('<span class="dropify-extension" />').html(this.getFileType()).appendTo(render);
@@ -565,7 +583,7 @@ DropifyMultiple.prototype.validateImage = function(fileIndex)
 {
     // get the droppedfile object
     var fObj = this.files[fileIndex];
-
+	console.log(this.files,fileIndex)
     if (this.settings.minWidth !== 0 && this.settings.minWidth >= fObj.width) {
         this.pushError("minWidth");
     }
@@ -594,17 +612,20 @@ DropifyMultiple.prototype.validateImage = function(fileIndex)
  */
 DropifyMultiple.prototype.getImageFormat = function(fileObject)
 {
-    if (fileObject.width == fileObject.height) {
-        return "square";
-    }
+	
+	if(fileObject){
+		if (fileObject.width == fileObject.height) {
+			return "square";
+		}
 
-    if (fileObject.width < fileObject.height) {
-        return "portrait";
-    }
+		if (fileObject.width < fileObject.height) {
+			return "portrait";
+		}
 
-    if (fileObject.width > fileObject.height) {
-        return "landscape";
-    }
+		if (fileObject.width > fileObject.height) {
+			return "landscape";
+		}
+	}
 };
 
 /**

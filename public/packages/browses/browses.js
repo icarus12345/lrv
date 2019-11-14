@@ -1,25 +1,50 @@
 $.fn.browses = function() {
 	let self = this;
 
+	let sortable = self.find('.browses-preview');
 	let input = self.find('input[type="hidden"]');
 	let fileInput = self.find('input.dropify');
-	let btn = self.find('button');
+	let btn = self.find('.browses-conntrol button');
 	let name = fileInput.attr('name');
-
-	let dropify = fileInput.DropifyMultiple()
-		// .on('dropify.afterClear', function(event, element){
-		//     input.attr('name',name)
-		//     	.val('')
-		// 	fileInput.attr('name',null)
-		// })
-		// .change((event) => {
-		// 	input.attr('name',null)
-		//     	.val('')
-		// 	fileInput.attr('name',name)
-		// })
+	
+	let dropify = fileInput.DropifyMultiple({
+		onPreview: (previewable, src, fileName)=>{
+			if(previewable) addItem(src);
+		},
+		onChange: ()=>{
+			dropify.data('DropifyMultiple').clearElement()
+		}
+	})
+		
+	sortable.sortable({
+		vertical: false,
+		//placeholder: "ui-state-highlight"
+	});
+	sortable.on('click','button',(e)=>{
+		$(e.target).parents('li').remove();
+	});
 	console.log(dropify)
-	input.attr('name',null)
+	function addItem(src){
+		let item = $([
+		'<li>',
+			'<div>',
+				'<img />',
+			'</div>',
+			'<span>',
+				'<button type="button">Remove</button>',
+			'</span>',
+			'<input type="hidden" name="'+name+'" />',
+		'</li>',
+		].join(''));
+		sortable.append(item);
+		item.find('img').attr('src',src);
+		item.find('input').val(src);
+		sortable.sortable('refresh');
+	}
 	fileInput.attr('name',null)
+		.on('change', (e)=>{
+			// dropify.data('DropifyMultiple').clearElement()
+		});
     btn.click((e)=>{
 		CKFinder.config( { connectorPath: '/ckfinder/connector' } );
 		CKFinder.modal( {
@@ -28,18 +53,15 @@ $.fn.browses = function() {
 			height: 600,
 			onInit: function( finder ) {
 				finder.on( 'files:choose', function( evt ) {
-					fileInput.attr('name',null)
 					var file = evt.data.files.first();
-					input.attr('name',name)
-						.val(file.getUrl());
-					dropify.data('dropify').setPreview(true, file.getUrl())
+					evt.data.files.models.map((file)=>{
+						addItem(file.getUrl());
+					})
+					
 				} );
 
 				finder.on( 'file:choose:resizedImage', function( evt ) {
-					fileInput.attr('name',null)
-					input.attr('name',name)
-						.val(evt.data.resizedUrl);
-					dropify.data('dropify').setPreview(true, file.getUrl())
+					addItem(evt.data.resizedUrl);
 				} );
 			}
 		} );

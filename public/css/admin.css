@@ -1,4 +1,21 @@
 .icheck{
-height: 34px;
+	height: 34px;
     display: inline-block;
-	}
+}
+.show-browse{
+	display:inline-block;
+	width:100px;
+	height:100px;
+	position: relative;
+	padding: 5px;
+    border: 1px solid #e5e5e5;
+    background: #fff;
+}
+.show-browse img{
+	position: absolute;
+	top:0;left:0;
+	bottom:0;right:0;
+	margin: auto;
+	max-width: 100%;
+	max-height: 100%;
+}

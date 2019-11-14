@@ -91,6 +91,39 @@ class Product extends BaseModel
 	public function setPicturesAttribute($pictures)
 	{
 		if (is_array($pictures)) {
+			$disk = 'public';
+			foreach($pictures as &$picture){
+				if (
+					strpos($picture, 'data:image/jpeg;base64,') !== false ||
+					strpos($picture, 'data:image/png;base64,') !== false
+					) {
+					$ext = 'jpg';
+					if (
+						strpos($picture, 'data:image/png;base64,') !== false
+					) {
+						$ext = 'png';
+					}
+					//$picture = str_replace('data:image/jpeg;base64,', '', $picture);
+					$picture = substr($picture, strpos($picture, ",")+1);
+					$picture = str_replace(' ', '+', $picture);
+					
+					$image = \Image::make($picture)
+					// ->resize(300, null, function ($constraint) {
+					//     $constraint->aspectRatio();
+					// })
+					// ->resizeCanvas(200, 200, 'center')
+					->orientate()
+					->encode("$ext");
+					$hash = md5($image->__toString());
+					$path = "images/{$hash}.{$ext}";
+					//dd($image);
+					// Save image
+					\Storage::disk($disk)->put($path, $image->__toString(), 'public');
+					
+					
+					$picture = \Storage::disk($disk)->url($path);
+				}
+			}
 			$this->attributes['pictures'] = json_encode($pictures,true);
 		}
 	}

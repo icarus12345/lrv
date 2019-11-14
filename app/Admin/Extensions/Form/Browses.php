@@ -10,6 +10,7 @@ class Browses extends Textarea
         '/js/ckfinder/ckfinder.js',
         '/packages/browses/browses.js',
         '/js/dropify/js/dropify-multiple.js',
+        '/js/sortable/jquery-sortable.js',
     ];
     public static $css = [
         '/packages/browses/browses.css',

@@ -52,7 +52,7 @@ class TeamController extends AdminController
         $show->field('name', __('Name'));
         $show->field('position_vi', __('Position vi'));
         $show->field('position_en', __('Position en'));
-        $show->field('image', __('Image'));
+        $show->field('image', __('Image'))->browse();
         $show->field('fb_link', __('Fb link'));
         $show->field('tw_link', __('Tw link'));
         $show->field('created_at', __('Created at'));

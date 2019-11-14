@@ -23,8 +23,8 @@
 							@if($product->pictures)
 							@foreach($product->pictures as $i=>$image)
                             <div class="tab-pane @if($i==0) active @endif" id="view{{$i}}">
-                                <a class="venobox" href="/storage/{{$image}}" data-gall="gallery" title="">
-									<div class="cover prod-thumb" style="background-image:url('/storage/{{$image}}')" ></div>
+                                <a class="venobox" href="{{$image}}" data-gall="gallery" title="">
+									<div class="cover prod-thumb" style="background-image:url('{{$image}}')" ></div>
 									<span>View larger<i class="fa fa-search-plus"></i></span>
 								</a>
                             </div>
@@ -43,7 +43,7 @@
 								@if($product->pictures)
 								@foreach($product->pictures as $i=>$image)
                                 <a href="#view{{$i}}">
-                                    <div class="cover prod-thumb" style="background-image:url('/storage/{{$image}}')" ></div>
+                                    <div class="cover prod-thumb" style="background-image:url('{{$image}}')" ></div>
                                 </a>
 								@endforeach
 								@else

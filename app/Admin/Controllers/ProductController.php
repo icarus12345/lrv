@@ -68,8 +68,8 @@ class ProductController extends AdminController
 			$lang = "(".__("common.locales.{$locale}").")";
             $show->field("name_{$locale}", trans('admin.title').$lang)->rules('required');
         }
-		$show->image()->image();
-		$show->pictures()->label();
+		$show->image()->browse();
+		$show->pictures()->browses();
 		$show->price();
         foreach ($locales as $locale) {
 			$lang = "(".__("common.locales.{$locale}").")";

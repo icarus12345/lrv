@@ -45,7 +45,7 @@ class Team extends BaseModel
             ->orientate()
             ->encode('jpg');
             $hash = md5($image->__toString());
-            $path = "{$hash}.jpg";
+            $path = "images/{$hash}.jpg";
             // Save image
             \Storage::disk($disk)->put($path, $image->__toString(), 'public');
             
