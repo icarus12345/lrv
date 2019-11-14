@@ -7,6 +7,7 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+Use Encore\Admin\Widgets\Table;
 
 class OrderController extends AdminController
 {
@@ -28,7 +29,15 @@ class OrderController extends AdminController
 
         $grid->column('id', __('Id'));
         $grid->column('no', __('No'))
-			->filter();
+			->filter()
+			->modal('OrderDetail', function ($model) {
+
+				$order_details = $model->order_details()->take(10)->get()->map(function ($order_detail) {
+					return $order_detail->only(['id', 'product_name', 'color','size','qty','price_with_discount']);
+				});
+
+				return new Table(['ID', 'Product', 'Color','Size','Qty','Price'], $order_details->toArray());
+			});
         $grid->column('name', __('Customer'))
 			->filter();
         $grid->column('company', __('Company'))

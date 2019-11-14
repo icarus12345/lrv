@@ -7,7 +7,7 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
-
+use App\Admin\Extensions\Action\PopupEdit;
 class CouponController extends AdminController
 {
     /**
@@ -33,7 +33,12 @@ class CouponController extends AdminController
         $grid->column('type', __('Type'));
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
-
+		$grid->actions(function ($actions) {
+			//$actions->disableDelete();
+			//$actions->disableEdit();
+			// add action
+			$actions->add(new PopupEdit);
+		});
         return $grid;
     }
 

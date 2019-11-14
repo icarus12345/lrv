@@ -25,8 +25,6 @@ Admin::css('/css/admin.css');
 use Encore\Admin\Form;
 use Encore\Admin\Show;
 
-
-
 Form::extend('ckeditor', \App\Admin\Extensions\Form\CKEditor::class);
 Form::extend('browse', \App\Admin\Extensions\Form\Browse::class);
 Form::extend('browses', \App\Admin\Extensions\Form\Browses::class);
