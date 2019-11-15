@@ -3,10 +3,11 @@
 namespace App\Admin\Controllers;
 
 use App\Models\Coupon;
-use Encore\Admin\Controllers\AdminController;
+use App\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use App\Admin\Layout\Column;
 use App\Admin\Extensions\Action\PopupEdit;
 class CouponController extends AdminController
 {
@@ -25,7 +26,6 @@ class CouponController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Coupon);
-
         $grid->column('id', __('Id'));
         $grid->column('code', __('Code'));
         $grid->column('expried', __('Expried'));
@@ -38,9 +38,21 @@ class CouponController extends AdminController
 			//$actions->disableEdit();
 			// add action
 			$actions->add(new PopupEdit);
-		});
-        return $grid;
+			$actions->add(new \App\Admin\Extensions\Action\CouponEdit);
+        });
+        return function($row) use ($grid){
+            $row->column(12, $grid);
+            // $form = $this->form();
+            // $form->setView('admin.form-modal');
+            // $row->column(12, $form);
+
+            //$column = new Column('<div id="pjax-form-modal"></div>', 12);
+
+            //$row->addColumn($column);
+        };
     }
+
+
 
     /**
      * Make a show builder.
@@ -79,8 +91,12 @@ class CouponController extends AdminController
 			'Discount'=>'Discount',
 			'Complimentary'=>'Complimentary',
 			'Cash'=>'Cash'
-		])->rules('required');
-
+        ])->rules('required');
+        $form->setView('admin.form-modal');
+        \Admin::script(<<<SCRIPT
+        console.log('INIT FORM');
+SCRIPT
+);
         return $form;
     }
 }

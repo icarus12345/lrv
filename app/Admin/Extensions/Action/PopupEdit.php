@@ -11,7 +11,7 @@ class PopupEdit extends RowAction
 {
     public $name = 'Coupon Edit';
 	
-	public function form()
+	public function form($model)
 	{	
 		$id = ($this->getKey());
 		$row = ($this->getRow());
@@ -35,6 +35,22 @@ class PopupEdit extends RowAction
 			->rules('required');
 	}
 	
+	/*
+	protected function script()
+    {
+        $script = <<<SCRIPT
+    console.log('aa');
+SCRIPT;
+        return $script;
+    }
+
+    public function render()
+    {
+        \Admin::script($this->script());
+
+        return '<a class="btn btn-sm btn-primary grid-assign-book" data-id="{$this->id}"><i class="fa fa-send"></i>&nbsp;&nbsp;My Action</a>';
+    }
+	*/
     public function handle(Model $model, Request $request)
     {
 		try {

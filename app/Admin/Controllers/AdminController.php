@@ -2,7 +2,7 @@
 
 namespace App\Admin\Controllers;
 
-use Encore\Admin\Layout\Content;
+use App\Admin\Layout\Content;
 use Illuminate\Routing\Controller;
 use App\Admin\Traits\HasResourceActions;
 use Illuminate\Http\Request;
@@ -30,6 +30,7 @@ class AdminController extends Controller
      * @var string
      */
     protected $title = 'Title';
+    protected $content = 'Title';
 
     /**
      * Set description for following 4 action pages.
@@ -62,6 +63,7 @@ class AdminController extends Controller
      */
     public function index($type = null,Content $content)
     {
+        $this->content = $content;
         return $content
             ->title($this->title())
             ->description($this->description['index'] ?? trans('admin.list'))
