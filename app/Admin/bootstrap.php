@@ -20,8 +20,8 @@
 
 Encore\Admin\Form::forget(['map', 'editor']);
 Admin::css('/css/admin.css');
-//Admin::js('/js/jquery-ui/jquery-ui.js');
-Admin::js('/assets/lib/serializeJSON/jquery.serializeJSON.js');
+Admin::js('/js/admin.js');
+
 
 use Encore\Admin\Form;
 use Encore\Admin\Show;

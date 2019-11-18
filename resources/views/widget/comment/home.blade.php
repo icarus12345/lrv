@@ -94,6 +94,7 @@
 			if(response.code == 1) {
 				//Swal.fire('System Notification', response.message, 'success');
 				e.target.reset();
+				$(e.target).removeClass('was-validated')
 				$(response.comment).insertAfter($('.comment-list>h5'))
 			} else {
 			  Swal.fire('System Error', response.message, 'error');

@@ -276,7 +276,7 @@ class Product extends BaseModel
             ->orientate()
             ->encode('jpg');
             $hash = md5($image->__toString());
-            $path = "{$hash}.jpg";
+            $path = "images/{$hash}.jpg";
             // Save image
             \Storage::disk($disk)->put($path, $image->__toString(), 'public');
             
@@ -310,14 +310,7 @@ class Product extends BaseModel
         if (!$this->image) {
             return '/images/no-image.svg';
         }
-        if (strpos($this->attributes['image'], 'http') !== false) {
-            return $this->attributes['image'];
-        } else {
-			if (strpos($this->attributes['image'], '/storage') === 0) {
-				return $this->attributes['image'];
-			}
-            return \Storage::disk($disk)->url($this->attributes['image']);
-        }
+        return $this->attributes['image'];
     }
 
 	public function getPriceWithFormatAttribute()

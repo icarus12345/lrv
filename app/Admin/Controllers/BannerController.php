@@ -29,7 +29,7 @@ class BannerController extends AdminController
 
         $grid->column('id', __('Id'));
         $grid->column('name', __('Name'));
-        $grid->column('image', __('Image'))->image('/storage', 60, 40);;
+        $grid->column('image', __('Image'))->image('/', 60, 40);;
         $grid->column('link', __('Link'));
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
@@ -74,7 +74,7 @@ class BannerController extends AdminController
         $form->text('name_en', __('Name en'));
         $form->text('desc_vi', __('Desc vi'));
         $form->text('desc_en', __('Desc en'));
-        $form->image('image', __('Image'));
+        $form->browse('image', __('Image'));
         $form->url('link', __('Link'));
         $form->hidden('type')->value($this->request->type);
 

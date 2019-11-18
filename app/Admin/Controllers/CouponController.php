@@ -4,7 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Models\Coupon;
 use App\Admin\Controllers\AdminController;
-use Encore\Admin\Form;
+use App\Admin\Extensions\MForm;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use App\Admin\Layout\Column;
@@ -82,11 +82,20 @@ class CouponController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Coupon);
+        $form = new MForm(new Coupon);
 
-        $form->text('code', __('Code'))->rules('required|min:12|max:12');
+        $form->text('code', __('Code'))
+            ->rules('required|min:12|max:12')
+            ->attribute([
+                'required'=>'',
+                'pattern'=>"[0-9A-Za-z]{12,12}"
+            ]);
         $form->date('expried', __('Expried'))->default(date('Y-m-d'));
-        $form->decimal('value', __('Value'))->default(0.00);
+        $form->decimal('value', __('Value'))->default(0.00)
+            ->attribute([
+                //'required'=>'',
+                'pattern'=>"[0-9]+"
+            ]);
         $form->select('type', __('Type'))->options([
 			'Discount'=>'Discount',
 			'Complimentary'=>'Complimentary',
