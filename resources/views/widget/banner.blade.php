@@ -1,4 +1,4 @@
-<div class="container">
+<div class="-container">
 
 <!--Banner Area Start-->
 <div class="banner-area section-padding pt-0">

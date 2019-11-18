@@ -30,6 +30,7 @@ class Order extends Model
         'total_item',
         'currency',
         'status',
+        'note',
     ];
 
 

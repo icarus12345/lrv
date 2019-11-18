@@ -60,7 +60,7 @@
             <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                 <tr style="border-top: 1px solid #efefef; font-size: 13px;">
                     <td style="padding: 5px 5px 5px 5px;color: #999;">Products</td>
-                    <td style="padding: 5px 5px 5px 5px;color: #999;text-align: center;" width="120" colspan="2">Qty * Sale Price</td>
+                    <td style="padding: 5px 5px 5px 5px;color: #999;text-align: center;" width="120">Qty * Sale Price</td>
                     <td style="padding: 5px 5px 5px 5px;color: #999;text-align: right" width="100">Total</td>
                 </tr>
                 @foreach($order->order_details as $item)
@@ -74,7 +74,7 @@
                         </span>
                         @endif
                     </td>
-                    <td style="padding: 5px 5px 5px 5px;text-align: center;" colspan="2">{{$item->qty}}x{!!\App\Helpers::formatPrice($item->price_with_discount)!!}</td>
+                    <td style="padding: 5px 5px 5px 5px;text-align: center;" >{{$item->qty}}x{!!\App\Helpers::formatPrice($item->price_with_discount)!!}</td>
                     <td style="padding: 5px 5px 5px 5px;text-align: right;">{!! \App\Helpers::formatPrice($item->amount)!!}</td>
                 </tr>
                 @endforeach

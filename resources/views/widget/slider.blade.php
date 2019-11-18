@@ -1,4 +1,4 @@
-<div class="container">
+<div class="-container">
 
 <!-- Slider With Banner Area -->
 <div class="slider-with-banner-area">

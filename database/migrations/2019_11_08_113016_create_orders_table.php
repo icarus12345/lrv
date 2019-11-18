@@ -36,6 +36,7 @@ class CreateOrdersTable extends Migration
             $table->decimal('billing_amount', 11, 2)->default(0);
             $table->integer('total_item')->nullable();
             $table->string('currency',10)->nullable();
+            $table->string('note',1000)->nullable();
             $table->enum('status', ['Requested','Approved','Unpaid','Paid','Shipping','Done','Canceled'])->default('Requested');
             $table->timestamps();
         });

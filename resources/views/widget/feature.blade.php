@@ -1,4 +1,4 @@
-<div class="container">
+<div class="-container">
 
 <!--Featured Area Start-->
 <div class="featured-area section-padding">

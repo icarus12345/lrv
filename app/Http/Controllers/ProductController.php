@@ -61,6 +61,7 @@ class ProductController extends Controller
 		$colors = \Session::get('color');
 		$min_price = \Session::get('min_price');
 		$max_price = \Session::get('max_price');
+		$category = Category::findOrFail($category_id);
         $products = Product::newest()
 			->byCategory($category)
 			->colorIn($colors)
@@ -70,6 +71,7 @@ class ProductController extends Controller
         $banners = Banner::where('type','banner')->offset(0)->limit(5)->get();
 
         $this->setData([
+			'category'    => $category,
             'products'  => $products,
             'sliders'   => $sliders,
             'banners'   => $banners,
