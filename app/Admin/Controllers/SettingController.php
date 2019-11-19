@@ -3,7 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Models\Setting;
-use Encore\Admin\Controllers\AdminController;
+use App\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
@@ -26,7 +26,7 @@ class SettingController extends AdminController
     {
         $grid = new Grid(new Setting);
         $grid->column('id', __('ID'))->sortable();
-        $grid->column('name', __('Name'));
+        $grid->column('display', __('Name'));
         $grid->column('value', __('Value'));
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
@@ -45,7 +45,7 @@ class SettingController extends AdminController
     {
         $show = new Show(Setting::findOrFail($id));
         $show->field('id', __('ID'));
-        $show->field('name', __('Name'));
+        $show->field('display', __('Name'));
         $show->field('value', __('Value'));
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
@@ -61,11 +61,34 @@ class SettingController extends AdminController
      */
     protected function form()
     {
+        $id = request()->route('setting');
+        $setting = Setting::find($id);
         $form = new Form(new Setting);
-
         $form->display('id', __('ID'));
-        $form->text("name", trans('Name'));
-        $form->text("value", trans('Value'));
+        if($id){
+            $form->display('display', __('Name'));
+        }else{
+            $form->select("type", trans('Type'))->options([
+                'string'=>'String',
+                'image'=>'Image',
+                'text'=>'Text',
+                'html'=>'Html',
+            ]);
+            $form->text("display", trans('Display'));
+            $form->text("name", trans('Name'));
+        }
+        if($setting){
+
+            if($setting->type == 'string'){
+                $form->text("value", trans('Value'));
+            }elseif($setting->type == 'text'){
+                $form->textarea("value", trans('Value'));
+            }if($setting->type == 'image'){
+                $form->browse("value", trans('Value'));
+            }
+        }else{
+            $form->text("value", trans('Value'));
+        }
         $form->display('created_at', __('Created At'));
         $form->display('updated_at', __('Updated At'));
 

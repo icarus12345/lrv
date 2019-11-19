@@ -22,12 +22,13 @@ class Controller extends BaseController
      */
     public function __construct()
     {
-        
+        $settings = Setting::pluck('value', 'name')->toArray();
         $this->flat_rate = Setting::getByName('flat_rate');
         $this->tax = Setting::getByName('tax');
         $this->data = [
             'flat_rate'    => $this->flat_rate,
             'tax'    => $this->tax,
+            'settings'    => $settings,
         ];
     }
 
