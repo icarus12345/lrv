@@ -41,21 +41,27 @@ class OrderController extends AdminController
         $grid->column('name', __('Customer'))
 			->filter();
         $grid->column('company', __('Company'))
-			->filter();
+            ->filter()
+            ->hide();
         $grid->column('email', __('Email'))
 			->filter();
         $grid->column('street_address', __('Street address'))
 			->filter();
         $grid->column('other_address', __('Other address'))
-			->filter();
+            ->filter()
+            ->hide();
         $grid->column('state_city', __('State city'))
-			->filter();
+            ->filter()
+            ->hide();
         $grid->column('country', __('Country'))
-			->filter();
+            ->filter()
+            ->hide();
         $grid->column('city', __('City'))
-			->filter();
+            ->filter()
+            ->hide();
         $grid->column('postcode_zip', __('Postcode zip'))
-			->filter();
+            ->filter()
+            ->hide();
         $grid->column('phone', __('Phone'))
 			->filter();
         $grid->column('coupon_code', __('Coupon Code'))
@@ -96,7 +102,7 @@ class OrderController extends AdminController
                 'Canceled' => 'Canceled'
 			]);
 		$grid->column('created_at', __('Created at'))
-			->filter('range', 'datetime');;
+            ->filter('range', 'datetime');
         $grid->fixColumns(4, -3);
         $grid->model()->orderBy('id', 'desc');
         $grid->disableCreateButton();

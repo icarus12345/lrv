@@ -5,7 +5,8 @@ namespace App\Admin\Controllers;
 use App\Models\Coupon;
 use App\Admin\Controllers\AdminController;
 use App\Admin\Extensions\MForm;
-use App\Admin\Extensions\MForm;
+use Encore\Admin\Layout\Content;
+use Encore\Admin\Facades\Admin;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Layout\Column;
@@ -20,6 +21,7 @@ class CouponController extends AdminController
      */
     protected $title = 'App\Models\Coupon';
 
+    
     /**
      * Make a grid builder.
      *
@@ -27,6 +29,7 @@ class CouponController extends AdminController
      */
     protected function grid()
     {
+        return view('admin.page.demo.grid')->render();
         $grid = new Grid(new Coupon);
         $grid->column('id', __('Id'));
         $grid->column('code', __('Code'));
@@ -92,17 +95,23 @@ class CouponController extends AdminController
                 'required'=>'',
                 'pattern'=>"[0-9A-Za-z]{12,12}"
             ]);
-        $form->date('expried', __('Expried'))->default(date('Y-m-d'));
-        $form->decimal('value', __('Value'))->default(0.00)
+        $form->date('expried', __('Expried'))
+            ->default(date('Y-m-d'));
+        $form->decimal('value', __('Value'))
+            ->default(0.00)
             ->attribute([
+                'style' => 'width: 110px;',
                 //'required'=>'',
-                'pattern'=>"[0-9]+"
+                'pattern'=>"[0-9.]+"
             ]);
         $form->select('type', __('Type'))->options([
 			'Discount'=>'Discount',
 			'Complimentary'=>'Complimentary',
 			'Cash'=>'Cash'
-        ])->rules('required');
+        ])->rules('required')
+        ->attribute([
+            'required'=>'',
+        ]);
         $form->setView('admin.form-modal');
         $form->any(function ($form) {
             $form->text('code', __('Code11'))->rules('required|min:12|max:12');

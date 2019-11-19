@@ -47,15 +47,17 @@
 	width: 520px;
 }
 
-
-.was-validated .form-control:valid, .form-control.is-valid, .was-validated
-.custom-select:valid,
+.was-validated .select2-hidden-accessible+.select2 .select2-selection,
+.was-validated .form-control:valid, 
+.form-control.is-valid, 
+.was-validated .custom-select:valid,
 .custom-select.is-valid {
   border-color: #28a745;
 }
 
-.was-validated .form-control:valid:focus, .form-control.is-valid:focus, .was-validated
-.custom-select:valid:focus,
+.was-validated .form-control:valid:focus, 
+.form-control.is-valid:focus, 
+.was-validated .custom-select:valid:focus,
 .custom-select.is-valid:focus {
   border-color: #28a745;
   box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
@@ -144,9 +146,10 @@
   background-color: rgba(220, 53, 69, 0.8);
   border-radius: .2rem;
 }
-
-.was-validated .form-control:invalid, .form-control.is-invalid, .was-validated
-.custom-select:invalid,
+.was-validated .select2-hidden-accessible:invalid+.select2 .select2-selection,
+.was-validated .form-control:invalid, 
+.form-control.is-invalid, 
+.was-validated .custom-select:invalid,
 .custom-select.is-invalid {
   border-color: #dc3545;
 }

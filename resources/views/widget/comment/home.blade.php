@@ -45,6 +45,7 @@
 		</form>
 	</div>
 </div>
+
 <script type="text/javascript">
 	document.getElementById('comment-form-{{$topic_id}}-{{$topic_type}}').addEventListener('submit', (e)=>{
 		if(e.target.checkValidity() === false){

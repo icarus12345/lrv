@@ -46,8 +46,10 @@ class ProductController extends AdminController
         $grid->instock()->editable();
         $grid->discount()->editable();
         $grid->tags()->label();
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
+		$grid->column('created_at', __('Created at'))
+			->hide();
+		$grid->column('updated_at', __('Updated at'))
+			->hide();
 
         return $grid;
     }
@@ -135,16 +137,25 @@ class ProductController extends AdminController
 			$form->number('price', 'Price')
 				->min(10)
 				->rules(['required','numeric'])
+				->attribute([
+					'style' => 'width: 100%;',
+				])
 				->disableHorizontal();
 		});
 		$form->column(2, function($form){
 			$form->number('instock', 'Instock')
 				->min(0)
+				->attribute([
+					'style' => 'width: 100%;',
+				])
 				->disableHorizontal();
 		});
 		$form->column(2, function($form){
 			$form->number('discount', 'Discount')
 				->min(0)
+				->attribute([
+					'style' => 'width: 100%;',
+				])
 				->max(100)
 				->disableHorizontal();
 		});

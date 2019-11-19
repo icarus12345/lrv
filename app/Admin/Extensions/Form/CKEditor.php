@@ -15,7 +15,7 @@ class CKEditor extends Textarea
 
     public function render()
     {
-        $this->script = "$('textarea.{$this->getElementClassString()}').ckeditor({
+        $this->script = "console.log('INIT CKEDITOR');$('textarea.{$this->getElementClassString()}').ckeditor({
 			filebrowserBrowseUrl: '".route('ckfinder_browser')."',
 			'toolbar': [
                 ['ShowBlocks', 'Image'],
