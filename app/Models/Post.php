@@ -56,6 +56,34 @@ class Post extends BaseModel
         
         return $this->{"content_{$this->locale}"};
     }
+
+    public function setImageAttribute($binary)
+    {
+        if (gettype($binary) == 'object') {
+
+            // Configs
+            $disk = 'public';
+            
+            $image = \Image::make($binary)
+            // ->resize(300, null, function ($constraint) {
+            //     $constraint->aspectRatio();
+            // })
+            // ->resizeCanvas(200, 200, 'center')
+            ->orientate()
+            ->encode('jpg');
+            $hash = md5($image->__toString());
+            $path = "images/{$hash}.jpg";
+            // Save image
+            \Storage::disk($disk)->put($path, $image->__toString(), 'public');
+            
+            
+            $this->attributes['image'] = \Storage::disk($disk)->url($path);
+        } else if (gettype($binary) == 'string') {
+            $this->attributes['image'] = $binary;
+        } else if (gettype($binary) == 'NULL') {
+            $this->attributes['image'] = null;
+        }
+    }
 	
 	public function getImagePathAttribute()
     {
@@ -63,14 +91,7 @@ class Post extends BaseModel
         if (!$this->image) {
             return '/images/no-image.svg';
         }
-        if (strpos($this->attributes['image'], 'http') !== false) {
-            return $this->attributes['image'];
-        } else {
-			if (strpos($this->attributes['image'], '/storage') === 0) {
-				return $this->attributes['image'];
-			}
-            return \Storage::disk($disk)->url($this->attributes['image']);
-        }
+        return $this->attributes['image'];
     }
 	
 	/**

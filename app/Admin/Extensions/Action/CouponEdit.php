@@ -40,7 +40,34 @@ class CouponEdit extends RowAction
     {
         $url = route('coupons.edit',['coupon'=>$this->getKey()]);
         $script = <<<SCRIPT
-        console.log('AA');
+        var actionResolver = function (data) {
+
+            var response = data;
+                
+            if (typeof response !== 'object') {
+                return $.admin.swal({type: 'error', title: 'Oops!'});
+            }
+            if(response.status){
+                toastr.success(response.message)
+            }else if(response.errors){
+                let messages = []
+                for (var key in response.errors) {
+                    messages.push(response.errors[key])
+                }
+                toastr.error(messages.join('<br/>'))
+            }else if(response.message){
+                toastr.warning(response.message)
+            }else{
+
+            }
+            
+        };
+        
+        var actionCatcher = function (request) {
+            if (request && typeof request.responseJSON === 'object') {
+                actionResolver(request.responseJSON)
+            }
+        };
         $('.grid-action-coupon-edit[data-id="{$this->getKey()}"]').on('click',(e)=>{
             let id = {$this->getKey()};
 
@@ -61,19 +88,50 @@ class CouponEdit extends RowAction
                 $(response).find("script[data-exec-on-popstate]").each(function () {
                     $.globalEval(this.text || this.textContent || this.innerHTML || '');
                 });
-                modal.find('form').on('submit',(e)=>{
-                    e.stopPropagation();
-                    e.preventDefault();
-                    let data = $(e.target).serializeJSON();
-                    data._editable = true;
-                    $.ajax({
-                        url: '/admin/coupons/4',
-                        method : 'POST',
-                        data: data
-                    }).done((response)=>{
-                        console.log(response);
-                    });
-                })
+                let form = modal.find('form');
+                form.attr('pjax-container',null)
+                modal.find('form button[type="submit"]').attr('type','button')
+                    .click((e)=>{
+                        form.addClass('was-validated');
+                        if (form[0].checkValidity() === false) {
+                            return;
+                        }
+
+                        
+                        var process = new Promise(function (resolve,reject) {
+                            let data = {}
+                            //Object.assign(data, {
+                            //    _token: $.admin.token,
+                            //    _action: 'App_Admin_Extensions_Action_PopupEdit',
+                            //});
+                            
+                            var formData = new FormData(form[0]);
+                            for (var key in data) {
+                                formData.append(key, data[key]);
+                            }
+                            
+                            $.ajax({
+                                method: 'POST',
+                                url: form[0].action,
+                                data: formData,
+                                cache: false,
+                                contentType: false,
+                                processData: false,
+                                success: function (data) {
+                                    resolve(data);
+                                    if (data.status === true) {
+                                        modal.remove();
+                                        $.admin.reload();
+                                    }
+                                },
+                                error:function(request){
+                                    reject(request);
+                                }
+                            });
+                        });
+                        process.then(actionResolver).catch(actionCatcher);
+                        
+                    })
             });
             
             

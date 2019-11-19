@@ -112,7 +112,7 @@ class PostController extends AdminController
 			$form->ckeditor("content_{$locale}", __('Content').$lang)
 				->rules('required');
 		}
-		$form->image('image');
+		$form->browse('image');
 		$form->tags('tags');
         return $form;
     }

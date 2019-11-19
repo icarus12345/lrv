@@ -81,7 +81,7 @@ class ContentController extends AdminController
                 ->rules('required')
                 ->disableHorizontal();
         }
-        $form->image('image')
+        $form->browse('image')
             ->disableHorizontal();
             // $form->textarea("desc_{$locale}", trans('admin.description').$lang)
                 // ->rules('required')
