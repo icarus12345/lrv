@@ -3568,6 +3568,7 @@ function startEditing(store, rowKey, columnName) {
 }
 exports.startEditing = startEditing;
 function finishEditing(_a, rowKey, columnName, value) {
+    console.log('finishEditing')
     var focus = _a.focus, id = _a.id;
     var eventBus = eventBus_1.getEventBus(id);
     var gridEvent = new gridEvent_1.default({ rowKey: rowKey, columnName: columnName, value: value });
@@ -3638,6 +3639,7 @@ function initFocus(_a) {
 }
 exports.initFocus = initFocus;
 function saveAndFinishEditing(store, value) {
+    console.log('saveAndFinishEditing')
     // @TODO: remove 'value' paramter
     // saveAndFinishEditing(store: Store)
     var focus = store.focus;
@@ -5972,6 +5974,7 @@ exports.setAutoBodyHeight = setAutoBodyHeight;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(0);
+var common_1 = __webpack_require__(1);
 var preact_1 = __webpack_require__(3);
 var colGroup_1 = __webpack_require__(30);
 var dom_1 = __webpack_require__(2);
@@ -5994,13 +5997,32 @@ var HeaderAreaComp = /** @class */ (function (_super) {
             _this.props.dispatch('dragMoveHeader', { pageX: pageX, pageY: pageY }, _this.startSelectedName);
         };
         _this.handleMouseDown = function (ev) {
+            console.log('HeaderAreaComp::handleMouseDown')
             var _a = _this.props, dispatch = _a.dispatch, complexColumnHeaders = _a.complexColumnHeaders;
             var target = ev.target;
+            
+
+            if(_this.context.store.cellEditor){
+                let celleditor = _this.context.store.cellEditor;
+                let validation = celleditor.props.columnInfo.validation
+                
+                if(celleditor.el.checkValidity && !celleditor.el.checkValidity()){
+                    window.event.stopPropagation();
+                    //window.event.defaultPrevented();
+                    setTimeout(()=>{
+                        celleditor.el.focus();
+                    }, 250);
+                    return false;
+                }
+                
+            }
+
             if (dom_1.findParent(target, 'cell-row-header') ||
                 dom_1.hasClass(target, 'btn-sorting') ||
                 dom_1.hasClass(target, 'btn-filter')) {
                 return;
             }
+            
             var name = target.getAttribute('data-column-name');
             if (!name) {
                 var parent_1 = dom_1.findParent(target, 'cell-header');
@@ -7994,6 +8016,7 @@ function createStore(id, options) {
     var renderState = renderState_1.create();
     var store = observable_1.observable({
         id: id,
+        cellEditor: null,
         data: data,
         column: column,
         dimension: dimension,
@@ -9060,6 +9083,11 @@ var TextEditor = /** @class */ (function () {
         el.className = dom_1.cls('content-text');
         el.type = options.type;
         el.value = String(common_1.isUndefined(props.value) || common_1.isNull(props.value) ? '' : props.value);
+        if(options && options.attributes){
+            for(let attr in options.attributes){
+                el[attr] = options.attributes[attr];
+            }
+        }
         this.el = el;
     }
     TextEditor.prototype.getElement = function () {
@@ -9089,6 +9117,7 @@ var CheckboxEditor = /** @class */ (function () {
         var _this = this;
         var name = 'tui-grid-check-input';
         var el = document.createElement('fieldset');
+        var options = props.columnInfo.editor.options;
         var type = props.columnInfo.editor.options.type;
         var listItems = editor_1.getListItems(props);
         listItems.forEach(function (_a) {
@@ -9098,6 +9127,11 @@ var CheckboxEditor = /** @class */ (function () {
             el.appendChild(_this.createLabel(text, id));
         });
         this.el = el;
+        if(options && options.attributes){
+            for(let attr in options.attributes){
+                el[attr] = options.attributes[attr];
+            }
+        }
         this.setValue(props.value);
     }
     CheckboxEditor.prototype.createLabel = function (text, id) {
@@ -9163,12 +9197,18 @@ var SelectEditor = /** @class */ (function () {
     function SelectEditor(props) {
         var _this = this;
         var el = document.createElement('select');
+        var options = props.columnInfo.editor.options;
         var listItems = editor_1.getListItems(props);
         listItems.forEach(function (_a) {
             var text = _a.text, value = _a.value;
             el.appendChild(_this.createOptions(text, value));
         });
         el.value = String(props.value);
+        if(options && options.attributes){
+            for(let attr in options.attributes){
+                el[attr] = options.attributes[attr];
+            }
+        }
         this.el = el;
     }
     SelectEditor.prototype.createOptions = function (text, value) {
@@ -10103,6 +10143,7 @@ exports.Root = Root;
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(0);
 var preact_1 = __webpack_require__(3);
+var focus_1 = __webpack_require__(16);
 var leftSide_1 = __webpack_require__(74);
 var rightSide_1 = __webpack_require__(91);
 var stateLayer_1 = __webpack_require__(92);
@@ -10294,11 +10335,46 @@ var ContainerComp = /** @class */ (function (_super) {
             }
         };
         _this.handleDocumentMouseDown = function (ev) {
-            var _a = _this.props, dispatch = _a.dispatch, filtering = _a.filtering;
+            console.log('ContainerComp::handleDocumentMouseDown')
+            var _a = _this.props, 
+                dispatch = _a.dispatch, 
+                filtering = _a.filtering, 
+                editing = _a.editing,
+                editingEvent = _a.editingEvent;
+            
             if (filtering) {
                 var target = ev.target;
                 if (!dom_1.findParent(target, 'btn-filter') && !dom_1.findParent(target, 'filter-container')) {
                     dispatch('setActiveColumnAddress', null);
+                }
+            }else{
+                // check validation
+                if(_this.context.store.cellEditor){
+                    let celleditor = _this.context.store.cellEditor;
+                    let validation = celleditor.props.columnInfo.validation
+                    if(ev.target == celleditor.el){
+                        return;
+                    }
+                    
+                    if(celleditor.el.checkValidity && !celleditor.el.checkValidity()){
+                        window.event.stopPropagation();
+                        //window.event.defaultPrevented();
+                        setTimeout(()=>{
+                            celleditor.el.focus();
+                        }, 250);
+                        return false;
+                    }
+                    celleditor.EditingLayerInnerComp.finishEditing(true)
+
+                    //let rowKey = 1;
+                    //let value = celleditor.getValue();
+                    //let columnName = celleditor.props.columnInfo.name;
+                    //dispatch('setValue', rowKey, columnName, value);
+                    //dispatch('finishEditing', rowKey, columnName, value);
+                    
+                    //dispatch('mouseDownRowHeader', 1);
+                    //dispatch('setActiveColumnAddress', null);
+                    
                 }
             }
         };
@@ -11004,6 +11080,23 @@ var BodyCellComp = /** @class */ (function (_super) {
             _this.props.dispatch('dragMoveRowHeader', { pageX: pageX, pageY: pageY });
         };
         _this.handleMouseDown = function (name, rowKey) {
+            // Cell mouse down
+            console.log('BodyCellComp::handleMouseDown')
+            // check validation
+            if(_this.context.store.cellEditor){
+                let celleditor = _this.context.store.cellEditor;
+                let validation = celleditor.props.columnInfo.validation
+                
+                if(celleditor.el.checkValidity && !celleditor.el.checkValidity()){
+                    window.event.stopPropagation();
+                    //window.event.defaultPrevented();
+                    setTimeout(()=>{
+                        celleditor.el.focus();
+                    }, 250);
+                    return false;
+                }
+                
+            }
             if (!column_1.isRowNumColumn(name)) {
                 return;
             }
@@ -11076,14 +11169,35 @@ var BodyCellComp = /** @class */ (function (_super) {
             _a[dom_1.dataAttr.COLUMN_NAME] = name,
             _a);
         var classNames = dom_1.cls('cell', 'cell-has-input', [editable, 'cell-editable'], [column_1.isRowHeader(name), 'cell-row-header'], [validation.required || false, 'cell-required'], [!!invalidStates.length, 'cell-invalid'], [disabled || allDisabled, 'cell-disabled'], [!!treeInfo, 'cell-has-tree'], [column_1.isRowHeader(name) && selectedRow, 'cell-selected']) + " " + className;
-        return treeInfo ? (preact_1.h("td", tslib_1.__assign({}, attrs, { style: style, class: classNames }),
-            preact_1.h("div", { class: dom_1.cls('tree-wrapper-relative') },
-                preact_1.h("div", { class: dom_1.cls('tree-wrapper-valign-center'), style: { paddingLeft: treeInfo.indentWidth }, ref: function (el) {
-                        _this.el = el;
-                    } },
-                    preact_1.h(treeCellContents_1.TreeCellContents, { treeInfo: treeInfo, rowKey: rowKey }))))) : (preact_1.h("td", tslib_1.__assign({}, attrs, rowSpanAttr, { style: style, class: classNames, ref: function (el) {
-                _this.el = el;
-            }, onMouseDown: function () { return _this.handleMouseDown(name, rowKey); } })));
+        return treeInfo ? (
+                preact_1.h(
+                    "td", 
+                    tslib_1.__assign({}, attrs, { style: style, class: classNames }),
+                    preact_1.h(
+                        "div", 
+                        { 
+                            class: dom_1.cls('tree-wrapper-relative') 
+                        },
+                        preact_1.h(
+                            "div", 
+                            { 
+                                class: dom_1.cls('tree-wrapper-valign-center'), 
+                                style: { paddingLeft: treeInfo.indentWidth }, 
+                                ref: function (el) {
+                                    _this.el = el;
+                                } 
+                            },
+                            preact_1.h(treeCellContents_1.TreeCellContents, { treeInfo: treeInfo, rowKey: rowKey })
+                        )
+                    )
+                )
+            ) : (
+                        preact_1.h("td", tslib_1.__assign({}, attrs, rowSpanAttr, { style: style, class: classNames, ref: function (el) {
+                            _this.el = el;
+                        }, onMouseDown: function () { 
+                            return _this.handleMouseDown(name, rowKey); 
+                        } }))
+            );
     };
     return BodyCellComp;
 }(preact_1.Component));
@@ -11648,18 +11762,46 @@ var EditingLayerInnerComp = /** @class */ (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.handleKeyDown = function (ev) {
             var keyName = keyboard_1.getKeyStrokeString(ev);
+            var editor = _this.editor;
+            console.log(ev,editor,'handleKeyDown')
             switch (keyName) {
                 case 'enter':
-                    _this.finishEditing(true);
+                        if(editor.el.checkValidity){
+                            if(editor.el.checkValidity())
+                                _this.finishEditing(true);
+                        } else {
+                            _this.finishEditing(true);
+                        }
                     break;
                 case 'esc':
                     _this.finishEditing(false);
                     break;
                 case 'tab':
-                    _this.moveTabFocus(ev, 'nextCell');
+                        if(editor.el.checkValidity){
+                            if(editor.el.checkValidity()){
+                                _this.moveTabFocus(ev, 'nextCell');
+                            }else{
+                                setTimeout(()=>{
+                                    editor.el.focus();
+                                }, 250);
+                            }
+                        } else {
+                            _this.moveTabFocus(ev, 'nextCell');
+                        }
+                    
                     break;
                 case 'shift-tab':
-                    _this.moveTabFocus(ev, 'prevCell');
+                        if(editor.el.checkValidity){
+                            if(editor.el.checkValidity()){
+                                _this.moveTabFocus(ev, 'prevCell');
+                            }else{
+                                setTimeout(()=>{
+                                    editor.el.focus();
+                                }, 250);
+                            }
+                        } else {
+                            _this.moveTabFocus(ev, 'prevCell');
+                        }
                     break;
                 default:
                 // do nothing;
@@ -11684,12 +11826,18 @@ var EditingLayerInnerComp = /** @class */ (function (_super) {
         }
     };
     EditingLayerInnerComp.prototype.componentDidMount = function () {
+        console.log('EditingLayerInnerComp::componentDidMount')
         var _a = this.props, grid = _a.grid, rowKey = _a.rowKey, columnInfo = _a.columnInfo, value = _a.value, width = _a.width;
+        console.log(this.context.store)
         var EditorClass = columnInfo.editor.type;
         var editorProps = { grid: grid, rowKey: rowKey, columnInfo: columnInfo, value: value };
         var cellEditor = new EditorClass(editorProps);
+        cellEditor.EditingLayerInnerComp = this;
+        cellEditor.props = editorProps;
         var editorEl = cellEditor.getElement();
+        this.context.store.cellEditor = cellEditor;
         if (editorEl && this.contentEl) {
+
             this.contentEl.appendChild(editorEl);
             this.editor = cellEditor;
             var editorWidth = editorEl.getBoundingClientRect().width;
@@ -11703,6 +11851,8 @@ var EditingLayerInnerComp = /** @class */ (function (_super) {
         }
     };
     EditingLayerInnerComp.prototype.componentWillUnmount = function () {
+        console.log('EditingLayerInnerComp::componentWillUnmount')
+        this.context.store.cellEditor = null;
         if (this.props.forcedDestroyEditing) {
             this.finishEditing(true);
         }
@@ -11711,6 +11861,7 @@ var EditingLayerInnerComp = /** @class */ (function (_super) {
         }
     };
     EditingLayerInnerComp.prototype.componentWillReceiveProps = function (nextProps) {
+        console.log('EditingLayerInnerComp::componentWillReceiveProps')
         var _a = this.props, prevFocusedColumnName = _a.focusedColumnName, prevFocusedRowKey = _a.focusedRowKey;
         var focusedColumnName = nextProps.focusedColumnName, focusedRowKey = nextProps.focusedRowKey;
         if (focusedColumnName !== prevFocusedColumnName || focusedRowKey !== prevFocusedRowKey) {
@@ -11718,6 +11869,7 @@ var EditingLayerInnerComp = /** @class */ (function (_super) {
         }
     };
     EditingLayerInnerComp.prototype.render = function () {
+        console.log('EditingLayerInnerComp::render')
         var _this = this;
         var _a = this.props, top = _a.top, left = _a.left, width = _a.width, height = _a.height, contentHeight = _a.contentHeight;
         var lineHeight = contentHeight + "px";

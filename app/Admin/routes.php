@@ -33,4 +33,6 @@ Route::group([
 	Route::resource('orders', 'OrderController');
 	Route::resource('teams', 'TeamController');
 	Route::resource('coupons', 'CouponController');
+
+	//Route::get('products/list', 'ProductController@list')->name('product.list');
 });

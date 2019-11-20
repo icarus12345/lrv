@@ -26,6 +26,20 @@ class ProductController extends AdminController
      */
     protected $title = 'App\Models\Product';
 
+	public function list(Request $request){
+		$perpage = $request->perPage??10;
+		$rows = Product::paginate($perpage);
+		return response()->json([
+			"result"=> true,
+			"data"=> [
+				"contents"=> $rows->getCollection(),
+				"pagination"=> [
+					"page"=> $rows->currentPage(),
+					"totalCount"=> $rows->total()
+				]
+			]
+		]);
+	}
     /**
      * Make a grid builder.
      *

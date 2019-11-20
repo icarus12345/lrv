@@ -299,6 +299,20 @@
   border: solid 1px #03A9F4;
   box-shadow: 0 0 0 0.2rem rgb(167, 218, 241);
 }
+.tui-grid-cell-content input[type='text'].is-invalid,
+.tui-grid-cell-content input[type='number'].is-invalid,
+.tui-grid-cell-content input[type='email'].is-invalid,
+.tui-grid-cell-content input[type='phone'].is-invalid,
+.tui-grid-cell-content input[type='password'].is-invalid,
+.tui-grid-cell-content input[type='text']:invalid,
+.tui-grid-cell-content input[type='number']:invalid,
+.tui-grid-cell-content input[type='email']:invalid,
+.tui-grid-cell-content input[type='phone']:invalid,
+.tui-grid-cell-content input[type='password']:invalid {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgb(246, 204, 208);
+}
+
 .tui-grid-cell-content label + input {
   margin-left: 10px;
 }
@@ -852,3 +866,11 @@
   cursor: pointer;
 }
 
+.tui-grid-cell-thumb{
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  -webkit-background-size: contain;
+  -moz-background-size: contain;
+  min-height: 29px;
+}

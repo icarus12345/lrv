@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Routing\Router;
 use Illuminate\Http\Request;
 
 /*
@@ -15,4 +16,19 @@ use Illuminate\Http\Request;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+});
+Admin::routes();
+Route::group([
+    'prefix'        => config('admin.route.prefix'),
+    'namespace'     => config('admin.route.namespace'),
+    // 'middleware'    => config('admin.route.middleware'),
+], function (Router $router) {
+    Route::get('categories/{type}', function($type) {
+        // If the Content-Type and Accept headers are set to 'application/json', 
+        // this will return a JSON structure. This will be cleaned up later.
+        $rows = \App\Models\Category::where('type', $type)->get();
+        return \App\Models\Category::buildNested($rows);
+        //return \App\Models\Category::all()->toArray();
+    });
+    Route::get('products', '\App\Admin\Controllers\ProductController@list')->name('product.list');
 });
