@@ -263,10 +263,10 @@ class Product extends BaseModel
 	
 	public function setImageAttribute($binary)
     {
+        // Configs
+        $disk = 'public';
         if (gettype($binary) == 'object') {
 
-            // Configs
-            $disk = 'public';
             
             $image = \Image::make($binary)
             // ->resize(300, null, function ($constraint) {
@@ -283,6 +283,36 @@ class Product extends BaseModel
             
             $this->attributes['image'] = \Storage::disk($disk)->url($path);
         } else if (gettype($binary) == 'string') {
+            if (
+                strpos($binary, 'data:image/jpeg;base64,') !== false ||
+                strpos($binary, 'data:image/png;base64,') !== false
+                ) {
+                $ext = 'jpg';
+                if (
+                    strpos($binary, 'data:image/png;base64,') !== false
+                ) {
+                    $ext = 'png';
+                }
+                //$picture = str_replace('data:image/jpeg;base64,', '', $picture);
+                $binary = substr($binary, strpos($binary, ",")+1);
+                $binary = str_replace(' ', '+', $binary);
+                
+                $image = \Image::make($binary)
+                // ->resize(300, null, function ($constraint) {
+                //     $constraint->aspectRatio();
+                // })
+                // ->resizeCanvas(200, 200, 'center')
+                ->orientate()
+                ->encode("$ext");
+                $hash = md5($image->__toString());
+                $path = "images/{$hash}.{$ext}";
+                //dd($image);
+                // Save image
+                \Storage::disk($disk)->put($path, $image->__toString(), 'public');
+                
+                
+                $binary = \Storage::disk($disk)->url($path);
+            }
             $this->attributes['image'] = $binary;
         } else if (gettype($binary) == 'NULL') {
             $this->attributes['image'] = null;

@@ -10352,7 +10352,7 @@ var ContainerComp = /** @class */ (function (_super) {
                 if(_this.context.store.cellEditor){
                     let celleditor = _this.context.store.cellEditor;
                     let validation = celleditor.props.columnInfo.validation
-                    if(ev.target == celleditor.el){
+                    if(ev.target == celleditor.el || $.contains(celleditor.el,ev.target)){
                         return;
                     }
                     
