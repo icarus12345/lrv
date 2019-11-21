@@ -337,6 +337,20 @@ var InitGrid = () => {
         },
         header: {
             align: 'left',
+            columns: [
+                {
+                    name: 'price',
+                    align: 'right'
+                },
+                {
+                    name: 'discount',
+                    align: 'right'
+                },
+                {
+                    name: 'instock',
+                    align: 'right'
+                },
+            ]
         },
         columns: [{
                 header: 'Name',
@@ -397,6 +411,7 @@ var InitGrid = () => {
             {
                 header: 'Price',
                 name: 'price',
+                align: "right",
                 sortable: true,
                 width: 100,
                 onBeforeChange(ev) {
@@ -418,6 +433,7 @@ var InitGrid = () => {
                             //type: 'number',
                             required: "true",
                             min: 0,
+                            style:'text-align:right;',
                             // pattern: "[0-9.]{0,11}"
                             pattern: "^([1-9][0-9]{0,10}([.][0-9]{1,2})?)|^(0.[0-9]{1,2})|0"
                         }
@@ -433,6 +449,7 @@ var InitGrid = () => {
                 header: 'Discount',
                 name: 'discount',
                 sortable: true,
+                align: "right",
                 width: 60,
                 onBeforeChange(ev) {
                     console.log('Before change:' , ev);
@@ -445,6 +462,7 @@ var InitGrid = () => {
                         attributes: {
                             //type: 'number',
                             required: "true",
+                            style:'text-align:right;',
                             //min: 0,
                             //max: 100,
                             pattern: "^([1-9][0-9]{0,1})|100|0"
@@ -456,6 +474,7 @@ var InitGrid = () => {
                 header: 'Instock',
                 name: 'instock',
                 sortable: true,
+                align: "right",
                 width: 60,
                 onBeforeChange(ev) {
                     console.log('Before change:' , ev);
@@ -468,6 +487,7 @@ var InitGrid = () => {
                         attributes: {
                             //type: 'number',
                             required: "true",
+                            style:'text-align:right;',
                             //min: 0,
                             //max: 100,
                             pattern: "^(-?[1-9]+\d*(\d+)?)$|0"
