@@ -40,6 +40,23 @@ class ProductController extends AdminController
 			]
 		]);
 	}
+
+	public function apiUpdate(Request $request, $id){
+		$params = $request->params;
+		$product = Product::find($id);
+		if($product){
+			$product->fill($params);
+			if($product->save()){
+				return response()->json([
+					"result"=> true,
+				]);
+			}
+		}
+		return response()->json([
+			"result"=> false
+		]);
+	}
+	
     /**
      * Make a grid builder.
      *
@@ -47,7 +64,7 @@ class ProductController extends AdminController
      */
     protected function grid()
     {
-		
+		return view('admin.page.demo.grid')->render();
         $grid = new Grid(new Product);
 		$grid->model()->where('type', $this->request->type);
 

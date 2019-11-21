@@ -9123,8 +9123,10 @@ var CheckboxEditor = /** @class */ (function () {
         listItems.forEach(function (_a) {
             var text = _a.text, value = _a.value;
             var id = name + "-" + value;
-            el.appendChild(_this.createCheckbox(value, name, id, type));
-            el.appendChild(_this.createLabel(text, id));
+            let span = document.createElement('span')
+            span.appendChild(_this.createCheckbox(value, name, id, type));
+            span.appendChild(_this.createLabel(text, id));
+            el.appendChild(span)
         });
         this.el = el;
         if(options && options.attributes){
@@ -10350,7 +10352,11 @@ var ContainerComp = /** @class */ (function (_super) {
             }else{
                 // check validation
                 if(_this.context.store.cellEditor){
+                    
                     let celleditor = _this.context.store.cellEditor;
+                    if(celleditor.waiting) {
+                        return;
+                    }
                     let validation = celleditor.props.columnInfo.validation
                     if(ev.target == celleditor.el || $.contains(celleditor.el,ev.target)){
                         return;
@@ -11763,7 +11769,6 @@ var EditingLayerInnerComp = /** @class */ (function (_super) {
         _this.handleKeyDown = function (ev) {
             var keyName = keyboard_1.getKeyStrokeString(ev);
             var editor = _this.editor;
-            console.log(ev,editor,'handleKeyDown')
             switch (keyName) {
                 case 'enter':
                         if(editor.el.checkValidity){

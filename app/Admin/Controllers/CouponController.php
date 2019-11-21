@@ -29,7 +29,7 @@ class CouponController extends AdminController
      */
     protected function grid()
     {
-        return view('admin.page.demo.grid')->render();
+        
         $grid = new Grid(new Coupon);
         $grid->column('id', __('Id'));
         $grid->column('code', __('Code'));

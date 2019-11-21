@@ -31,4 +31,5 @@ Route::group([
         //return \App\Models\Category::all()->toArray();
     });
     Route::get('products', '\App\Admin\Controllers\ProductController@list')->name('product.list');
+    Route::put('product/{id}', '\App\Admin\Controllers\ProductController@apiUpdate')->name('product.update');
 });

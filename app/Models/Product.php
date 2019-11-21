@@ -137,7 +137,10 @@ class Product extends BaseModel
 	{
 		if (is_array($labels)) {
 			$this->attributes['labels'] = json_encode($labels,true);
-		}
+		}elseif(gettype($labels) == 'string'){
+            $labels = explode(',',$labels);
+            $this->attributes['labels'] = json_encode($labels,true);
+        }
 	}
 
 	public function getLabelsAttribute()
