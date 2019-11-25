@@ -69,13 +69,14 @@ var Helper = (function(){
         }
         
     };
+    self.Resolver = actionResolver;
     
     var actionCatcher = function (request) {
         if (request && typeof request.responseJSON === 'object') {
             actionResolver(request.responseJSON)
         }
     };
-		
+	self.Catcher = actionCatcher;
 	
 	self.Encore_Admin_Grid_Actions_Delete = (props, callback) => {
         var data = {_key:props.id}

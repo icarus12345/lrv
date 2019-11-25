@@ -207,6 +207,10 @@ ActionRenderer = window.ActionRenderer || class ActionRenderer {
     render(props) {
         //this.el.value = String(props.value);
     }
+
+    mounted() {
+        //this.el.select();
+    }
 }
 CategoryRenderer = window.CategoryRenderer || class CategoryRenderer {
     constructor(props) {
@@ -254,6 +258,9 @@ CategoryRenderer = window.CategoryRenderer || class CategoryRenderer {
         })
 
     }
+    mounted() {
+        //this.el.select();
+    }
 }
 ImageRenderer = window.ImageRenderer || class ImageRenderer {
     constructor(props) {
@@ -282,22 +289,28 @@ ImageRenderer = window.ImageRenderer || class ImageRenderer {
 var InitGrid = () => {
     var onCellUpdated = (ev) => {
         let row = grid.getRow(ev.rowKey)
-        let params = {}
-        params[ev.columnName] = ev.value;
+        // let params = {}
+        // params[ev.columnName] = ev.value;
+        let data = {
+            pk: row.id,
+            name: ev.columnName,
+            value: ev.value,
+            _editable: 1,
+            _token: $.admin.token,
+        }
         NProgress.start()
         $.ajax({
             method: 'PUT',
-            url: '/api/admin/product/' + row.id,
-            data: {
-                params: params
-            },
+            url: 'product/' + row.id,
+            data: data,
             success: function(rs) {
                 //resolve(rs)
-                NProgress.done()
+                NProgress.done();
+                Helper.Resolver(rs);
             },
             error: function(request) {
-                toastr.error('Oops.');
                 NProgress.done()
+                Helper.Catcher(request)
             }
         });
     }
@@ -335,7 +348,10 @@ var InitGrid = () => {
         pageOptions: {
             perPage: 10
         },
+        useClientSort: false,
         header: {
+            // height: 100,
+            filterRow: true,
             align: 'left',
             columns: [
                 {
@@ -356,10 +372,9 @@ var InitGrid = () => {
                 header: 'Name',
                 name: 'name',
                 sortable: true,
+                
                 filter: {
-                    type: 'text',
-                    showApplyBtn: true,
-                    showClearBtn: true
+                    type: 'text'
                 },
                 onBeforeChange(ev) {
                     console.log('Before change:', ev);
@@ -390,6 +405,7 @@ var InitGrid = () => {
                 header: 'Category',
                 name: 'category_id',
                 sortable: true,
+                
                 width: 120,
                 onBeforeChange(ev) {
                     console.log('Before change:' , ev);
@@ -404,6 +420,9 @@ var InitGrid = () => {
                         required: "true",
                     }
                 },
+                filter: {
+                    type: CategoryEditor
+                },
                 renderer: {
                     type: CategoryRenderer,
                 }
@@ -411,6 +430,9 @@ var InitGrid = () => {
             {
                 header: 'Price',
                 name: 'price',
+                filter: {
+                    type: NumberEditor
+                },
                 align: "right",
                 sortable: true,
                 width: 100,
@@ -490,7 +512,7 @@ var InitGrid = () => {
                             style:'text-align:right;',
                             //min: 0,
                             //max: 100,
-                            pattern: "^(-?[1-9]+\d*(\d+)?)$|0"
+                            pattern: "^(-?[1-9][0-9]{0,4}?)$|0"
                         }
                     }
                 },

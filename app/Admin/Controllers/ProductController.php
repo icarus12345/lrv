@@ -28,7 +28,10 @@ class ProductController extends AdminController
 
 	public function list(Request $request){
 		$perpage = $request->perPage??10;
-		$rows = Product::paginate($perpage);
+		$sort_column = $request->sortColumn??'id';
+		$sort_ascending = $request->sortAscending?'asc':'desc';
+		$rows = Product::orderBy($sort_column, $sort_ascending)
+			->paginate($perpage);
 		return response()->json([
 			"result"=> true,
 			"data"=> [
@@ -41,21 +44,21 @@ class ProductController extends AdminController
 		]);
 	}
 
-	public function apiUpdate(Request $request, $id){
-		$params = $request->params;
-		$product = Product::find($id);
-		if($product){
-			$product->fill($params);
-			if($product->save()){
-				return response()->json([
-					"result"=> true,
-				]);
-			}
-		}
-		return response()->json([
-			"result"=> false
-		]);
-	}
+	// public function apiUpdate(Request $request, $id){
+	// 	$params = $request->params;
+	// 	$product = Product::find($id);
+	// 	if($product){
+	// 		$product->fill($params);
+	// 		if($product->save()){
+	// 			return response()->json([
+	// 				"result"=> true,
+	// 			]);
+	// 		}
+	// 	}
+	// 	return response()->json([
+	// 		"result"=> false
+	// 	]);
+	// }
 	
     /**
      * Make a grid builder.
@@ -64,7 +67,7 @@ class ProductController extends AdminController
      */
     protected function grid()
     {
-		return view('admin.page.demo.grid')->render();
+		return view('admin.page.demo.grid');//->render();
         $grid = new Grid(new Product);
 		$grid->model()->where('type', $this->request->type);
 

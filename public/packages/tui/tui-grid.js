@@ -5942,6 +5942,10 @@ function setHeaderHeight(store, height) {
     store.dimension.headerHeight = height;
 }
 exports.setHeaderHeight = setHeaderHeight;
+function setFilterRow(store, filterRow) {
+    store.dimension.filterRow = filterRow;
+}
+exports.setFilterRow = setFilterRow;
 function refreshLayout(store, containerEl, parentEl) {
     var dimension = store.dimension;
     var autoWidth = dimension.autoWidth, fitToParentHeight = dimension.fitToParentHeight;
@@ -6017,9 +6021,12 @@ var HeaderAreaComp = /** @class */ (function (_super) {
                 
             }
 
-            if (dom_1.findParent(target, 'cell-row-header') ||
+            if (
+                dom_1.findParent(target, 'filter-row') ||
+                dom_1.findParent(target, 'cell-row-header') ||
                 dom_1.hasClass(target, 'btn-sorting') ||
-                dom_1.hasClass(target, 'btn-filter')) {
+                dom_1.hasClass(target, 'btn-filter')
+                ) {
                 return;
             }
             
@@ -6060,25 +6067,65 @@ var HeaderAreaComp = /** @class */ (function (_super) {
     HeaderAreaComp.prototype.componentDidUpdate = function () {
         this.el.scrollLeft = this.props.scrollLeft;
     };
-    HeaderAreaComp.prototype.render = function () {
+    HeaderAreaComp.prototype.render = function() {
         var _this = this;
-        var _a = this.props, columns = _a.columns, headerHeight = _a.headerHeight, cellBorderWidth = _a.cellBorderWidth, side = _a.side, complexColumnHeaders = _a.complexColumnHeaders, grid = _a.grid;
-        var headerHeightStyle = { height: headerHeight + cellBorderWidth };
-        return (preact_1.h("div", { class: dom_1.cls('header-area'), style: headerHeightStyle, ref: function (el) {
-                _this.el = el;
-            } },
-            preact_1.h("table", { class: dom_1.cls('table'), onMouseDown: this.handleMouseDown },
-                preact_1.h(colGroup_1.ColGroup, { side: side, useViewport: false }),
-                complexColumnHeaders.length ? (preact_1.h(complexHeader_1.ComplexHeader, { side: side, grid: grid })) : (preact_1.h("tbody", null,
-                    preact_1.h("tr", { style: headerHeightStyle, onDblClick: this.handleDblClick }, columns.map(function (columnInfo, index) { return (preact_1.h(columnHeader_1.ColumnHeader, { key: columnInfo.name, columnInfo: columnInfo, selected: _this.isSelected(index), grid: grid })); }))))),
-            preact_1.h(columnResizer_1.ColumnResizer, { side: side })));
+        
+        var _a = this.props,
+            columns = _a.columns,
+            headerHeight = _a.headerHeight,
+            cellBorderWidth = _a.cellBorderWidth,
+            side = _a.side,
+            complexColumnHeaders = _a.complexColumnHeaders,
+            grid = _a.grid,
+            filterRow = _a.filterRow;
+        var headerHeightStyle = {
+            height: headerHeight + cellBorderWidth
+        };
+        return (preact_1.h("div", {
+                class: dom_1.cls('header-area',[filterRow,'has-filter-row']),
+                style: headerHeightStyle,
+                ref: function(el) {
+                    _this.el = el;
+                }
+            },
+            preact_1.h("table", {
+                    class: dom_1.cls('table'),
+                    onMouseDown: this.handleMouseDown
+                },
+                preact_1.h(colGroup_1.ColGroup, {
+                    side: side,
+                    useViewport: false
+                }),
+                complexColumnHeaders.length ? (preact_1.h(complexHeader_1.ComplexHeader, {
+                    side: side,
+                    grid: grid
+                })) : (preact_1.h("tbody", null,
+                    preact_1.h("tr", {
+                        style: headerHeightStyle,
+                        onDblClick: this.handleDblClick
+                    }, columns.map(function(columnInfo, index) {
+                            return (preact_1.h(columnHeader_1.ColumnHeader, {
+                                key: columnInfo.name,
+                                columnInfo: columnInfo,
+                                selected: _this.isSelected(index),
+                                grid: grid
+                            }));
+                        })
+                    )
+                    )
+                )),
+            preact_1.h(columnResizer_1.ColumnResizer, {
+                side: side
+            })));
     };
     return HeaderAreaComp;
 }(preact_1.Component));
 exports.HeaderArea = hoc_1.connect(function (store, _a) {
     var side = _a.side;
     var _b = store.column, visibleColumnsBySideWithRowHeader = _b.visibleColumnsBySideWithRowHeader, complexColumnHeaders = _b.complexColumnHeaders, _c = store.dimension, headerHeight = _c.headerHeight, cellBorderWidth = _c.cellBorderWidth, rangeBySide = store.selection.rangeBySide, viewport = store.viewport, id = store.id;
+    var filterRow = _c.filterRow;
     return {
+        filterRow: filterRow,
         headerHeight: headerHeight,
         cellBorderWidth: cellBorderWidth,
         columns: visibleColumnsBySideWithRowHeader[side],
@@ -6106,6 +6153,118 @@ var sortingOrder_1 = __webpack_require__(79);
 var filterButton_1 = __webpack_require__(80);
 var column_1 = __webpack_require__(8);
 var common_1 = __webpack_require__(1);
+var filter_1 = __webpack_require__(23);
+var keyboard_1 = __webpack_require__(19);
+var TextFilterRow = /** @class */ (function (_super) {
+    tslib_1.__extends(TextFilterRow, _super);
+    function TextFilterRow() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        var dispatch = _this.props.dispatch;
+        console.log(_this.props.grid.store.data,'_this.props.grid.store.data')
+        var _a = _this.props
+        var _d = _this.props.grid.store
+        var columnInfo = _a.columnInfo;
+        var columnName = (columnInfo.name)
+        _d.filterRowStore = _d.filterRowStore || {}
+        _this.getPreviousValue = function () {
+            var _a = _this.props, filterIndex = _a.filterIndex, filterState = _a.filterState;
+            var state = 1;//filterState.state;
+            var code = 'contain';
+            var value = '';
+            if (state.length && state[filterIndex]) {
+                var _b = state[filterIndex], prevCode = _b.code, prevValue = _b.value;
+                code = prevCode;
+                value = String(prevValue);
+            }
+            return { value: value, code: code };
+        };
+        _this.handleChange = common_1.debounce(function (ev) {
+           
+            var keyCode = ev.keyCode;
+            if (keyboard_1.isNonPrintableKey(keyCode)) {
+                return;
+            }
+            var keyName = keyboard_1.keyNameMap[keyCode];
+            if (keyName === 'enter') {
+                _d.filterRowStore[columnName] = {
+                    columnName: columnName,
+                    condition: 'contain',
+                    value: _this.inputEl.value
+                }
+                //dispatch('applyActiveFilterState');
+                console.log('ENKER KEY',_d.filterRowStore)
+            }
+            else {
+                var filterIndex = _this.props.filterIndex;
+                var value = _this.inputEl.value;
+                var code = 'contain';
+                //dispatch('setActiveFilterState', { value: value, code: code }, filterIndex);
+                console.log('PRESS KEY')
+            }
+        }, 50);
+        _this.getValue = function () {
+            if(columnName && _d.filterRowStore[columnName]) {
+                return _d.filterRowStore[columnName].value || ''
+            }
+        }
+        return _this;
+    }
+    TextFilterRow.prototype.componentDidMount = function () {
+        console.log('TextFilterRow.prototype.componentDidMount')
+        var _a = this.props, 
+            columnInfo = _a.columnInfo, 
+            grid = _a.grid;
+        if (!this.el) {
+            return;
+        }
+        var type = typeof columnInfo.filter.type;
+        if(type == 'function'){
+            var FilterRowClass = columnInfo.filter.type;
+            console.log(FilterRowClass,'FilterRowClass')
+            var renderer = new FilterRowClass({ 
+                //grid: grid, 
+                columnInfo: columnInfo 
+            });
+            var rendererEl = renderer.getElement();
+            this.el.appendChild(rendererEl);
+            this.renderer = renderer;
+            if (common_1.isFunction(renderer.mounted)) {
+                renderer.mounted(this.el);
+            }
+        }
+    }
+    TextFilterRow.prototype.render = function () {
+        var _this = this;
+        var columnInfo = this.props.columnInfo;
+        var _a = this.getPreviousValue(), code = _a.code, value = this.getValue();
+        var selectOption = filter_1.filterSelectOption[columnInfo.filter.type];
+        // var dispatch = this.context.dispatch;
+        var type = typeof columnInfo.filter.type;
+            return (
+                preact_1.h('div',
+                    tslib_1.__assign({
+                            ref: function(el) {
+                                _this.el = el;
+                            },
+                            style: {
+                                
+                            },
+                            
+                        }), 
+                        type=='function'?null:preact_1.h('input', { 
+                        ref: function (ref) {
+                            _this.inputEl = ref;
+                        }, 
+                        type: "text", 
+                        className: dom_1.cls('filter-input'), 
+                        onKeyUp: this.handleChange, 
+                        value: value ,
+                    })
+                )
+            );
+    };
+    return TextFilterRow;
+}(preact_1.Component));
 var ColumnHeader = /** @class */ (function (_super) {
     tslib_1.__extends(ColumnHeader, _super);
     function ColumnHeader() {
@@ -6150,13 +6309,62 @@ var ColumnHeader = /** @class */ (function (_super) {
             this.renderer.beforeDestroy();
         }
     };
-    ColumnHeader.prototype.render = function () {
+    ColumnHeader.prototype.render = function() {
         var _this = this;
-        var _a = this.props, columnInfo = _a.columnInfo, colspan = _a.colspan, rowspan = _a.rowspan, selected = _a.selected, height = _a.height;
-        var name = columnInfo.name, textAlign = columnInfo.headerAlign, verticalAlign = columnInfo.headerVAlign, headerRenderer = columnInfo.headerRenderer;
-        return (preact_1.h("th", tslib_1.__assign({ ref: function (el) {
-                _this.el = el;
-            }, "data-column-name": name, style: { textAlign: textAlign, verticalAlign: verticalAlign, padding: headerRenderer ? 0 : null, height: height }, class: dom_1.cls('cell', 'cell-header', [!column_1.isRowHeader(name) && selected, 'cell-selected'], [column_1.isRowHeader(name), 'cell-row-header']) }, !!colspan && { colspan: colspan }, !!rowspan && { rowspan: rowspan }), ['checkbox', 'sortingBtn', 'sortingOrder', 'filter'].map(function (type) { return _this.getElement(type); })));
+        var _a = this.props,
+            columnInfo = _a.columnInfo,
+            colspan = _a.colspan,
+            rowspan = _a.rowspan,
+            selected = _a.selected,
+            height = _a.height;
+        var name = columnInfo.name,
+            textAlign = columnInfo.headerAlign,
+            verticalAlign = columnInfo.headerVAlign,
+            headerRenderer = columnInfo.headerRenderer;
+        return (
+            preact_1.h(
+                "th", 
+                tslib_1.__assign({
+                        ref: function(el) {
+                            _this.el = el;
+                        },
+                        "data-column-name": name,
+                        style: {
+                            textAlign: textAlign,
+                            verticalAlign: verticalAlign,
+                            padding: headerRenderer ? 0 : null,
+                            height: height
+                        },
+                        class: dom_1.cls('cell', 'cell-header', [!column_1.isRowHeader(name) && selected, 'cell-selected'], [column_1.isRowHeader(name), 'cell-row-header'])
+                    }, !!colspan && {
+                        colspan: colspan
+                    }, !!rowspan && {
+                        rowspan: rowspan
+                }), 
+                ['checkbox', 'sortingBtn', 'sortingOrder', 'filter'].map(function(type) {
+                    return _this.getElement(type);
+                }),
+                // filter row control
+                preact_1.h('div',{
+                    
+                    class: dom_1.cls('filter-row'),
+                    onClick: function (ev) {
+                        var target = ev.target;
+                        if (!dom_1.hasClass(target, 'filter-row')) {
+                            return;
+                        }
+                        
+                    }
+                }, 
+                    columnInfo.filter ? preact_1.h(TextFilterRow,{
+                        columnInfo: columnInfo,
+                        grid: _a.grid,
+                        dispatch: _a.grid.dispatch,
+                    }) : null
+                )
+                
+            )
+        );
     };
     return ColumnHeader;
 }(preact_1.Component));
@@ -6978,9 +7186,13 @@ var Grid = /** @class */ (function () {
      * @param {Array} [options.complexColumns] - The complex columns info
      */
     Grid.prototype.setHeader = function (_a) {
-        var height = _a.height, complexColumns = _a.complexColumns;
+        var filterRow = _a.filterRow;
+        var height = _a.height + (filterRow? 27 :0), complexColumns = _a.complexColumns;
         if (height) {
             this.dispatch('setHeaderHeight', height);
+        }
+        if (filterRow) {
+            this.dispatch('setFilterRow', filterRow);
         }
         if (complexColumns) {
             this.dispatch('setComplexColumnHeaders', complexColumns);
@@ -7947,6 +8159,7 @@ function createStore(id, options) {
     var frozenBorderWidth = columnOptions.frozenBorderWidth;
     var summaryHeight = summaryOptions.height, summaryPosition = summaryOptions.position;
     var _p = header.height, headerHeight = _p === void 0 ? 40 : _p, _q = header.complexColumns, complexColumns = _q === void 0 ? [] : _q, _r = header.align, align = _r === void 0 ? 'center' : _r, _s = header.valign, valign = _s === void 0 ? 'middle' : _s, _t = header.columns, columnHeaders = _t === void 0 ? [] : _t;
+    var _f = header.filterRow, filterRow = _f === void 0 ? false : _f;
     var column = column_1.create({
         columns: options.columns,
         columnOptions: columnOptions,
@@ -7981,7 +8194,8 @@ function createStore(id, options) {
         summaryPosition: summaryPosition,
         scrollX: scrollX,
         scrollY: scrollY,
-        headerHeight: headerHeight
+        headerHeight: headerHeight,
+        filterRow: filterRow
     });
     var columnCoords = columnCoords_1.create({ column: column, dimension: dimension });
     var rowCoords = rowCoords_1.create({ data: data, dimension: dimension });
@@ -9389,7 +9603,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var observable_1 = __webpack_require__(5);
 var common_1 = __webpack_require__(1);
 function create(_a) {
-    var column = _a.column, _b = _a.width, width = _b === void 0 ? 'auto' : _b, domWidth = _a.domWidth, _c = _a.rowHeight, rowHeight = _c === void 0 ? 40 : _c, _d = _a.bodyHeight, bodyHeight = _d === void 0 ? 'auto' : _d, _e = _a.minRowHeight, minRowHeight = _e === void 0 ? 40 : _e, _f = _a.minBodyHeight, minBodyHeight = _f === void 0 ? 130 : _f, _g = _a.frozenBorderWidth, frozenBorderWidth = _g === void 0 ? 1 : _g, _h = _a.heightResizable, heightResizable = _h === void 0 ? false : _h, _j = _a.scrollX, scrollX = _j === void 0 ? true : _j, _k = _a.scrollY, scrollY = _k === void 0 ? true : _k, _l = _a.summaryHeight, summaryHeight = _l === void 0 ? 0 : _l, _m = _a.summaryPosition, summaryPosition = _m === void 0 ? 'bottom' : _m, _o = _a.headerHeight, headerHeight = _o === void 0 ? 40 : _o;
+    var column = _a.column, _b = _a.width, width = _b === void 0 ? 'auto' : _b, 
+        domWidth = _a.domWidth, _c = _a.rowHeight, rowHeight = _c === void 0 ? 40 : _c, 
+        _d = _a.bodyHeight, bodyHeight = _d === void 0 ? 'auto' : _d, _e = _a.minRowHeight, 
+        minRowHeight = _e === void 0 ? 40 : _e, _f = _a.minBodyHeight, minBodyHeight = _f === void 0 ? 130 : _f, 
+        _g = _a.frozenBorderWidth, frozenBorderWidth = _g === void 0 ? 1 : _g, _h = _a.heightResizable, heightResizable = _h === void 0 ? false : _h, 
+        _j = _a.scrollX, scrollX = _j === void 0 ? true : _j, _k = _a.scrollY, scrollY = _k === void 0 ? true : _k, _l = _a.summaryHeight, 
+        summaryHeight = _l === void 0 ? 0 : _l, _m = _a.summaryPosition, summaryPosition = _m === void 0 ? 'bottom' : _m, 
+        _o = _a.headerHeight, headerHeight = _o === void 0 ? 40 : _o,
+        _fr = _a.filterRow, filterRow = _fr === void 0 ? false : _fr;
     var bodyHeightVal = typeof bodyHeight === 'number' ? bodyHeight : 0;
     return observable_1.observable({
         offsetLeft: 0,
@@ -9408,7 +9630,8 @@ function create(_a) {
         scrollY: scrollY,
         summaryHeight: summaryHeight,
         summaryPosition: summaryPosition,
-        headerHeight: headerHeight,
+        headerHeight: headerHeight + (_fr?27:0),
+        filterRow: filterRow,
         scrollbarWidth: 17,
         tableBorderWidth: 1,
         cellBorderWidth: 1,
@@ -10298,6 +10521,10 @@ var ContainerComp = /** @class */ (function (_super) {
              * @property {string} columnName - columnName of the target cell
              * @property {Grid} instance - Current grid instance
              */
+            var target = event.target;
+            if (dom_1.findParent(target, 'filter-row')) {
+                return;
+            }
             eventBus.trigger('mousedown', gridEvent);
             if (!gridEvent.isStopped()) {
                 dispatch('setNavigating', true);
@@ -10343,9 +10570,12 @@ var ContainerComp = /** @class */ (function (_super) {
                 filtering = _a.filtering, 
                 editing = _a.editing,
                 editingEvent = _a.editingEvent;
-            
+            var target = ev.target;
+            // if (dom_1.findParent(target, 'filter-row')) {
+            //     dispatch('setActiveColumnAddress', null);
+            // }else 
             if (filtering) {
-                var target = ev.target;
+                
                 if (!dom_1.findParent(target, 'btn-filter') && !dom_1.findParent(target, 'filter-container')) {
                     dispatch('setActiveColumnAddress', null);
                 }
@@ -14323,6 +14553,7 @@ var ServerSideDataProvider = /** @class */ (function () {
             return;
         }
         var _a = this, api = _a.api, withCredentials = _a.withCredentials, store = _a.store;
+        console.log(_a.store.filterRowStore,'_a.store.filterRowStore')
         var treeColumnName = store.column.treeColumnName;
         var pageOptions = store.data.pageOptions;
         var perPage = pageOptions.perPage;
