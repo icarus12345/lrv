@@ -30,7 +30,9 @@ class ProductController extends AdminController
 		$perpage = $request->perPage??10;
 		$sort_column = $request->sortColumn??'id';
 		$sort_ascending = $request->sortAscending?'asc':'desc';
-		$rows = Product::orderBy($sort_column, $sort_ascending)
+		$filter = $request->filter??null;
+		$rows = Product::filter($filter)
+			->orderBy($sort_column, $sort_ascending)
 			->paginate($perpage);
 		return response()->json([
 			"result"=> true,

@@ -16,7 +16,7 @@ ImageEditor = window.ImageEditor || class ImageEditor {
     constructor(props) {
         let self = this;
     	let $el = $([
-    		'<div class="tui-grid-editor-dropdown">',
+    		'<div class="tui-grid-editor-dropdown tui-grid-editor-file">',
 		    '   <button type="button" class="btn btn-default tui-grid-cell-thumb" data-preview data-action="upload"><i class="fa fa-upload"></i></button>',
 		    '   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">',
             //'       Action',
@@ -168,6 +168,82 @@ CategoryEditor = window.CategoryEditor || class CategoryEditor {
     mounted() {
         this.el.focus();
 
+    }
+}
+DropdownEditor = window.DropdownEditor || class DropdownEditor {
+    constructor(props) {
+        let $el = $([
+    		'<div class="tui-grid-editor-dropdown">',
+		    '   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">',
+            '       <span>Action</span>',
+		    '       <span class="caret"></span>',
+            '   </button>',
+		    '   <ul class="dropdown-menu">',
+            '   </ul>',
+		    '</div>'
+		].join(''));
+        const el = $el[0];//document.createElement('input');
+        categoryPromise.then((rs) => {
+            let addOptions = ($el, items) => {
+                items.map((c) => {
+
+                    if (c.children) {
+                        let li = $([
+                            '<li>',
+                            '   <div href="Javascript:" data-value="'+c.id+'">'+c.name+'</div>',
+                            '   <ul></ul>',
+                            '</li>',
+                        ].join(''));
+                        $el.append(li)
+                        addOptions(li.find('>ul'), c.children);
+                    } else {
+                        let li = $([
+                            '<li>',
+                            '   <a href="Javascript:" data-value="'+c.id+'">'+c.name+'</a>',
+                            '</li>',
+                        ].join(''));
+                        $el.append(li);
+                    }
+                })
+            }
+            addOptions($el.find('>ul'), rs)
+            var selectedText = $el.find('a[data-value="'+props.value+'"]').text() || '---Select---'
+            $el.find('a.active').removeClass('active')
+            $el.find('a[data-value="'+props.value+'"]').addClass('active')
+            $el.find('>button>span:first-child').text(selectedText);
+            
+            $el.find('a').unbind('click')
+                .click((ev)=>{
+                    $el.find('a.active').removeClass('active');
+                    $(ev.target).addClass('active')
+                    var selectedText = $(ev.target).text()
+                    $el.find('>button>span:first-child').text(selectedText);
+                    $el.trigger('change')
+                    el.dispatchEvent(
+                        new Event('change', {
+                            bubbles: true,
+                            cancelable: true,
+                            view: window,
+                    }));
+                })
+        })
+
+
+// Dispatch it.
+        
+        this.el = el;
+    }
+
+    getElement() {
+        return this.el;
+    }
+
+    getValue() {
+        return $(this.el).find('a.active').data('value');
+    }
+
+    mounted() {
+        $(this.el).find('>button').focus();
     }
 }
 ActionRenderer = window.ActionRenderer || class ActionRenderer {
@@ -372,10 +448,10 @@ var InitGrid = () => {
                 header: 'Name',
                 name: 'name',
                 sortable: true,
+                // filter: {
+                //     type: DropdownEditor
+                // },
                 
-                filter: {
-                    type: 'text'
-                },
                 onBeforeChange(ev) {
                     console.log('Before change:', ev);
                     //ev.stop();
@@ -412,7 +488,7 @@ var InitGrid = () => {
                 },
                 onAfterChange: onCellUpdated,
                 editor: {
-                    type: CategoryEditor,
+                    type: DropdownEditor,
                     options: {
                         maxLength: 10
                     },
@@ -421,7 +497,11 @@ var InitGrid = () => {
                     }
                 },
                 filter: {
-                    type: CategoryEditor
+                    type: 'list',//CategoryEditor
+                    source: categoryPromise,
+                    // render: ()=>{
+                    //     return ''
+                    // }
                 },
                 renderer: {
                     type: CategoryRenderer,
@@ -431,7 +511,7 @@ var InitGrid = () => {
                 header: 'Price',
                 name: 'price',
                 filter: {
-                    type: NumberEditor
+                    type: 'text'
                 },
                 align: "right",
                 sortable: true,
@@ -470,6 +550,9 @@ var InitGrid = () => {
             {
                 header: 'Discount',
                 name: 'discount',
+                filter: {
+                    type: 'text'
+                },
                 sortable: true,
                 align: "right",
                 width: 60,
@@ -621,6 +704,19 @@ var InitGrid = () => {
                     }
                 },
             },
+            {
+				header: 'Created',
+                name: 'created_at',
+                filter: {
+                    type: 'date'
+                },
+				editor: {
+					type: 'datePicker',
+					options: {
+						format: 'dd/MM/yyyy'
+					}
+				}
+			},
             {
                 header: '#',
                 name: 'id',
