@@ -31,6 +31,12 @@ class Product extends BaseModel
 		// 'colors',
 		// 'sizes',
     ];
+
+    protected $localeField = [
+        'name', 
+        'desc', 
+		'content',
+    ];
 	
 	protected $casts = [
         //'colors' => 'json',

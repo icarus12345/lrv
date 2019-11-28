@@ -29,7 +29,7 @@ class ProductController extends AdminController
 	public function list(Request $request){
 		$perpage = $request->perPage??10;
 		$sort_column = $request->sortColumn??'id';
-		$sort_ascending = $request->sortAscending?'asc':'desc';
+		$sort_ascending = $request->sortAscending=="true"?'asc':'desc';
 		$filter = $request->filter??null;
 		$rows = Product::filter($filter)
 			->orderBy($sort_column, $sort_ascending)

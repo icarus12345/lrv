@@ -12,7 +12,7 @@
   font-size: 13px;
   font-family: Arial, '\B3CB\C6C0', Dotum, sans-serif;
 }
-.tui-grid-container ::-webkit-scrollbar {
+/* .tui-grid-container ::-webkit-scrollbar {
   -webkit-appearance: none;
   width: 17px;
   height: 17px;
@@ -20,7 +20,7 @@
 .tui-grid-container ::-webkit-scrollbar-thumb {
   border: 4px solid transparent;
   background-clip: content-box;
-}
+} */
 .tui-grid-container * {
   box-sizing: content-box;
   -webkit-box-sizing: content-box;
@@ -212,7 +212,7 @@
   filter: alpha(opacity=10);
 }
 .tui-grid-layer-datepicker {
-  width: calc(100% - 10px);
+  /* width: calc(100% - 10px); */
   position: absolute;
   z-index: 100;
   box-sizing: border-box;
@@ -400,6 +400,8 @@
   position: relative;
   border-style: solid;
   border-width: 0 0 1px;
+  border-width: 0 0 0px;
+  box-shadow: 0 0 0 1px #ccc;
 }
 .tui-grid-content-area.tui-grid-no-scroll-x {
   border-bottom-width: 0;
@@ -502,6 +504,7 @@
   border-style: solid;
   border-width: 1px;
   z-index: 10;
+  opacity: 0;
 }
 .tui-grid-scrollbar-left-bottom {
   position: absolute;
@@ -512,6 +515,7 @@
   border-style: solid;
   border-width: 0 1px;
   z-index: 10;
+  opacity: 0;
 }
 .tui-grid-scrollbar-right-bottom {
   position: absolute;
@@ -521,12 +525,14 @@
   border-style: solid;
   border-width: 1px 1px 0 1px;
   z-index: 10;
+  opacity: 0;
 }
 .tui-grid-no-scroll-x .tui-grid-scrollbar-right-bottom {
   height: 0;
 }
 .tui-grid-no-scroll-x.tui-grid-has-summary-bottom .tui-grid-scrollbar-right-bottom {
   border-bottom-width: 1px;
+  opacity: 0;
 }
 .tui-grid-no-scroll-y .tui-grid-scrollbar-right-bottom {
   width: 0;
@@ -557,6 +563,7 @@
   border-style: solid;
   border-width: 0 1px 0 0;
   z-index: 10;
+  opacity: 0;
 }
 .tui-grid-frozen-border {
   position: absolute;
@@ -937,11 +944,17 @@
   padding-right: 20px;
 
 }
+.tui-grid-editor-dropdown.open .dropdown-toggle.btn-default,
+.tui-grid-editor-dropdown.open .dropdown-toggle.btn-default:active,
+.tui-grid-editor-dropdown.open .dropdown-toggle.btn-default:focus,
+.tui-grid-editor-dropdown.open .dropdown-toggle.btn-default:hover,
+.tui-grid-editor-dropdown .dropdown-toggle.btn-default{
+  background:#fff;
+}
 .tui-grid-editor-dropdown .btn:first-child{
   padding-left: 5px;
   padding-right: 5px;
   width: 100%;
- 
 }
 .tui-grid-editor-dropdown.tui-grid-editor-file .btn:first-child{
   text-align: center;
@@ -965,6 +978,11 @@
   background: transparent;
 }
 
+.tui-grid-filter-row .tui-grid-cell-list>span:first-child{
+  text-overflow: ellipsis;
+    overflow: hidden;
+    display: block;
+}
 .tui-grid-filter-row .tui-grid-cell-list{
   text-align: left;
   position: relative;
@@ -1023,7 +1041,7 @@
     border-radius: 0;
 }
 .tui-grid-editor-dropdown .dropdown-menu li > ul{
-  padding-left: 24px;
+  /* padding-left: 24px; */
 }
 .tui-grid-editor-dropdown .dropdown-menu li > a:hover{
   background: #f0f0f0;
@@ -1077,7 +1095,7 @@
   display: none;
 }
 .tui-grid-has-filter-row{
-  overflow: visible;
+  /* overflow: visible; */
 }
 .tui-grid-has-filter-row .tui-grid-cell-header .tui-grid-btn-sorting{
   margin-top: -23px;

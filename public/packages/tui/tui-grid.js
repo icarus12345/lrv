@@ -6169,6 +6169,9 @@ var DatePickerFilterRow = /** @class */ (function (_super) {
         var _a = _this.props, columnInfo = _a.columnInfo, _grid = _a.grid;
         var columnName = columnInfo.name
         var filterRowStore = _grid.filterRowStore;
+        _this.onInputMousedown = (ev) => {
+            //_grid.gridEl.appendChild(_this.calendarWrapper)
+        }
         _this.createDatePicker = function () {
             var _b = columnInfo.filter.options, options = _b === void 0 ? {} : _b;
             var usageStatistics = _grid.usageStatistics;
@@ -6189,9 +6192,12 @@ var DatePickerFilterRow = /** @class */ (function (_super) {
                 usageStatistics: usageStatistics
             };
             _this.datePickerEl = new tui_date_picker_1.default(_this.calendarWrapper, common_1.deepMergedCopy(defaultOptions, options || {}));
+            _this.inputEl.removeEventListener('mousedown', _this.onInputMousedown)
+            _this.inputEl.addEventListener('mousedown', _this.onInputMousedown)
             _this.datePickerEl.on('change', _this.handleChange);
             _this.datePickerEl.on('close', ()=>{
-                _this.calendarWrapper.remove()
+                var pNode = _this.inputEl.parentNode.parentNode
+                pNode.insertBefore(_this.calendarWrapper,pNode.nextSibling)
             });
             _this.datePickerEl.on('open', ()=>{
                 if(_this.calendarWrapper){
@@ -6250,6 +6256,7 @@ var DatePickerFilterRow = /** @class */ (function (_super) {
     };
     DatePickerFilterRow.prototype.componentWillUnmount = function () {
         this.datePickerEl.destroy();
+        console.log('DatePickerFilterRow::componentWillUnmount')
     };
     DatePickerFilterRow.prototype.render = function () {
         var _this = this;
@@ -6281,28 +6288,43 @@ var ListFilterRow = /** @class */ (function (_super) {
         var columnName = columnInfo.name
         var filterRowStore = _grid.filterRowStore;
         var source = columnInfo.filter.source;
-        _this.createList = function () {
-            var _b = columnInfo.filter.options, options = _b === void 0 ? {} : _b;
-            var filterValue = filterRowStore.get(columnName) || [];
-            
-            _this.selectAllEl.addEventListener('change',(ev) => {
-                
-            
-                var selectedValues = Array.from(_this.listEl.getElementsByTagName('input'))
-                .map((input)=>{
-                    input.checked = ev.target.checked;
-                })
-                // if (ev.target.checked) {
-                // }
-                //_this.handleChange();
-            })
-            document.addEventListener('click',(ev)=>{
-                if(!dom_1.findParent(ev.target, 'filter-container')){
+        _this.documentOnClick = (ev) => {
+            if(
+                !dom_1.findParent(ev.target, 'filter-container') &&
+                !_this.inputEl.contains(ev.target) &&
+                !(_this.inputEl == ev.target)
+                ){
+                if(_this.wrapper.classList.contains('show')){
+
                     _this.wrapper.classList.remove('show')
                     _this.wrapper.remove();
                     _this.handleChange();
                 }
+            }
+        }
+        _this.selectAllOnChange = (ev) => {
+            console.log('Select All: change')
+            var selectedValues = Array.from(_this.listEl.getElementsByTagName('input'))
+            .map((input)=>{
+                input.checked = ev.target.checked;
             })
+            // if (ev.target.checked) {
+            // }
+            //_this.handleChange();
+            _this.updateLabel()
+        }
+        _this.addEvents = function () {
+            console.log('addEvents')
+            _this.selectAllEl.removeEventListener('change', _this.selectAllOnChange)
+            _this.selectAllEl.addEventListener('change', _this.selectAllOnChange)
+            document.removeEventListener('mousedown', _this.documentOnClick)
+            document.addEventListener('mousedown', _this.documentOnClick)
+
+            
+        }
+        _this.createList = function () {
+            var _b = columnInfo.filter.options, options = _b === void 0 ? {} : _b;
+            var filterValue = filterRowStore.get(columnName) || [];
             if(source && source.then){
                 source.then((rs)=>{
                     let addItem = (el, items, level) => {
@@ -6329,8 +6351,10 @@ var ListFilterRow = /** @class */ (function (_super) {
                         })
                     }
                     addItem(_this.listEl, rs)
+                    _this.updateLabel()
                 })
             }
+            _this.updateLabel()
         };
         _this.handleKeyUp = common_1.debounce(function (ev) {
             var keyCode = ev.keyCode;
@@ -6360,6 +6384,7 @@ var ListFilterRow = /** @class */ (function (_super) {
         _this.applyFilter = (ev)=>{
             if(filterTimer) clearTimeout(filterTimer);
             var value = _this.getValue();
+            console.log('FILTER:LIST')
             if(value.toString() != filterRowStore.get(columnName).toString()){
                 filterRowStore.set(columnName, value)
                 _grid.readData(1)
@@ -6378,14 +6403,15 @@ var ListFilterRow = /** @class */ (function (_super) {
             
             if(!_this.listEl.innerHTML){
                 _this.createList();
+                
             }
             var r1 = _grid.gridEl.getBoundingClientRect()
             var r2 = _this.inputEl.getBoundingClientRect()
             _this.wrapper.style.top = '72px'
             _this.wrapper.style.zIndex = '111'
             var left = r2.left - r1.left - 0
-            if(left + 276 > r1.width){
-                _this.wrapper.style.left = (r1.width - 276) + 'px'
+            if(left + _this.wrapper.clientWidth > r1.width){
+                _this.wrapper.style.left = (r1.width - _this.wrapper.clientWidth) + 'px'
             } else {
                 _this.wrapper.style.left = (left) + 'px'
             }
@@ -6394,9 +6420,25 @@ var ListFilterRow = /** @class */ (function (_super) {
                 _this.wrapper.remove();
             } else {
                 _grid.gridEl.appendChild(_this.wrapper)
+                _this.addEvents();
             }
             _this.wrapper.classList.toggle('show')
         };
+
+        _this.updateLabel = ()=>{
+            var labels = Array.from(_this.listEl.getElementsByTagName('input'))
+                .filter((input)=>input.checked)
+                .map((input)=>{
+                    return input.nextSibling.textContent
+                });
+            _this.displayLabel.innerHTML = labels.length?(labels.length + ' items') : '---Choose---';
+
+            // set checked all
+            var isSelectedAll = !!!(Array.from(_this.listEl.getElementsByTagName('input'))
+                .filter((input)=>!input.checked)
+                .length)
+            _this.selectAllEl.checked = isSelectedAll
+        }
 
         _this.onCheckedChange = (ev) => {
             var ch = ev.target.parentElement.nextSibling
@@ -6425,7 +6467,7 @@ var ListFilterRow = /** @class */ (function (_super) {
                 .filter((input)=>!input.checked)
                 .length)
             _this.selectAllEl.checked = isSelectedAll
-
+            _this.updateLabel()
             //_this.handleChange();
         }
         _this.getValue = ()=>{
@@ -6438,7 +6480,7 @@ var ListFilterRow = /** @class */ (function (_super) {
         return _this;
     }
     ListFilterRow.prototype.componentDidMount = function () {
-        
+        this.addEvents()
         console.log('componentDidMount',this.wrapper)
     };
     ListFilterRow.prototype.componentWillUnmount = function () {
@@ -6447,9 +6489,13 @@ var ListFilterRow = /** @class */ (function (_super) {
     };
     ListFilterRow.prototype.render = function () {
         var _this = this;
-        var columnInfo = this.props.columnInfo;
+        var _a = _this.props, columnInfo = _a.columnInfo, _grid = _a.grid;
         var source = columnInfo.filter.source;
-        console.log('render',_this.wrapper)
+        var search = columnInfo.filter.search;
+        var columnName = columnInfo.name
+
+        var filterRowStore = _grid.filterRowStore;
+        var filterValue = filterRowStore.get(columnName);
         return (preact_1.h("div", {
             },
             
@@ -6461,7 +6507,12 @@ var ListFilterRow = /** @class */ (function (_super) {
                     onClick: this.toggleList
                 },
                 
-                preact_1.h("span", { className: '' }),
+                preact_1.h("span", { 
+                    ref: function (ref) {
+                        _this.displayLabel = ref;
+                    },
+                    className: '' 
+                }, filterValue.length?(filterValue.length + ' items') : '---Choose---'),
                 preact_1.h("span", { className: 'caret' })
                 
             ),
@@ -6475,10 +6526,10 @@ var ListFilterRow = /** @class */ (function (_super) {
                     },
                     className: dom_1.cls('filter-container')
                 }, 
-                preact_1.h("input", {
+                search?preact_1.h("input", {
                     type: 'text',
                     className: dom_1.cls('filter-input'),
-                }),
+                }): null,
                 preact_1.h("div", {
                         className: dom_1.cls('filter-list-container'),
                     },
@@ -6495,6 +6546,7 @@ var ListFilterRow = /** @class */ (function (_super) {
                                 ref: function (ref) {
                                     _this.selectAllEl = ref;
                                 },
+                                checked: (source && source.length)?filterValue.length == source.length: false,
                             }),preact_1.h("span",{
                             },'Select All')
                             )
@@ -6515,7 +6567,8 @@ var ListFilterRow = /** @class */ (function (_super) {
                                 },preact_1.h("input",{
                                     type: 'checkbox',
                                     value: d.id,
-                                    onchange: _this.onCheckedChange
+                                    onchange: _this.onCheckedChange,
+                                    checked: filterValue.indexOf(d.id.toString()) >= 0,
                                 }),preact_1.h("span",{
                                 },d.name)
                                 )
@@ -6543,19 +6596,6 @@ var TextFilterRow = /** @class */ (function (_super) {
         var columnInfo = _a.columnInfo;
         var columnName = (columnInfo.name)
         
-        
-        _this.getPreviousValue = function () {
-            var _a = _this.props, filterIndex = _a.filterIndex, filterState = _a.filterState;
-            var state = 1;//filterState.state;
-            var code = 'contain';
-            var value = '';
-            if (state.length && state[filterIndex]) {
-                var _b = state[filterIndex], prevCode = _b.code, prevValue = _b.value;
-                code = prevCode;
-                value = String(prevValue);
-            }
-            return { value: value, code: code };
-        };
         _this.handleChange = common_1.debounce(function (ev) {
            
             var keyCode = ev.keyCode;
@@ -6646,7 +6686,6 @@ var TextFilterRow = /** @class */ (function (_super) {
     TextFilterRow.prototype.render = function () {
         var _this = this;
         var columnInfo = this.props.columnInfo;
-        var _a = this.getPreviousValue(), code = _a.code, value = this.getFilterValue();
         var selectOption = filter_1.filterSelectOption[columnInfo.filter.type];
         // var dispatch = this.context.dispatch;
         var type = typeof columnInfo.filter.type;
@@ -6666,6 +6705,8 @@ var TextFilterRow = /** @class */ (function (_super) {
                             _this.inputEl = ref;
                         }, 
                         type: "text", 
+                        title: '= Equal\r\n!= Not equal\r\n> Greater than\r\n< Less than\r\n>= Greater than or equal\r\n<= Less than or equal\r\n, And condition',
+                        placeHolder: 'Search',
                         className: dom_1.cls('filter-input'), 
                         onKeyUp: this.handleChange, 
                         //value: value ,
@@ -6675,6 +6716,120 @@ var TextFilterRow = /** @class */ (function (_super) {
     };
     return TextFilterRow;
 }(preact_1.Component));
+
+
+var SelectFilterRow = /** @class */ (function (_super) {
+    tslib_1.__extends(SelectFilterRow, _super);
+    function SelectFilterRow() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        var dispatch = _this.props.dispatch;
+        var _a = _this.props
+        var _d = _this.props.grid.store
+        var _grid = _this.props.grid
+        var filterRowStore = _grid.filterRowStore;
+        var columnInfo = _a.columnInfo;
+        var columnName = (columnInfo.name)
+        
+        
+        
+        _this.handleChange = common_1.debounce(function (ev) {
+           
+            _this.applyFilter()
+            
+        }, constant_1.FILTER_DEBOUNCE_TIME);
+        _this.getFilterValue = function () {
+            if(columnName && filterRowStore) {
+                return filterRowStore.get(columnName) || ''
+            }
+        }
+        _this.getValue = function () {
+            var type = typeof columnInfo.filter.type;
+            if(type == 'function'){
+                return _this.renderer.getValue()
+            }
+            return _this.inputEl.value
+        }
+        var filterTimer;
+        
+        _this.applyFilter = (ev)=>{
+            if(filterTimer) clearTimeout(filterTimer);
+            var value = _this.getValue();
+            if(value != filterRowStore.get(columnName)){
+                filterRowStore.set(columnName, value)
+                _grid.readData(1)
+            }
+        }
+        return _this;
+    }
+    SelectFilterRow.prototype.componentDidMount = function () {
+        let _this = this;
+        var _a = this.props, 
+            columnInfo = _a.columnInfo, 
+            grid = _a.grid;
+        if (!this.el) {
+            return;
+        }
+        var type = typeof columnInfo.filter.type;
+        if(type == 'function'){
+            var FilterRowClass = columnInfo.filter.type;
+            var renderer = new FilterRowClass({ 
+                //grid: grid, 
+                columnInfo: columnInfo 
+            });
+            var rendererEl = renderer.getElement();
+            this.el.appendChild(rendererEl);
+            _this.inputEl = rendererEl
+            _this.renderer = renderer
+            rendererEl.addEventListener('change', (ev)=>{
+                _this.applyFilter()
+            });
+            this.renderer = renderer;
+            if (common_1.isFunction(renderer.mounted)) {
+                renderer.mounted(this.el);
+            }
+            renderer.mounted()
+        }
+    }
+    SelectFilterRow.prototype.render = function () {
+        var _this = this;
+        var columnInfo = this.props.columnInfo;
+        
+        var source = columnInfo.filter.source;
+        // var dispatch = this.context.dispatch;
+        var type = typeof columnInfo.filter.type;
+            return (
+                preact_1.h('div',
+                    tslib_1.__assign({
+                        ref: function(el) {
+                            _this.el = el;
+                        },
+                        style: {
+                            
+                        },
+                        
+                    }), 
+                    type=='function'?null:
+                    preact_1.h('select', { 
+                        ref: function (ref) {
+                            _this.inputEl = ref;
+                        }, 
+                        className: dom_1.cls('filter-select'), 
+                        onChange: this.handleChange, 
+                        //value: value ,
+                    }, preact_1.h('option', {
+                        value: ''
+                    }, '---Choose---'),source.map((d)=>{
+                        return preact_1.h('option', {
+                            value: d.id
+                        }, d.name);
+                    }))
+                )
+            );
+    };
+    return SelectFilterRow;
+}(preact_1.Component));
+
+
 var ColumnHeader = /** @class */ (function (_super) {
     tslib_1.__extends(ColumnHeader, _super);
     function ColumnHeader() {
@@ -6731,6 +6886,20 @@ var ColumnHeader = /** @class */ (function (_super) {
             textAlign = columnInfo.headerAlign,
             verticalAlign = columnInfo.headerVAlign,
             headerRenderer = columnInfo.headerRenderer;
+        var filterRowClass = TextFilterRow;
+        if(columnInfo.filter) switch(columnInfo.filter.type){
+            case 'date':
+                filterRowClass = DatePickerFilterRow
+                break;
+            case 'list':
+                filterRowClass = ListFilterRow
+                break;
+            case 'select':
+                filterRowClass = SelectFilterRow
+                break;
+            default:
+                filterRowClass = TextFilterRow;
+        }
         return (
             preact_1.h(
                 "th", 
@@ -6768,7 +6937,7 @@ var ColumnHeader = /** @class */ (function (_super) {
                 }, 
                     columnInfo.filter ? preact_1.h(
                         (
-                            columnInfo.filter.type=='date' ? DatePickerFilterRow : columnInfo.filter.type=='list' ? ListFilterRow : TextFilterRow
+                            filterRowClass
                         ), {
                             columnInfo: columnInfo,
                             grid: _a.grid,
@@ -14292,11 +14461,11 @@ exports.presetDefault = {
         background: 'transparent'
     },
     scrollbar: {
-        border: '#eee',
-        background: '#fff',
-        emptySpace: '#f9f9f9',
-        thumb: '#ddd',
-        active: '#ddd'
+        // border: '#eee',
+        // background: '#fff',
+        // emptySpace: '#f9f9f9',
+        // thumb: '#ddd',
+        // active: '#ddd'
     },
     outline: {
         border: '#aaa',
