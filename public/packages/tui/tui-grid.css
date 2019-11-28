@@ -238,6 +238,9 @@
   padding: 0;
   overflow: hidden;
 }
+.tui-grid-cell:hover {
+  background: #e4f6ff;
+}
 .tui-grid-cell .tui-grid-cell-content {
   padding: 12px 12px 11px;
   overflow: hidden;
@@ -1118,7 +1121,7 @@
     border-top: 1px solid #eee;
     padding: 2px;
     height: 33px;
-    background: #fff;
+    /* background: #fff; */
 }
 .tui-grid-filter-row .tui-grid-cell-list,
 .tui-grid-filter-row select,
