@@ -12554,7 +12554,7 @@ var RightSideComp = /** @class */ (function (_super) {
         var style = {
             display: 'block',
             marginLeft: marginLeft,
-            width: width
+            // width: 'calc(100% - ' + marginLeft + 'px)'
         };
         return (preact_1.h("div", { class: dom_1.cls('rside-area'), style: style },
             preact_1.h(headerArea_1.HeaderArea, { side: "R" }),

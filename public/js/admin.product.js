@@ -535,7 +535,7 @@ var InitGrid = () => {
         columnOptions: {
             frozenCount: 2,
             // frozenBorderWidth: 2,
-            // minWidth: 300
+            // minWidth: 320
         },
         columns: [{
             header: '#',

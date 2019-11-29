@@ -430,6 +430,59 @@ var InitOrderGrid = () => {
                     }
                 }
             }
+        },{
+            type: 'checkbox',
+            align: 'center',
+            header: `
+                <label for="all-checkbox" class="checkbox">
+                    <input type="checkbox" id="all-checkbox" class="hidden-input" name="_checked" />
+                    <span class="custom-input"></span>
+                </label>
+            `,
+            renderer: {
+                type: function(props) {
+                    const { grid, rowKey } = props;
+            
+                    const label = document.createElement('label');
+                    label.className = 'checkbox';
+                    label.setAttribute('for', String(rowKey));
+            
+                    const hiddenInput = document.createElement('input');
+                    hiddenInput.className = 'hidden-input';
+                    hiddenInput.id = String(rowKey);
+            
+                    const customInput = document.createElement('span');
+                    customInput.className = 'custom-input';
+            
+                    label.appendChild(hiddenInput);
+                    label.appendChild(customInput);
+            
+                    hiddenInput.type = 'checkbox';
+                    hiddenInput.addEventListener('change', () => {
+                    if (hiddenInput.checked) {
+                        grid.check(rowKey);
+                    } else {
+                        grid.uncheck(rowKey);
+                    }
+                    });
+            
+                    this.el = label;
+            
+                    
+                    
+                    this.getElement = function() {
+                        return this.el;
+                    }
+                    
+                    this.render = function(props) {
+                        const hiddenInput = this.el.querySelector('.hidden-input');
+                        const checked = Boolean(props.value);
+                        
+                        hiddenInput.checked = checked;
+                    }
+                    this.render(props);
+                }
+            }
         }],
         scrollX: true,
         scrollY: false,
@@ -471,6 +524,9 @@ var InitOrderGrid = () => {
             align: 'left',
             columns: [
                 {
+                    name: '_checked',
+                    align: 'center'
+                },{
                     name: 'amount',
                     align: 'right'
                 },
@@ -804,6 +860,70 @@ var InitOrderGrid = () => {
             
         ]
     });
+    var onCheckedChange = function(ev){
+        setTimeout(()=>{
+            var checkedRows = grid.getCheckedRows();
+            if(checkedRows.length){
+                $('.grid-select-all-btn').show();
+                $('.grid-select-all-btn>span>span').text(checkedRows.length + ' items');
+
+            }else{
+                $('.grid-select-all-btn').hide();
+
+            }
+        },42)
+    }
+    grid.on('check', onCheckedChange);
+    grid.on('uncheck', onCheckedChange);
+    grid.on('checkAll', onCheckedChange);
+    grid.on('uncheckAll', onCheckedChange);
+    $('.grid-batch-delete').click(()=>{
+        swal({
+            title: "Are you sure to delete this item ?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Confirm",
+            showLoaderOnConfirm: true,
+            cancelButtonText: "Cancel",
+            preConfirm: function() {
+                return new Promise(function(resolve, reject) {
+                    NProgress.start()
+                    var checkedIds = grid.getCheckedRows().map((row)=>row.id);
+                    $.ajax({
+                        method: 'post',
+                        url: 'product/' + checkedIds.join(),
+                        data: {
+                            _method:'delete',
+                            _token: LA.token
+                        },
+                        complete: function(xhr, stat) {
+                            NProgress.done();
+                        },
+                        success: function (data) {
+                            resolve(data);
+                        },
+                        error: function(request) {
+                            reject()
+                            Helper.Catcher(request)
+                        }
+                    });
+                });
+            }
+        }).then(function(result) {
+            var data = result.value;
+            if (typeof data === 'object') {
+                if (data.status) {
+                    swal(data.message, '', 'success');
+                    grid.reloadData()
+                } else {
+                    swal(data.message, '', 'error');
+                }
+            }else{
+                swal('Oops !', '', 'error');
+            }
+        });
+    })
 }
 
 var InitOrderDetailGrid = (id) => {
