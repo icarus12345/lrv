@@ -362,7 +362,14 @@ var ImageRenderer = function(props) {
     }
     this.render(props);
 }
-
+var CurrencyFormatter = function(props){
+    return new Intl.NumberFormat('vi-VN', {
+        maximumSignificantDigits: 2,
+        style: 'currency',
+        currency: 'VND',
+        // currencyDisplay: '$',
+    }).format(+props.value);
+}
 
 var InitGrid = () => {
     var onCellUpdated = (ev) => {
@@ -379,7 +386,7 @@ var InitGrid = () => {
         NProgress.start()
         $.ajax({
             method: 'PUT',
-            url: 'product/' + row.id,
+            url: 'orders/' + row.id,
             data: data,
             success: function(rs) {
                 //resolve(rs)
@@ -421,21 +428,21 @@ var InitGrid = () => {
         data: {
             api: {
                 readData: {
-                    url: '/api/admin/products',
+                    url: '/api/admin/orders',
                     method: 'GET',
                 },
-                createData: {
-                    url: '/api/createData',
-                    method: 'POST'
-                },
-                updateData: {
-                    url: '/api/updateData',
-                    method: 'PUT'
-                },
-                modifyData: {
-                    url: '/api/modifyData',
-                    method: 'PUT'
-                },
+                // createData: {
+                //     url: '/api/createData',
+                //     method: 'POST'
+                // },
+                // updateData: {
+                //     url: '/api/updateData',
+                //     method: 'PUT'
+                // },
+                // modifyData: {
+                //     url: '/api/modifyData',
+                //     method: 'PUT'
+                // },
                 deleteData: {
                     url: '/api/deleteData',
                     method: 'DELETE'
@@ -456,329 +463,292 @@ var InitGrid = () => {
             align: 'left',
             columns: [
                 {
-                    name: 'price',
+                    name: 'amount',
                     align: 'right'
                 },
                 {
-                    name: 'discount',
+                    name: 'tax_amount',
                     align: 'right'
                 },
                 {
-                    name: 'instock',
+                    name: 'ship_amount',
                     align: 'right'
+                },
+                {
+                    name: 'discount_amount',
+                    align: 'right'
+                },
+                {
+                    name: 'total_amount',
+                    align: 'right'
+                },
+                {
+                    name: 'total_item',
+                    align: 'right'
+                },
+                {
+                    name: 'flat_rate',
+                    align: 'center'
                 },
             ]
         },
         columnOptions: {
-            frozenCount: 2,
+            frozenCount: 3,
             // frozenBorderWidth: 2,
             // minWidth: 300
         },
         columns: [{
-            header: '#',
-            name: 'id',
-            className: "tui-grid-cell-action",
-            width: 60,
-            align: 'center',
-            renderer: {
-                type: ActionRenderer,
-            }
-        },{
-                header: 'Name',
+                header: '#',
+                name: 'id',
+                className: "tui-grid-cell-action",
+                width: 60,
+                align: 'center',
+                renderer: {
+                    type: ActionRenderer,
+                }
+            },{
+                header: 'No',
+                name: 'no',
+                filter: {
+                    type: 'text'
+                },
+                sortable: true,
+                width: 100,
+            },{
+                header: 'Customer',
                 name: 'name',
                 filter: {
                     type: 'text'
                 },
                 sortable: true,
-                minWidth: 180,
-                // filter: {
-                //     type: DropdownEditor
-                // },
+                width: 180,
+            },{
+                header: 'Company',
+                name: 'company',
+                filter: {
+                    type: 'text'
+                },
+                sortable: true,
+                width: 120,
+            },{
+                header: 'Email',
+                name: 'email',
+                filter: {
+                    type: 'text'
+                },
+                sortable: true,
+                width: 200,
+            },{
+                header: 'Street Address',
+                name: 'street_address',
+                filter: {
+                    type: 'text'
+                },
+                sortable: true,
+                width: 280,
+            },{
+                header: 'State City',
+                name: 'state_city',
+                filter: {
+                    type: 'text'
+                },
+                sortable: true,
+                width: 100,
+            },{
+                header: 'Country',
+                name: 'country',
+                filter: {
+                    type: 'text'
+                },
+                sortable: true,
+                width: 100,
+            },{
+                header: 'City',
+                name: 'city',
+                filter: {
+                    type: 'text'
+                },
+                sortable: true,
+                width: 100,
+            },{
+                header: 'Postcode/Zip',
+                name: 'postcode_zip',
+                filter: {
+                    type: 'text'
+                },
+                sortable: true,
+                width: 100,
+            },{
+                header: 'Phone',
+                name: 'phone',
+                filter: {
+                    type: 'text'
+                },
+                sortable: true,
+                width: 100,
+            },{
+                header: 'Coupon Code',
+                name: 'coupon_code',
+                filter: {
+                    type: 'text'
+                },
+                sortable: true,
+                width: 100,
+            },{
+                header: 'Amount',
+                name: 'amount',
+                filter: {
+                    type: 'text'
+                },
+                align: "right",
+                sortable: true,
+                width: 100,
+                formatter: CurrencyFormatter
+            },{
+                header: 'Tax Amount',
+                name: 'tax_amount',
+                filter: {
+                    type: 'text'
+                },
+                align: "right",
+                sortable: true,
+                width: 100,
+                formatter: CurrencyFormatter
+            },{
+                header: 'Ship Amount',
+                name: 'ship_amount',
+                filter: {
+                    type: 'text'
+                },
+                align: "right",
+                sortable: true,
+                width: 100,
+                formatter: CurrencyFormatter
+            },{
+                header: 'Flat Rate',
+                name: 'flat_rate',
+                filter: {
+                    type: 'checkbox'
+                },
+                align: "center",
+                sortable: true,
+                width: 60,
+                renderer: {
+                    type: function (props){
+                        const { grid, rowKey } = props;
                 
-                onBeforeChange(ev) {
-                    console.log('Before change:', ev);
-                    //ev.stop();
-                    //if(!ev.value) throw "Bla"
-
-                },
-                onAfterChange(ev) {
-                    console.log('After change:', ev);
-                    // setTimeout(()=>{
-                    //     grid.startEditing(ev.rowKey,ev.columnName)
-                    // }, 42)
-                },
-                editor: {
-                    type: 'text',
-                    options: {
-                        attributes: {
-                            required: "true",
-                            pattern: ".{0,50}"
+                        const label = document.createElement('label');
+                        label.className = 'checkbox';
+                        label.setAttribute('for', String(rowKey));
+                
+                        const hiddenInput = document.createElement('input');
+                        hiddenInput.className = 'hidden-input';
+                        hiddenInput.id = String(rowKey);
+                
+                        const customInput = document.createElement('span');
+                        customInput.className = 'custom-input';
+                
+                        label.appendChild(hiddenInput);
+                        label.appendChild(customInput);
+                
+                        hiddenInput.type = 'checkbox';
+                        hiddenInput.addEventListener('change', () => {
+                        if (hiddenInput.checked) {
+                            grid.check(rowKey);
+                        } else {
+                            grid.uncheck(rowKey);
                         }
+                        });
+                
+                        this.el = label;
+                
+                        
+                
+                        this.getElement = function() {
+                            return this.el;
+                        }
+                
+                        this.render = function (props) {
+                            const hiddenInput = this.el.querySelector('.hidden-input');
+                            
+                        }
+                        this.render(props);
+                        const checked = Boolean(props.value);
+                    
+                            hiddenInput.checked = checked;
                     }
+                }
+            },{
+                header: 'Discount Amount',
+                name: 'discount_amount',
+                filter: {
+                    type: 'text'
                 },
-                // validation: {
-                //     required: true
-                // }
+                align: "right",
+                sortable: true,
+                width: 100,
+                formatter: CurrencyFormatter
+            },{
+                header: 'Total Amount',
+                name: 'total_amount',
+                filter: {
+                    type: 'text'
+                },
+                align: "right",
+                sortable: true,
+                width: 100,
+                formatter: CurrencyFormatter
+            },{
+                header: 'Total Item',
+                name: 'total_item',
+                filter: {
+                    type: 'text'
+                },
+                align: "right",
+                sortable: true,
+                width: 80,
+            },{
+                header: 'Currency',
+                name: 'currency',
+                filter: {
+                    type: 'text'
+                },
+                sortable: true,
+                width: 60,
             },
             
-            {
-                header: 'Category',
-                name: 'category_id',
-                sortable: true,
-                
-                width: 120,
-                onBeforeChange(ev) {
-                    console.log('Before change:' , ev);
-                },
-                onAfterChange: onCellUpdated,
-                editor: {
-                    type: DropdownEditor,
-                    options: {
-                        maxLength: 10
-                    },
-                    attributes: {
-                        required: "true",
-                    }
-                },
-                filter: {
-                    type: 'list',//CategoryEditor
-                    search: true,
-                    source: categoryPromise,
-                    // render: ()=>{
-                    //     return ''
-                    // }
-                },
-                renderer: {
-                    type: CategoryRenderer,
-                }
-            },
-            {
-                header: 'Price',
-                name: 'price',
-                filter: {
-                    type: 'text'
-                },
-                align: "right",
-                sortable: true,
-                width: 100,
-                onBeforeChange(ev) {
-                    console.log('Before change:' , ev);
-                },
-                onAfterChange: onCellUpdated,
-                formatter: (props) => {
-                    return new Intl.NumberFormat('vi-VN', {
-                        maximumSignificantDigits: 2,
-                        style: 'currency',
-                        currency: 'VND',
-                        // currencyDisplay: '$',
-                    }).format(+props.value);
-                },
-                editor: {
-                    type: 'text',//NumberEditor,
-                    options: {
-                        attributes: {
-                            //type: 'number',
-                            required: "true",
-                            min: 0,
-                            style:'text-align:right;',
-                            // pattern: "[0-9.]{0,11}"
-                            pattern: "^([1-9][0-9]{0,10}([.][0-9]{1,2})?)|^(0.[0-9]{1,2})|0"
-                        }
-                    }
-                },
-                // validation: {
-                //     min: 0,
-                //     max: 10000000,
-                //     //validatorFn: value => value != 3
-                // }
-            },
-            {
-                header: 'Discount',
-                name: 'discount',
-                filter: {
-                    type: 'text'
-                },
-                sortable: true,
-                align: "right",
-                width: 60,
-                onBeforeChange(ev) {
-                    console.log('Before change:' , ev);
-                },
-                onAfterChange: onCellUpdated,
-                
-                editor: {
-                    type: 'text',//NumberEditor,
-                    options: {
-                        attributes: {
-                            //type: 'number',
-                            required: "true",
-                            style:'text-align:right;',
-                            //min: 0,
-                            //max: 100,
-                            pattern: "^([1-9][0-9]{0,1})|100|0"
-                        }
-                    }
-                },
-            },
-            {
-                header: 'Instock',
-                name: 'instock',
-                sortable: true,
-                align: "right",
-                width: 60,
-                onBeforeChange(ev) {
-                    console.log('Before change:' , ev);
-                },
-                onAfterChange: onCellUpdated,
-                
-                editor: {
-                    type: 'text',//NumberEditor,
-                    options: {
-                        attributes: {
-                            //type: 'number',
-                            required: "true",
-                            style:'text-align:right;',
-                            //min: 0,
-                            //max: 100,
-                            pattern: "^(-?[1-9][0-9]{0,4}?)$|0"
-                        }
-                    }
-                },
-            },
-            {
-                header: 'Image',
-                name: 'image',
-                width: 60,
-                onBeforeChange: function(ev) {
-                    console.log('Before change:' , ev);
-                },
-                onAfterChange: onCellUpdated,
-                formatter: (props) => {
-                    return '<img src="' + props.value + '" height="30"/>';
-                },
-                editor: {
-                    type: ImageEditor,
-                    options: {
-
-                    }
-                },
-                renderer: {
-                    type: ImageRenderer,
-                }
-            },
-            {
-                header: 'Labels',
-                name: 'labels',
-                sortable: true,
-                width: 100,
-                onBeforeChange(ev) {
-                    console.log('Before change:' , ev);
-                },
-                onAfterChange: onCellUpdated,
-                formatter: 'listItemText',
-                editor: {
-                    type: 'checkbox',
-                    options: {
-                        listItems: [{
-                                text: 'Hot',
-                                value: 'hot'
-                            },
-                            {
-                                text: 'New',
-                                value: 'new'
-                            },
-                            {
-                                text: 'Sale',
-                                value: 'sale'
-                            },
-                        ]
-                    }
-                },
-                copyOptions: {
-                    useListItemText: true // when this option is used, the copy value is concatenated text
-                }
-            },
-            {
-                header: 'Rating',
-                name: 'rating',
-                sortable: true,
-                minWidth: 80,
-                width: 80,
-                onBeforeChange: function(ev) {
-                    console.log('Before change:' + ev);
-                },
-                onAfterChange: onCellUpdated,
-                copyOptions: {
-                    useListItemText: true
-                },
-                formatter: (props) => {
-                    let v = Math.round(props.value)
-                    return '★'.repeat(v) + '☆'.repeat(5-v);
-                },
-                editor: {
-                    type: 'text',//NumberEditor,
-                    options: {
-                        attributes: {
-                            //type: 'number',
-                            required: "true",
-                            //min: 0,
-                            pattern: "[0-5]{1,1}"
-                        },
-                    }
-                },
-                filter: {
-                    type: 'list',//CategoryEditor
-                    source: [{
-                        id: '1',
-                        name: '★☆☆☆☆',
-                    },{
-                        id: '2',
-                        name: '★★☆☆☆',
-                    },{
-                        id: '3',
-                        name: '★★★☆☆',
-                    },{
-                        id: '4',
-                        name: '★★★★☆',
-                    },{
-                        id: '5',
-                        name: '★★★★★',
-                    }],
-                    // render: ()=>{
-                    //     return ''
-                    // }
-                },
-            },
+            
             {
                 header: 'Status',
                 name: 'status',
                 sortable: true,
                 width: 80,
-                //formatter: 'listItemText',
                 onAfterChange: onCellUpdated,
                 editor: {
                     type: 'select',//NumberEditor,
                     options: {
-                        listItems: [{
-                                text: 'Active',
-                                value: 'Active'
-                            },
-                            {
-                                text: 'InActive',
-                                value: 'InActive'
-                            },
+                        listItems: [
+                            {text: 'Requested', value: 'Requested'},
+                            {text: 'Approved', value: 'Approved'},
+                            {text: 'Unpaid', value: 'Unpaid'},
+                            {text: 'Paid', value: 'Paid'},
+                            {text: 'Shipping', value: 'Shipping'},
+                            {text: 'Done', value: 'Done'},
+                            {text: 'Canceled', value: 'Canceled'}
                         ]
                     }
                 },
                 filter: {
                     type: 'select',//CategoryEditor
-                    source: [{
-                        id: 'Active',
-                        name: 'Active',
-                    },{
-                        id: 'InActive',
-                        name: 'InActive',
-                    }],
+                    source: [
+                        {id: 'Requested', name: 'Requested'},
+                        {id: 'Approved', name: 'Approved'},
+                        {id: 'Unpaid', name: 'Unpaid'},
+                        {id: 'Paid', name: 'Paid'},
+                        {id: 'Shipping', name: 'Shipping'},
+                        {id: 'Done', name: 'Done'},
+                        {id: 'Canceled', name: 'Canceled'}
+                    ],
                     // render: ()=>{
                     //     return ''
                     // }
@@ -787,20 +757,10 @@ var InitGrid = () => {
             {
 				header: 'Created',
                 name: 'created_at',
-                width: 120,
+                width: 140,
                 filter: {
                     type: 'date'
                 },
-				editor: {
-					type: 'datePicker',
-					options: {
-						format: 'yyyy-MM-dd HH:mm A',
-						timepicker: {
-							layoutType: 'tab',
-							inputType: 'spinbox'
-						}
-					}
-				}
 			},
             
         ]

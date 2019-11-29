@@ -8,7 +8,7 @@
 <script src="/packages/tui/tui-date-picker/dist/tui-date-picker.js"></script>
 <script src="/packages/tui/tui-pagination.js"></script>
 <script src="/packages/tui/tui-grid.js"></script>
-<script src="/js/admin.product.js" data-exec-on-popstate></script>
+<script src="/js/admin.order.js" data-exec-on-popstate></script>
 <div id="tui-grid"></div>
 <script>
     $(document).ready(function(){

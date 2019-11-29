@@ -30,6 +30,9 @@ Route::group([
         return \App\Models\Category::buildNested($rows);
         //return \App\Models\Category::all()->toArray();
     });
+    
     Route::get('products', '\App\Admin\Controllers\ProductController@list')->name('product.list');
+    Route::get('orders', '\App\Admin\Controllers\OrderController@list')->name('order.list');
+
     Route::put('product/{id}', '\App\Admin\Controllers\ProductController@apiUpdate')->name('product.update');
 });

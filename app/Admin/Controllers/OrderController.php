@@ -8,6 +8,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 Use Encore\Admin\Widgets\Table;
+use Illuminate\Http\Request;
 
 class OrderController extends AdminController
 {
@@ -18,6 +19,27 @@ class OrderController extends AdminController
      */
     protected $title = 'App\Models\Order';
 
+
+    public function list(Request $request){
+		$perpage = $request->perPage??10;
+		$sort_column = $request->sortColumn??'id';
+		$sort_ascending = $request->sortAscending=="true"?'asc':'desc';
+		$filter = $request->filter??null;
+		$rows = Order::filter($filter)
+			->orderBy($sort_column, $sort_ascending)
+			->paginate($perpage);
+		return response()->json([
+			"result"=> true,
+			"data"=> [
+				"contents"=> $rows->getCollection(),
+				"pagination"=> [
+					"page"=> $rows->currentPage(),
+					"totalCount"=> $rows->total()
+				]
+			]
+		]);
+    }
+    
     /**
      * Make a grid builder.
      *
@@ -25,6 +47,7 @@ class OrderController extends AdminController
      */
     protected function grid()
     {
+        return view('admin.page.demo.order-grid');//->render();
         $grid = new Grid(new Order);
 
         $grid->column('id', __('Id'));

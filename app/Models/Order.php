@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\BaseModel;
 
-class Order extends Model
+class Order extends BaseModel
 {
     //
     protected $fillable = [

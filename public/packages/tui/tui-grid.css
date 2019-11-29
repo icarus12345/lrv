@@ -1147,3 +1147,97 @@
 .tui-grid-check-list ul{
   padding-left: 20px;
 }
+.checkbox {
+  position: relative;
+  display: inline-block
+}
+.tui-grid-filter-row-checkbox>span,
+.tui-grid-cell .checkbox{
+  margin: 0;
+  margin-top: 4px;
+}
+
+.checkbox>input[type=checkbox],
+.hidden-input{
+  /* display: none; */
+  box-sizing: border-box;
+  margin:0;left: 0;top:0;
+  opacity: 0;
+}
+.tui-grid-filter-row-checkbox{
+  border:0;
+  padding: 1px;
+  outline: none;
+  background: none;
+}
+.tui-grid-filter-row-checkbox>span,
+.custom-input {
+  cursor: pointer;
+  position: relative;
+  padding: 0;
+  display: inline;
+  display: -ms-flexbox;
+  display: flex
+}
+.tui-grid-filter-row-checkbox>span:before,
+.custom-input:before {
+  transition: .2s ease-out;
+  content: "";
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  background: #f7f9f9;
+  border: 1px solid #ddd;
+  border-radius: 2px;
+  vertical-align: middle
+}
+.tui-grid-filter-row-checkbox>span:after,
+.custom-input:after {
+  transition: .2s ease-out;
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 8px;
+  top: 3px;
+  left: 6px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg)
+}
+.tui-grid-filter-row-checkbox[value=""]>span:after{
+  width: 8px;
+  height: 8px;
+  border: 0;
+  background: #666;
+  transform: none;
+  top: 4px;
+  left: 4px;
+}
+
+input[type=checkbox][disabled]~.custom-input {
+  opacity: .4;
+  cursor: not-allowed
+}
+.tui-grid-filter-row-checkbox:focus>span:before,
+input[type=checkbox]:focus~.custom-input:before{
+  box-shadow: 0 0 0 0.2rem #f0f0f0;
+}
+.tui-grid-filter-row-checkbox:focus[value="1"]>span:before,
+input[type=checkbox]:checked:focus~.custom-input:before{
+  box-shadow: 0 0 0 0.2rem rgb(167, 218, 241);
+}
+.tui-grid-filter-row-checkbox[value="1"]>span:before,
+input[type=checkbox]:checked~.custom-input:before {
+  background: #2196F3;
+  border: 1px solid transparent
+}
+.tui-grid-filter-row-checkbox[value="0"]>span:after,
+input[type=checkbox]~.custom-input:after {
+  visibility: hidden
+}
+.tui-grid-filter-row-checkbox[value=""]>span:after,
+.tui-grid-filter-row-checkbox[value="1"]>span:after,
+input[type=checkbox]:checked~.custom-input:after {
+  visibility: visible;
+  visibility: initial
+}

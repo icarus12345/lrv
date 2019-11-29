@@ -34,8 +34,9 @@ class OrderDetail extends Model
 	
 	public function getProductNameAttribute()
     {
-        
-        return $this->product->name;
+        if($this->product)
+            return $this->product->name;
+        return null;
     }
 	
     public function toArray() 

@@ -6431,7 +6431,7 @@ var ListFilterRow = /** @class */ (function (_super) {
                 .map((input)=>{
                     return input.nextSibling.textContent
                 });
-            _this.displayLabel.innerHTML = labels.length?(labels.length + ' items') : '---Choose---';
+            _this.displayLabel.innerHTML = labels.length?(labels.length + ' items') : 'Choose:';
 
             // set checked all
             var isSelectedAll = !!!(Array.from(_this.listEl.getElementsByTagName('input'))
@@ -6512,7 +6512,7 @@ var ListFilterRow = /** @class */ (function (_super) {
                         _this.displayLabel = ref;
                     },
                     className: '' 
-                }, filterValue.length?(filterValue.length + ' items') : '---Choose---'),
+                }, filterValue.length?(filterValue.length + ' items') : 'Choose:'),
                 preact_1.h("span", { className: 'caret' })
                 
             ),
@@ -6818,7 +6818,7 @@ var SelectFilterRow = /** @class */ (function (_super) {
                         //value: value ,
                     }, preact_1.h('option', {
                         value: ''
-                    }, '---Choose---'),source.map((d)=>{
+                    }, 'Choose:'),source.map((d)=>{
                         return preact_1.h('option', {
                             value: d.id
                         }, d.name);
@@ -6829,6 +6829,101 @@ var SelectFilterRow = /** @class */ (function (_super) {
     return SelectFilterRow;
 }(preact_1.Component));
 
+var CheckboxFilterRow = /** @class */ (function (_super) {
+    tslib_1.__extends(CheckboxFilterRow, _super);
+    function CheckboxFilterRow() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        var dispatch = _this.props.dispatch;
+        var _a = _this.props
+        var _d = _this.props.grid.store
+        var _grid = _this.props.grid
+        var filterRowStore = _grid.filterRowStore;
+        var columnInfo = _a.columnInfo;
+        var columnName = (columnInfo.name)
+        
+        
+        
+        _this.handleClick =function (ev) {
+            if(_this.inputEl.value == '') {
+                _this.inputEl.value = 0;
+            }else if(_this.inputEl.value == '0') {
+                _this.inputEl.value = 1;
+            }else{
+                _this.inputEl.value = '';
+            }
+            _this.applyFilter()
+        }
+        _this.handleChange = common_1.debounce(function (ev) {
+           
+            _this.applyFilter()
+            
+        }, constant_1.FILTER_DEBOUNCE_TIME);
+        _this.getFilterValue = function () {
+            if(columnName && filterRowStore) {
+                return filterRowStore.get(columnName) || ''
+            }
+        }
+        _this.getValue = function () {
+            return _this.inputEl.value
+        }
+        var filterTimer;
+        
+        _this.applyFilter = (ev)=>{
+            if(filterTimer) clearTimeout(filterTimer);
+            var value = _this.getValue();
+            if(value != filterRowStore.get(columnName)){
+                filterRowStore.set(columnName, value)
+                _grid.readData(1)
+            }
+        }
+        return _this;
+    }
+    CheckboxFilterRow.prototype.componentDidMount = function () {
+        let _this = this;
+        var _a = this.props, 
+            columnInfo = _a.columnInfo, 
+            grid = _a.grid;
+        if (!this.el) {
+            return;
+        }
+        var type = typeof columnInfo.filter.type;
+        
+    }
+    CheckboxFilterRow.prototype.render = function () {
+        var _this = this;
+        var columnInfo = this.props.columnInfo;
+        var _grid = _this.props.grid
+        var filterRowStore = _grid.filterRowStore;
+        var columnName = (columnInfo.name)
+        // var dispatch = this.context.dispatch;
+        var value = filterRowStore.get(columnName);
+        var type = typeof columnInfo.filter.type;
+            return (
+                preact_1.h('div',
+                    tslib_1.__assign({
+                        ref: function(el) {
+                            _this.el = el;
+                        },
+                        style: {
+                            
+                        },
+                        
+                    }), 
+                    preact_1.h('button', { 
+                        ref: function (ref) {
+                            _this.inputEl = ref;
+                        }, 
+                        className: dom_1.cls('filter-row-checkbox'),
+                        onClick: this.handleClick, 
+                        value: value ,
+                    },preact_1.h('span', { 
+                        
+                    }))
+                )
+            );
+    };
+    return CheckboxFilterRow;
+}(preact_1.Component));
 
 var ColumnHeader = /** @class */ (function (_super) {
     tslib_1.__extends(ColumnHeader, _super);
@@ -6896,6 +6991,9 @@ var ColumnHeader = /** @class */ (function (_super) {
                 break;
             case 'select':
                 filterRowClass = SelectFilterRow
+                break;
+            case 'checkbox':
+                filterRowClass = CheckboxFilterRow
                 break;
             default:
                 filterRowClass = TextFilterRow;
