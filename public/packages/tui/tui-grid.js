@@ -6982,6 +6982,8 @@ var ColumnHeader = /** @class */ (function (_super) {
             verticalAlign = columnInfo.headerVAlign,
             headerRenderer = columnInfo.headerRenderer;
         var filterRowClass = TextFilterRow;
+        var _grid = _a.grid;
+        var filterRow = _grid.store.dimension.filterRow;
         if(columnInfo.filter) switch(columnInfo.filter.type){
             case 'date':
                 filterRowClass = DatePickerFilterRow
@@ -7022,18 +7024,19 @@ var ColumnHeader = /** @class */ (function (_super) {
                     return _this.getElement(type);
                 }),
                 // filter row control
+                (!filterRow) ? null : 
                 preact_1.h('div',{
-                    
-                    class: dom_1.cls('filter-row'),
-                    onClick: function (ev) {
-                        var target = ev.target;
-                        if (!dom_1.hasClass(target, 'filter-row')) {
-                            return;
+                        class: dom_1.cls('filter-row'),
+                        onClick: function (ev) {
+                            var target = ev.target;
+                            if (!dom_1.hasClass(target, 'filter-row')) {
+                                return;
+                            }
+                            
                         }
-                        
-                    }
-                }, 
-                    columnInfo.filter ? preact_1.h(
+                    }, 
+                    (!columnInfo.filter) ? null : 
+                    preact_1.h(
                         (
                             filterRowClass
                         ), {
@@ -7041,7 +7044,7 @@ var ColumnHeader = /** @class */ (function (_super) {
                             grid: _a.grid,
                             dispatch: _a.grid.dispatch,
                         }
-                    ) : null
+                    )
                 )
                 
             )

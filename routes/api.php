@@ -33,6 +33,7 @@ Route::group([
     
     Route::get('products', '\App\Admin\Controllers\ProductController@list')->name('product.list');
     Route::get('orders', '\App\Admin\Controllers\OrderController@list')->name('order.list');
+    Route::get('orders-detail/{order_id}', '\App\Admin\Controllers\OrderController@orderDetailList')->name('order.detail.list');
 
     Route::put('product/{id}', '\App\Admin\Controllers\ProductController@apiUpdate')->name('product.update');
 });

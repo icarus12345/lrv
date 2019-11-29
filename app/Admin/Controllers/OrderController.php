@@ -19,6 +19,19 @@ class OrderController extends AdminController
      */
     protected $title = 'App\Models\Order';
 
+    
+    public function orderDetailList(Request $request, $order_id){
+		$order = Order::find($order_id);
+            $order_details = $order->order_details()->take(10)->get()->map(function ($order_detail) {
+                return $order_detail->only(['id', 'product_name', 'color','size','qty','price_with_discount']);
+            });
+		return response()->json([
+			"result"=> true,
+			"data"=> [
+				"contents"=> $order_details->toArray(),
+			]
+		]);
+    }
 
     public function list(Request $request){
 		$perpage = $request->perPage??10;

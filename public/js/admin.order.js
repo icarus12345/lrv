@@ -256,9 +256,11 @@ ActionRenderer = window.ActionRenderer || class ActionRenderer {
             //'       Action',
 		    '       <span class="glyphicon glyphicon-option-vertical"></span>',
             '   </button>',
-		    '   <a href="product/'+props.value+'/edit" type="button" class="btn btn-default" data-preview><i class="fa fa-pencil"></i></a>',
+		    // '   <a href="orders/'+props.value+'/edit" type="button" class="btn btn-default" data-preview><i class="fa fa-pencil"></i></a>',
+		    '   <a href="orders/'+props.value+'" type="button" class="btn btn-default" data-preview><i class="fa fa-eye"></i></a>',
 		    '   <ul class="dropdown-menu -dropdown-menu-right">',
-		    '       <li><a href="product/'+props.value+'/edit" ><i class="fa fa-pencil"></i> Edit</a></li>',
+		    // '       <li><a href="orders/'+props.value+'/edit" ><i class="fa fa-pencil"></i> Edit</a></li>',
+		    '       <li><a href="orders/'+props.value+'" ><i class="fa fa-eye"></i> Show</a></li>',
 		    '       <li><a href="JavaScript:" data-action="delete"><i class="fa fa-trash"></i> Delete</a></li>',
             '   </ul>',
 		    '</div>'
@@ -266,10 +268,9 @@ ActionRenderer = window.ActionRenderer || class ActionRenderer {
         const el = $el[0];
         this.el = el;
         $el.find('[data-action="delete"]').click(()=>{
-            console.log(self)
             Helper.Encore_Admin_Grid_Actions_Delete({
                 id: props.value,
-                model: 'Product'
+                model: 'Order'
             },()=>{
                 grid.readData()
             })
@@ -371,7 +372,7 @@ var CurrencyFormatter = function(props){
     }).format(+props.value);
 }
 
-var InitGrid = () => {
+var InitOrderGrid = () => {
     var onCellUpdated = (ev) => {
         let row = grid.getRow(ev.rowKey)
         // let params = {}
@@ -514,6 +515,32 @@ var InitGrid = () => {
                 },
                 sortable: true,
                 width: 100,
+                renderer: {
+                    type: function (props){
+                        const { grid, rowKey } = props;
+                
+                        const el = document.createElement('a');
+                        el.classList.add('tui-grid-cell-content')
+                        el.onclick = (ev)=>{
+                            console.log('Show Model',props)
+                            var rowKey = props.rowKey;
+                            var rowData = props.grid.getRow(rowKey)
+                            $('#tui-grid-detail-modal').modal('show')
+                            InitOrderDetailGrid(rowData.id)
+                        }
+                
+                        this.el = el;
+                        this.getElement = function() {
+                            return this.el;
+                        }
+                
+                        this.render = function (props) {
+                            el.href = 'JavaScript:'
+                            el.innerHTML = props.value
+                        }
+                        this.render(props);
+                    }
+                }
             },{
                 header: 'Customer',
                 name: 'name',
@@ -654,9 +681,11 @@ var InitGrid = () => {
                         hiddenInput.type = 'checkbox';
                         hiddenInput.addEventListener('change', () => {
                         if (hiddenInput.checked) {
-                            grid.check(rowKey);
+                            console.log('^^')
+                            //grid.check(rowKey);
                         } else {
-                            grid.uncheck(rowKey);
+                            console.log('^^')
+                            //grid.uncheck(rowKey);
                         }
                         });
                 
@@ -762,6 +791,68 @@ var InitGrid = () => {
                     type: 'date'
                 },
 			},
+            
+        ]
+    });
+}
+
+var InitOrderDetailGrid = (id) => {
+    if(window.gridDetail) gridDetail.destroy()
+    window.gridDetail = new tui.Grid({
+        el: document.getElementById('tui-grid-detail'),
+        rowHeight: 32,
+        minRowHeight: 32,
+        rowHeaders: [{
+            type: 'rowNum',
+        }],
+        scrollX: false,
+        scrollY: false,
+        data: {
+            api: {
+                readData: {
+                    url: '/api/admin/orders-detail/'+id,
+                    method: 'GET',
+                },
+            },
+        },
+        header: {
+            align: 'left',
+            height: 36,
+            columns: [
+                {
+                    name: 'qty',
+                    align: 'right'
+                },
+                {
+                    name: 'price_with_discount',
+                    align: 'right'
+                },
+            ]
+        },
+        columns: [{
+                header: 'Product',
+                name: 'product_name',
+                
+            },{
+                header: 'Color',
+                width: 80,
+                name: 'color',
+            },{
+                header: 'Size',
+                width: 80,
+                name: 'size',
+            },{
+                header: 'Qty',
+                name: 'qty',
+                width: 80,
+                align: "right",
+            },{
+                header: 'Sale Price',
+                name: 'price_with_discount',
+                align: "right",
+                width: 100,
+                formatter: CurrencyFormatter
+            },
             
         ]
     });
