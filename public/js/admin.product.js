@@ -258,6 +258,7 @@ ActionRenderer = window.ActionRenderer || class ActionRenderer {
             '   </button>',
 		    '   <a href="product/'+props.value+'/edit" type="button" class="btn btn-default" data-preview><i class="fa fa-pencil"></i></a>',
 		    '   <ul class="dropdown-menu -dropdown-menu-right">',
+		    '       <li><a href="product/'+props.value+'" ><i class="fa fa-eye"></i> Show</a></li>',
 		    '       <li><a href="product/'+props.value+'/edit" ><i class="fa fa-pencil"></i> Edit</a></li>',
 		    '       <li><a href="JavaScript:" data-action="delete"><i class="fa fa-trash"></i> Delete</a></li>',
             '   </ul>',
@@ -271,7 +272,7 @@ ActionRenderer = window.ActionRenderer || class ActionRenderer {
                 id: props.value,
                 model: 'Product'
             },()=>{
-                grid.readData()
+                grid.reloadData()
             })
         })
         //this.render(props);
@@ -383,15 +384,14 @@ var InitGrid = () => {
             url: 'product/' + row.id,
             data: data,
             complete: function(xhr, stat) {
+                NProgress.done();
                 grid.removeCellClassName(ev.rowKey,ev.columnName,'tui-grid-cell-loading')
             },
             success: function(rs) {
                 //resolve(rs)
-                NProgress.done();
                 Helper.Resolver(rs);
             },
             error: function(request) {
-                NProgress.done()
                 Helper.Catcher(request)
             }
         });
@@ -402,12 +402,14 @@ var InitGrid = () => {
         minRowHeight: 32,
         rowHeaders: [{
             type: 'rowNum',
+            align: 'right',
             renderer: {
                 type: function(props){
                     var itemsPerPage = props.grid.getPagination()._options.itemsPerPage;
                     var currentPage = props.grid.getPagination().getCurrentPage()
                     var start = currentPage*itemsPerPage - itemsPerPage
                     var el = document.createElement('span');
+                    el.classList.add('tui-grid-cell-content')
                     el.innerHTML = +props.formattedValue + start
                     this.el = el;
                     this.getElement = ()=> {
@@ -417,6 +419,59 @@ var InitGrid = () => {
                     this.render = (props)=>{
                         el.innerHTML = +props.formattedValue + start
                     }
+                }
+            }
+        },{
+            type: 'checkbox',
+            align: 'center',
+            header: `
+                <label for="all-checkbox" class="checkbox">
+                    <input type="checkbox" id="all-checkbox" class="hidden-input" name="_checked" />
+                    <span class="custom-input"></span>
+                </label>
+            `,
+            renderer: {
+                type: function(props) {
+                    const { grid, rowKey } = props;
+            
+                    const label = document.createElement('label');
+                    label.className = 'checkbox';
+                    label.setAttribute('for', String(rowKey));
+            
+                    const hiddenInput = document.createElement('input');
+                    hiddenInput.className = 'hidden-input';
+                    hiddenInput.id = String(rowKey);
+            
+                    const customInput = document.createElement('span');
+                    customInput.className = 'custom-input';
+            
+                    label.appendChild(hiddenInput);
+                    label.appendChild(customInput);
+            
+                    hiddenInput.type = 'checkbox';
+                    hiddenInput.addEventListener('change', () => {
+                    if (hiddenInput.checked) {
+                        grid.check(rowKey);
+                    } else {
+                        grid.uncheck(rowKey);
+                    }
+                    });
+            
+                    this.el = label;
+            
+                    
+                    
+                    this.getElement = function() {
+                        return this.el;
+                    }
+                    
+                    this.render = function(props) {
+                        const hiddenInput = this.el.querySelector('.hidden-input');
+                        const checked = Boolean(props.value);
+                        
+                        hiddenInput.checked = checked;
+                    }
+                    this.render(props);
                 }
             }
         }],
@@ -449,7 +504,7 @@ var InitGrid = () => {
         pageOptions: {
             perPage: (function(){
                 var pageSize = 10;
-                var newSize = (window.innerHeight - 50 - 60 - 72 - 60 - 70) / 32
+                var newSize = Math.floor((window.innerHeight - 50 - 60 - 72 - 60 - 72) / 32)
                 return Math.max(pageSize, newSize);
             }())
         },
@@ -460,14 +515,18 @@ var InitGrid = () => {
             align: 'left',
             columns: [
                 {
+                    name: '_checked',
+                    align: 'center'
+                }, {
+                    name: '_number',
+                    align: 'right'
+                }, {
                     name: 'price',
                     align: 'right'
-                },
-                {
+                }, {
                     name: 'discount',
                     align: 'right'
-                },
-                {
+                }, {
                     name: 'instock',
                     align: 'right'
                 },
@@ -604,7 +663,7 @@ var InitGrid = () => {
                 },
                 sortable: true,
                 align: "right",
-                width: 60,
+                width: 80,
                 onBeforeChange(ev) {
                     console.log('Before change:' , ev);
                 },
@@ -629,7 +688,7 @@ var InitGrid = () => {
                 name: 'instock',
                 sortable: true,
                 align: "right",
-                width: 60,
+                width: 80,
                 onBeforeChange(ev) {
                     console.log('Before change:' , ev);
                 },
@@ -809,4 +868,68 @@ var InitGrid = () => {
             
         ]
     });
+    var onCheckedChange = function(ev){
+        setTimeout(()=>{
+            var checkedRows = grid.getCheckedRows();
+            if(checkedRows.length){
+                $('.grid-select-all-btn').show();
+                $('.grid-select-all-btn>span>span').text(checkedRows.length + ' items');
+
+            }else{
+                $('.grid-select-all-btn').hide();
+
+            }
+        },42)
+    }
+    grid.on('check', onCheckedChange);
+    grid.on('uncheck', onCheckedChange);
+    grid.on('checkAll', onCheckedChange);
+    grid.on('uncheckAll', onCheckedChange);
+    $('.grid-batch-delete').click(()=>{
+        swal({
+            title: "Are you sure to delete this item ?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Confirm",
+            showLoaderOnConfirm: true,
+            cancelButtonText: "Cancel",
+            preConfirm: function() {
+                return new Promise(function(resolve, reject) {
+                    NProgress.start()
+                    var checkedIds = grid.getCheckedRows().map((row)=>row.id);
+                    $.ajax({
+                        method: 'post',
+                        url: 'product/' + checkedIds.join(),
+                        data: {
+                            _method:'delete',
+                            _token: LA.token
+                        },
+                        complete: function(xhr, stat) {
+                            NProgress.done();
+                        },
+                        success: function (data) {
+                            resolve(data);
+                        },
+                        error: function(request) {
+                            reject()
+                            Helper.Catcher(request)
+                        }
+                    });
+                });
+            }
+        }).then(function(result) {
+            var data = result.value;
+            if (typeof data === 'object') {
+                if (data.status) {
+                    swal(data.message, '', 'success');
+                    grid.reloadData()
+                } else {
+                    swal(data.message, '', 'error');
+                }
+            }else{
+                swal('Oops !', '', 'error');
+            }
+        });
+    })
 }

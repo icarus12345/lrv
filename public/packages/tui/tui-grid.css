@@ -61,7 +61,7 @@
   font-style: normal;
 }
 .tui-grid-container .tui-grid-pagination {
-  margin-top: 20px;
+  margin: 10px 0px;
 }
 .tui-grid-clipboard {
   position: fixed;
@@ -1273,4 +1273,13 @@ input[type=checkbox]:checked~.custom-input:after {
 @-webkit-keyframes spin {
   from { -webkit-transform: rotate(0deg); }
   to { -webkit-transform: rotate(360deg); }
+}
+.tui-grid-checked-action{
+  position: absolute;
+  top:0;left: 0;
+}
+.tui-grid-checked-action>div{
+  border: 1px solid #ccc;
+  height: 60px;
+  width: 220px;;
 }

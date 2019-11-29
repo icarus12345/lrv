@@ -272,7 +272,7 @@ ActionRenderer = window.ActionRenderer || class ActionRenderer {
                 id: props.value,
                 model: 'Order'
             },()=>{
-                grid.readData()
+                grid.reloadData()
             })
         })
         //this.render(props);
@@ -460,7 +460,7 @@ var InitOrderGrid = () => {
         pageOptions: {
             perPage: (function(){
                 var pageSize = 10;
-                var newSize = (window.innerHeight - 50 - 60 - 72 - 60 - 70) / 32
+                var newSize = Math.floor((window.innerHeight - 50 - 60 - 72 - 60 - 72) / 32)
                 return Math.max(pageSize, newSize);
             }())
         },
