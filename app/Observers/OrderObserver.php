@@ -45,8 +45,10 @@ class OrderObserver
                 // update stock
                 foreach ($order->order_details as $detail) {
                     $product = $detail->product;
-                    $product->instock-=$detail->qty;
-                    $product->save();
+                    if ($product) {
+                        $product->instock-=$detail->qty;
+                        $product->save();
+                    }
                 }
             } else if(
                 in_array($order->getOriginal('status'), $avaiable) &&
@@ -55,8 +57,10 @@ class OrderObserver
                 // restore stock
                 foreach ($order->order_details as $detail) {
                     $product = $detail->product;
-                    $product->instock+=$detail->qty;
-                    $product->save();
+                    if ($product) {
+                        $product->instock+=$detail->qty;
+                        $product->save();
+                    }
                 }
             }
         }

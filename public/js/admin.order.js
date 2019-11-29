@@ -374,30 +374,37 @@ var CurrencyFormatter = function(props){
 
 var InitOrderGrid = () => {
     var onCellUpdated = (ev) => {
-        let row = grid.getRow(ev.rowKey)
-        // let params = {}
-        // params[ev.columnName] = ev.value;
-        let data = {
-            pk: row.id,
-            name: ev.columnName,
-            value: ev.value,
-            _editable: 1,
-            _token: $.admin.token,
-        }
-        NProgress.start()
-        $.ajax({
-            method: 'PUT',
-            url: 'orders/' + row.id,
-            data: data,
-            success: function(rs) {
-                //resolve(rs)
-                NProgress.done();
-                Helper.Resolver(rs);
-            },
-            error: function(request) {
-                NProgress.done()
-                Helper.Catcher(request)
+        return new Promise(function(resolve, reject){
+            let row = grid.getRow(ev.rowKey)
+            // let params = {}
+            // params[ev.columnName] = ev.value;
+            let data = {
+                pk: row.id,
+                name: ev.columnName,
+                value: ev.value,
+                _editable: 1,
+                _token: $.admin.token,
             }
+            grid.addCellClassName(ev.rowKey,ev.columnName, 'tui-grid-cell-loading')
+            // NProgress.start()
+            $.ajax({
+                method: 'PUT',
+                url: 'orders/' + row.id,
+                data: data,
+                complete: function(xhr, stat) {
+                    grid.removeCellClassName(ev.rowKey,ev.columnName,'tui-grid-cell-loading')
+                    resolve();
+                },
+                success: function(rs) {
+                    //resolve(rs)
+                    // NProgress.done();
+                    Helper.Resolver(rs);
+                },
+                error: function(request) {
+                    // NProgress.done()
+                    Helper.Catcher(request)
+                }
+            });
         });
     }
     window.grid = new tui.Grid({
@@ -494,7 +501,7 @@ var InitOrderGrid = () => {
             ]
         },
         columnOptions: {
-            frozenCount: 3,
+            frozenCount: 4,
             // frozenBorderWidth: 2,
             // minWidth: 300
         },
@@ -510,10 +517,10 @@ var InitOrderGrid = () => {
             },{
                 header: 'No',
                 name: 'no',
-                filter: {
-                    type: 'text'
-                },
-                sortable: true,
+                // filter: {
+                //     type: 'text'
+                // },
+                // sortable: true,
                 width: 100,
                 renderer: {
                     type: function (props){
@@ -541,6 +548,53 @@ var InitOrderGrid = () => {
                         this.render(props);
                     }
                 }
+            },{
+                header: 'Total Amount',
+                name: 'total_amount',
+                filter: {
+                    type: 'text'
+                },
+                align: "right",
+                sortable: true,
+                width: 100,
+                formatter: CurrencyFormatter
+            
+            },{
+                header: 'Status',
+                name: 'status',
+                sortable: true,
+                width: 80,
+                //onAfterChange: onCellUpdated,
+                onCellUpdate: onCellUpdated,
+                editor: {
+                    type: 'select',//NumberEditor,
+                    options: {
+                        listItems: [
+                            {text: 'Requested', value: 'Requested'},
+                            {text: 'Approved', value: 'Approved'},
+                            {text: 'Unpaid', value: 'Unpaid'},
+                            {text: 'Paid', value: 'Paid'},
+                            {text: 'Shipping', value: 'Shipping'},
+                            {text: 'Done', value: 'Done'},
+                            {text: 'Canceled', value: 'Canceled'}
+                        ]
+                    }
+                },
+                filter: {
+                    type: 'select',//CategoryEditor
+                    source: [
+                        {id: 'Requested', name: 'Requested'},
+                        {id: 'Approved', name: 'Approved'},
+                        {id: 'Unpaid', name: 'Unpaid'},
+                        {id: 'Paid', name: 'Paid'},
+                        {id: 'Shipping', name: 'Shipping'},
+                        {id: 'Done', name: 'Done'},
+                        {id: 'Canceled', name: 'Canceled'}
+                    ],
+                    // render: ()=>{
+                    //     return ''
+                    // }
+                },
             },{
                 header: 'Customer',
                 name: 'name',
@@ -717,16 +771,7 @@ var InitOrderGrid = () => {
                 sortable: true,
                 width: 100,
                 formatter: CurrencyFormatter
-            },{
-                header: 'Total Amount',
-                name: 'total_amount',
-                filter: {
-                    type: 'text'
-                },
-                align: "right",
-                sortable: true,
-                width: 100,
-                formatter: CurrencyFormatter
+            
             },{
                 header: 'Total Item',
                 name: 'total_item',
@@ -747,42 +792,7 @@ var InitOrderGrid = () => {
             },
             
             
-            {
-                header: 'Status',
-                name: 'status',
-                sortable: true,
-                width: 80,
-                onAfterChange: onCellUpdated,
-                editor: {
-                    type: 'select',//NumberEditor,
-                    options: {
-                        listItems: [
-                            {text: 'Requested', value: 'Requested'},
-                            {text: 'Approved', value: 'Approved'},
-                            {text: 'Unpaid', value: 'Unpaid'},
-                            {text: 'Paid', value: 'Paid'},
-                            {text: 'Shipping', value: 'Shipping'},
-                            {text: 'Done', value: 'Done'},
-                            {text: 'Canceled', value: 'Canceled'}
-                        ]
-                    }
-                },
-                filter: {
-                    type: 'select',//CategoryEditor
-                    source: [
-                        {id: 'Requested', name: 'Requested'},
-                        {id: 'Approved', name: 'Approved'},
-                        {id: 'Unpaid', name: 'Unpaid'},
-                        {id: 'Paid', name: 'Paid'},
-                        {id: 'Shipping', name: 'Shipping'},
-                        {id: 'Done', name: 'Done'},
-                        {id: 'Canceled', name: 'Canceled'}
-                    ],
-                    // render: ()=>{
-                    //     return ''
-                    // }
-                },
-            },
+            
             {
 				header: 'Created',
                 name: 'created_at',

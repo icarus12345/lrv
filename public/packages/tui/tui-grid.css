@@ -110,6 +110,7 @@
   right: 0;
   top: 50%;
   margin-top: -8px;
+  background-color: inherit;
 }
 .tui-grid-btn-sorting-down {
   background-position: -129px  -8px;
@@ -273,6 +274,7 @@
 }
 .tui-grid-cell-has-input .tui-grid-cell-content {
   padding: 4px 5px;
+  text-overflow: ellipsis;
 }
 .tui-grid-cell-has-tree {
   height: inherit;
@@ -1103,6 +1105,9 @@
 .tui-grid-has-filter-row .tui-grid-cell-header .tui-grid-btn-sorting{
   margin-top: -23px;
 }
+.tui-grid-cell-header.tui-grid-cell-header-has-sortable{
+  padding-right: 16px;
+}
 .tui-grid-has-filter-row .tui-grid-cell-header{
   padding-bottom: 33px;
   overflow: visible;
@@ -1240,4 +1245,32 @@ input[type=checkbox]~.custom-input:after {
 input[type=checkbox]:checked~.custom-input:after {
   visibility: visible;
   visibility: initial
+}
+.tui-grid-cell-loading{
+  position: relative;
+}
+.tui-grid-cell-loading:after{
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  height: 14px;
+  width: 14px;
+  border-radius: 7px;
+  border: 1px solid #ccc;
+  border-top-color: #00BCD4;
+  content: '';
+  display: block;
+  margin-top: -7px;
+  -webkit-animation: spin 1s infinite linear;
+     -moz-animation: spin 1s infinite linear;
+     -o-animation: spin 1s infinite linear;
+     animation: spin 1s infinite linear;
+}
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@-webkit-keyframes spin {
+  from { -webkit-transform: rotate(0deg); }
+  to { -webkit-transform: rotate(360deg); }
 }

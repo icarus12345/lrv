@@ -377,10 +377,14 @@ var InitGrid = () => {
             _token: $.admin.token,
         }
         NProgress.start()
+        grid.addCellClassName(ev.rowKey,ev.columnName, 'tui-grid-cell-loading')
         $.ajax({
             method: 'PUT',
             url: 'product/' + row.id,
             data: data,
+            complete: function(xhr, stat) {
+                grid.removeCellClassName(ev.rowKey,ev.columnName,'tui-grid-cell-loading')
+            },
             success: function(rs) {
                 //resolve(rs)
                 NProgress.done();
@@ -787,7 +791,7 @@ var InitGrid = () => {
             {
 				header: 'Created',
                 name: 'created_at',
-                width: 120,
+                width: 140,
                 filter: {
                     type: 'date'
                 },

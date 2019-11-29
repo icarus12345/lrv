@@ -2878,6 +2878,14 @@ function setValue(store, rowKey, columnName, value) {
         gridEvent = new gridEvent_1.default({ rowKey: rowKey, columnName: columnName, value: value });
         targetColumn.onAfterChange(gridEvent);
     }
+    if (targetColumn && targetColumn.onCellUpdate) {
+        gridEvent = new gridEvent_1.default({ rowKey: rowKey, columnName: columnName, value: value });
+        // show loading
+        var promise = targetColumn.onCellUpdate(gridEvent);
+        if(promise) promise.then(function(){
+            // hide loading
+        })
+    }
 }
 exports.setValue = setValue;
 function isUpdatableRowAttr(name, checkDisabled, allDisabled) {
@@ -4483,7 +4491,14 @@ function createRelationColumns(relations) {
 exports.createRelationColumns = createRelationColumns;
 // eslint-disable-next-line max-params
 function createColumn(column, columnOptions, relationColumns, gridCopyOptions, treeColumnOptions, columnHeaderInfo) {
-    var name = column.name, header = column.header, width = column.width, minWidth = column.minWidth, align = column.align, hidden = column.hidden, resizable = column.resizable, editor = column.editor, renderer = column.renderer, relations = column.relations, sortable = column.sortable, sortingType = column.sortingType, copyOptions = column.copyOptions, validation = column.validation, formatter = column.formatter, onBeforeChange = column.onBeforeChange, onAfterChange = column.onAfterChange, whiteSpace = column.whiteSpace, ellipsis = column.ellipsis, valign = column.valign, defaultValue = column.defaultValue, escapeHTML = column.escapeHTML, ignored = column.ignored, filter = column.filter, className = column.className;
+    var name = column.name, header = column.header, width = column.width, minWidth = column.minWidth, 
+        align = column.align, hidden = column.hidden, resizable = column.resizable, editor = column.editor, 
+        renderer = column.renderer, relations = column.relations, sortable = column.sortable, sortingType = column.sortingType, 
+        copyOptions = column.copyOptions, validation = column.validation, formatter = column.formatter, 
+        onCellUpdate = column.onCellUpdate,
+        onBeforeChange = column.onBeforeChange, onAfterChange = column.onAfterChange, whiteSpace = column.whiteSpace, ellipsis = 
+        column.ellipsis, valign = column.valign, defaultValue = column.defaultValue, escapeHTML = column.escapeHTML, ignored = column.ignored, 
+        filter = column.filter, className = column.className;
     var editorOptions = createEditorOptions(editor);
     var rendererOptions = createRendererOptions(renderer);
     var filterOptions = filter ? createColumnFilterOption(filter) : null;
@@ -4492,6 +4507,7 @@ function createColumn(column, columnOptions, relationColumns, gridCopyOptions, t
         escapeHTML: escapeHTML, header: header || name, hidden: Boolean(hidden), resizable: common_1.isUndefined(resizable) ? Boolean(columnOptions.resizable) : Boolean(resizable), align: align || 'left', fixedWidth: typeof width === 'number', copyOptions: tslib_1.__assign(tslib_1.__assign({}, gridCopyOptions), copyOptions), baseWidth: (width === 'auto' ? 0 : width) || 0, minWidth: minWidth || columnOptions.minWidth || COLUMN, relationMap: createRelationMap(relations || []), related: common_1.includes(relationColumns, name), sortable: sortable, sortingType: sortingType || 'asc', validation: validation ? tslib_1.__assign({}, validation) : {}, renderer: rendererOptions, formatter: formatter,
         onBeforeChange: onBeforeChange,
         onAfterChange: onAfterChange,
+        onCellUpdate: onCellUpdate,
         whiteSpace: whiteSpace,
         ellipsis: ellipsis,
         valign: valign,
@@ -6979,6 +6995,7 @@ var ColumnHeader = /** @class */ (function (_super) {
             height = _a.height;
         var name = columnInfo.name,
             textAlign = columnInfo.headerAlign,
+            sortable = columnInfo.sortable,
             verticalAlign = columnInfo.headerVAlign,
             headerRenderer = columnInfo.headerRenderer;
         var filterRowClass = TextFilterRow;
@@ -7014,7 +7031,13 @@ var ColumnHeader = /** @class */ (function (_super) {
                             padding: headerRenderer ? 0 : null,
                             height: height
                         },
-                        class: dom_1.cls('cell', 'cell-header', [!column_1.isRowHeader(name) && selected, 'cell-selected'], [column_1.isRowHeader(name), 'cell-row-header'])
+                        class: dom_1.cls(
+                            'cell', 
+                            'cell-header', 
+                            [!column_1.isRowHeader(name) && selected, 'cell-selected'], 
+                            [column_1.isRowHeader(name), 'cell-row-header'],
+                            [sortable, 'cell-header-has-sortable'],
+                        )
                     }, !!colspan && {
                         colspan: colspan
                     }, !!rowspan && {
@@ -14578,7 +14601,7 @@ exports.presetDefault = {
     area: {
         header: {
             border: '#ccc',
-            background: '#fff'
+            background: '#f9f9f9'
         },
         body: {
             background: '#fff'
@@ -14590,21 +14613,21 @@ exports.presetDefault = {
     },
     cell: {
         normal: {
-            background: '#f4f4f4',
+            background: '#fafafa',
             border: '#eee',
             text: '#333',
             showVerticalBorder: false,
             showHorizontalBorder: true
         },
         header: {
-            background: '#fff',
+            background: '#f9f9f9',
             border: '#eee',
             text: '#222',
             showVerticalBorder: true,
             showHorizontalBorder: true
         },
         rowHeader: {
-            background: '#fff',
+            background: '#f9f9f9',
             border: '#eee',
             text: '#333',
             showVerticalBorder: false,
