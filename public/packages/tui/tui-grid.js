@@ -6318,21 +6318,33 @@ var ListFilterRow = /** @class */ (function (_super) {
                 }
             }
         }
-        _this.selectAllOnChange = (ev) => {
-            console.log('Select All: change')
-            var selectedValues = Array.from(_this.listEl.getElementsByTagName('input'))
-            .map((input)=>{
-                input.checked = ev.target.checked;
-            })
-            // if (ev.target.checked) {
-            // }
-            //_this.handleChange();
+        _this.clearSelectClick = (ev)=>{
+            Array.from(_this.listEl.getElementsByTagName('label'))
+                .filter((label)=>{
+                    var text = label.textContent.toLowerCase();
+                    var search = _this.inputFilterEl.value.toLowerCase()
+                    return (search == '' || text.indexOf(search)>=0);
+                })
+                .map((label)=>{
+                    var input = label.getElementsByTagName('input')[0]
+                    input.checked = false;
+                })
+            _this.updateLabel()
+        }
+        _this.selectAllClick = (ev) => {
+            Array.from(_this.listEl.getElementsByTagName('label'))
+                .filter((label)=>{
+                    var text = label.textContent.toLowerCase();
+                    var search = _this.inputFilterEl.value.toLowerCase()
+                    return (search == '' || text.indexOf(search)>=0);
+                })
+                .map((label)=>{
+                    var input = label.getElementsByTagName('input')[0]
+                    input.checked = true;
+                })
             _this.updateLabel()
         }
         _this.addEvents = function () {
-            console.log('addEvents')
-            _this.selectAllEl.removeEventListener('change', _this.selectAllOnChange)
-            _this.selectAllEl.addEventListener('change', _this.selectAllOnChange)
             document.removeEventListener('mousedown', _this.documentOnClick)
             document.addEventListener('mousedown', _this.documentOnClick)
 
@@ -6372,26 +6384,7 @@ var ListFilterRow = /** @class */ (function (_super) {
             }
             _this.updateLabel()
         };
-        _this.handleKeyUp = common_1.debounce(function (ev) {
-            var keyCode = ev.keyCode;
-            var keyName = keyboard_1.keyNameMap[keyCode];
-            var dispatch = _this.props.dispatch;
-            if (keyboard_1.isNonPrintableKey(keyCode)) {
-                return;
-            }
-            if (keyName === 'enter') {
-                //dispatch('applyActiveFilterState');
-                //_this.handleChange();
-            }
-            else {
-                //_this.handleChange();
-                var value = _this.inputEl.value;
-                if(value == ''){
-                    //_this.datePickerEl.setNull()
-                }
-            }
-        }, constant_1.FILTER_DEBOUNCE_TIME);
-
+        
         var filterTimer;
         _this.autoAapplyFilter = ()=>{
             if(filterTimer) clearTimeout(filterTimer);
@@ -6406,6 +6399,26 @@ var ListFilterRow = /** @class */ (function (_super) {
                 _grid.readData(1)
             }
         }
+
+        _this.handleKeyPress = common_1.debounce(function (ev) {
+           
+            var keyCode = ev.keyCode;
+            if (keyboard_1.isNonPrintableKey(keyCode)) {
+                return;
+            }
+            var keyName = keyboard_1.keyNameMap[keyCode];
+            Array.from(_this.listEl.getElementsByTagName('label'))
+                .map((input)=>{
+                    var text = input.textContent.toLowerCase();
+                    var search = ev.target.value.toLowerCase()
+                    if(search == '' || text.indexOf(search)>=0){
+                        input.style.display = ''
+                    }else{
+                        input.style.display = 'none'
+                    }
+                });
+            
+        }, constant_1.FILTER_DEBOUNCE_TIME);
 
         _this.handleChange = function () {
             _this.autoAapplyFilter()
@@ -6449,11 +6462,7 @@ var ListFilterRow = /** @class */ (function (_super) {
                 });
             _this.displayLabel.innerHTML = labels.length?(labels.length + ' items') : 'Choose:';
 
-            // set checked all
-            var isSelectedAll = !!!(Array.from(_this.listEl.getElementsByTagName('input'))
-                .filter((input)=>!input.checked)
-                .length)
-            _this.selectAllEl.checked = isSelectedAll
+            
         }
 
         _this.onCheckedChange = (ev) => {
@@ -6478,11 +6487,6 @@ var ListFilterRow = /** @class */ (function (_super) {
                 pa.getElementsByTagName('input')[0].checked = isSelectedAll;
 
             }
-
-            var isSelectedAll = !!!(Array.from(_this.listEl.getElementsByTagName('input'))
-                .filter((input)=>!input.checked)
-                .length)
-            _this.selectAllEl.checked = isSelectedAll
             _this.updateLabel()
             //_this.handleChange();
         }
@@ -6542,32 +6546,29 @@ var ListFilterRow = /** @class */ (function (_super) {
                     },
                     className: dom_1.cls('filter-container')
                 }, 
-                search?preact_1.h("input", {
+                !search?null:
+                preact_1.h("input", {
+                    ref: function (ref) {
+                        _this.inputFilterEl = ref;
+                    },
                     type: 'text',
                     className: dom_1.cls('filter-input'),
-                }): null,
+                    onKeyUp: _this.handleKeyPress
+                }),
+                preact_1.h("div", {
+                        className: dom_1.cls('filter-btns'),
+                    },preact_1.h("span", {
+                        className: dom_1.cls('filter-btn-check-all'),
+                        onclick: _this.selectAllClick
+                    },'Select All'),preact_1.h("span", {
+                        className: dom_1.cls('filter-btn-uncheck-all'),
+                        onclick: _this.clearSelectClick
+                    },'Clear')
+                ),
                 preact_1.h("div", {
                         className: dom_1.cls('filter-list-container'),
                     },
-                    preact_1.h("ul",{
-                            className: dom_1.cls('check-list', 'check-list-select-all'),
-                        },
-                        preact_1.h("li",{
-                                className: dom_1.cls('check-list-item'),
-                            },
-                            preact_1.h("label",{
-                                
-                            },preact_1.h("input",{
-                                type: 'checkbox',
-                                ref: function (ref) {
-                                    _this.selectAllEl = ref;
-                                },
-                                checked: (source && source.length)?filterValue.length == source.length: false,
-                            }),preact_1.h("span",{
-                            },'Select All')
-                            )
-                        )
-                    ),
+                    
                     preact_1.h("ul",{
                             className: dom_1.cls('check-list'),
                             ref: function (ref) {

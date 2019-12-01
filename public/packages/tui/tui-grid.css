@@ -1140,6 +1140,7 @@
   font-weight: normal;
   background: #fff;
 }
+.tui-grid-filter-container .tui-grid-filter-input:focus,
 .tui-grid-cell-list:focus,
 .tui-grid-filter-row select:focus,
 .tui-grid-filter-row input[type="number"]:focus,
@@ -1281,5 +1282,19 @@ input[type=checkbox]:checked~.custom-input:after {
 .tui-grid-checked-action>div{
   border: 1px solid #ccc;
   height: 60px;
-  width: 220px;;
+  width: 220px;
+}
+.tui-grid-filter-btns{
+  display: flex;
+  padding: 2px 7px;
+}
+.tui-grid-filter-btns>span+span{
+  border-left:0;
+}
+.tui-grid-filter-btns>span{
+  border: 1px solid #ccc;
+  padding: 4px;
+  text-align: center;
+  width: 50%;
+  cursor: pointer;
 }
