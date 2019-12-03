@@ -1,377 +1,234 @@
-var categoryPromise = window.categoryPromise || new Promise(function(resolve, reject) {
-    $.ajax({
-        method: 'GET',
-        url: '/api/admin/categories/gid',
-        success: function(rs) {
-            resolve(rs)
-        },
-        error: function(request) {
-            reject(request);
-        }
-    });
-});
 
-
-var ImageEditor = function(props) {
-    let self = this;
-    let $el = $([
-        '<div class="tui-grid-editor-dropdown tui-grid-editor-file">',
-        '   <button type="button" class="btn btn-default tui-grid-cell-thumb" data-preview data-action="upload"><i class="fa fa-upload"></i></button>',
-        '   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">',
-        //'       Action',
-        '       <span class="caret"></span>',
-        '   </button>',
-        '   <ul class="dropdown-menu">',
-        '       <li><a href="JavaScript:" data-action="upload"><i class="fa fa-upload"></i> File Upload</a></li>',
-        '       <li><a href="JavaScript:" data-action="browse"><i class="fa fa-folder-open"></i> Browse from Libraries</a></li>',
-        '   </ul>',
-        '   <input type="file" style="display: none;" />',
-        '</div>'
-    ].join(''));
-    const el = $el[0];//document.createElement('input');
-    const {
-        maxLength
-    } = props.columnInfo.editor.options;
-
-    this.value = props.value;
-    this.waiting = false;
-    let fileInput = $el.find('[type="file"]');
-    $el.find('[data-action="upload"]').click((e)=>{
-        fileInput.click();
-    });
-    fileInput.on('change', (e)=>{
-        var reader         = new FileReader();
-        var file           = fileInput[0].files[0];
-        reader.readAsDataURL(file);
-        reader.onload =  (function (file) {
-            return function (_file) {
-                self.value = (_file.target.result);
-                self.preview();
-                self.finishEditing();
-            }.bind(this);
-        })(file);
-    });
-    $el.find('[data-action="browse"]').click((e)=>{
-        self.waiting = true;
-        CKFinder.config( { connectorPath: '/ckfinder/connector' } );
-        CKFinder.modal( {
-            chooseFiles: true,
-            width: 800,
-            height: 600,
-            onInit: function( finder ) {
-                finder.on( 'files:choose', function( evt ) {
-                    self.waiting = false;
-                    var file = evt.data.files.first();
-                    self.value = (file.getUrl());
-                    self.preview();
-                    self.finishEditing();
-                } );
-
-                finder.on( 'file:choose:resizedImage', function( evt ) {
-                    self.waiting = false;
-                    self.value = (evt.data.resizedUrl);
-                    self.preview();
-                    self.finishEditing();
-                } );
-            }
-        } );
-    });
-    this.el = el;
-    this.previewEl = $el.find('[data-preview]');
-        
-    this.finishEditing = function() {
-        this.EditingLayerInnerComp.finishEditing(true)
-    }
-    this.preview = function() {
-        
-        this.previewEl.css({
-            backgroundImage: this.value?'url('+this.value+')':'none'
-        })
-    }
-    this.getElement = function() {
-        return this.el;
-    }
-
-    this.getValue = function() {
-        return this.value;
-    }
-
-    this.mounted = function() {
-        //this.el.select();
-        $(this.el).find('.dropdown-toggle').focus()
-    }
-    this.preview()
-}
-NumberEditor = window.NumberEditor || class NumberEditor {
-    constructor(props) {
-        const el = document.createElement('input');
-        //const { maxLength } = props.columnInfo.editor.options;
-
-        el.type = 'number';
-        el.value = String(props.value);
-
-        this.el = el;
-    }
-
-    getElement() {
-        return this.el;
-    }
-
-    getValue() {
-        return this.el.value;
-    }
-
-    mounted() {
-        this.el.select();
-    }
-}
-CategoryEditor = window.CategoryEditor || class CategoryEditor {
-    constructor(props) {
-        const el = document.createElement('select');
-        //const { maxLength } = props.columnInfo.editor.options;
-        console.log(props.columnInfo.editor.options)
-        categoryPromise.then((rs) => {
-            let addOptions = (el, items, prefix) => {
-                items.map((c) => {
-
-                    if (c.children) {
-                        var optgroup = document.createElement('optgroup');
-                        optgroup.setAttribute('label', c.name);
-                        this.el.appendChild(optgroup);
-
-                        addOptions(optgroup, c.children, (prefix || '') + "　");
-                    } else {
-                        var option = document.createElement('option');
-                        option.setAttribute('value', c.id);
-                        option.innerText = (prefix || '') + c.name;
-                        this.el.appendChild(option);
-                    }
-                })
-            }
-            addOptions(this.el, rs)
-            el.value = String(props.value);
-        })
-
-
-        this.el = el;
-    }
-
-    getElement() {
-        return this.el;
-    }
-
-    getValue() {
-        return this.el.value;
-    }
-
-    mounted() {
-        this.el.focus();
-
-    }
-}
-DropdownEditor = window.DropdownEditor || class DropdownEditor {
-    constructor(props) {
-        let $el = $([
-    		'<div class="tui-grid-editor-dropdown">',
-		    '   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">',
-            '       <span>Action</span>',
-		    '       <span class="caret"></span>',
-            '   </button>',
-		    '   <ul class="dropdown-menu">',
-            '   </ul>',
-		    '</div>'
-        ].join(''));
-        $el.find('>button').keypress((ev)=>{
-            console.log(ev)
-        })
-        const el = $el[0];//document.createElement('input');
-        categoryPromise.then((rs) => {
-            let addOptions = ($el, items, level) => {
-                items.map((c) => {
-
-                    if (c.children) {
-                        let li = $([
-                            '<li>',
-                            '   <div href="Javascript:" data-value="'+c.id+'"><span style="padding-left:'+((level || 0)*20)+'px">'+c.name+'</span></div>',
-                            '</li>',
-                        ].join(''));
-                        $el.append(li)
-                        addOptions($el, c.children, (level||0)+1);
-                    } else {
-                        let li = $([
-                            '<li>',
-                            '   <a href="Javascript:" data-value="'+c.id+'"><span style="padding-left:'+((level || 0)*20)+'px">'+c.name+'</span></a>',
-                            '</li>',
-                        ].join(''));
-                        $el.append(li);
-                    }
-                })
-            }
-            addOptions($el.find('>ul'), rs)
-            var selectedText = $el.find('a[data-value="'+props.value+'"]').text() || '---Select---'
-            $el.find('a.active').removeClass('active')
-            $el.find('a[data-value="'+props.value+'"]').addClass('active')
-            $el.find('>button>span:first-child').text(selectedText);
-            
-            $el.find('a').unbind('click')
-                .click(function(ev){
-                    $el.find('a.active').removeClass('active');
-                    $(this).addClass('active')
-                    var selectedText = $(ev.target).text()
-                    $el.find('>button>span:first-child').text(selectedText);
-                    $el.trigger('change')
-                    el.dispatchEvent(
-                        new Event('change', {
-                            bubbles: true,
-                            cancelable: true,
-                            view: window,
-                    }));
-                })
-        })
-
-
-// Dispatch it.
-        
-        this.el = el;
-    }
-
-    getElement() {
-        return this.el;
-    }
-
-    getValue() {
-        return $(this.el).find('a.active').data('value');
-    }
-
-    mounted() {
-        $(this.el).find('>button').focus();
-    }
-}
-ActionRenderer = window.ActionRenderer || class ActionRenderer {
-    constructor(props) {
-        let self = this;
-    	let $el = $([
-    		'<div class="tui-grid-action-dropdown">',
-		    '   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">',
-            //'       Action',
-		    '       <span class="glyphicon glyphicon-option-vertical"></span>',
-            '   </button>',
-		    // '   <a href="orders/'+props.value+'/edit" type="button" class="btn btn-default" data-preview><i class="fa fa-pencil"></i></a>',
-		    '   <a href="orders/'+props.value+'" type="button" class="btn btn-default" data-preview><i class="fa fa-eye"></i></a>',
-		    '   <ul class="dropdown-menu -dropdown-menu-right">',
-		    // '       <li><a href="orders/'+props.value+'/edit" ><i class="fa fa-pencil"></i> Edit</a></li>',
-		    '       <li><a href="orders/'+props.value+'" ><i class="fa fa-eye"></i> Show</a></li>',
-		    '       <li><a href="JavaScript:" data-action="delete"><i class="fa fa-trash"></i> Delete</a></li>',
-            '   </ul>',
-		    '</div>'
-		].join(''));
-        const el = $el[0];
-        this.el = el;
-        $el.find('[data-action="delete"]').click(()=>{
-            Helper.Encore_Admin_Grid_Actions_Delete({
-                id: props.value,
-                model: 'Order'
-            },()=>{
-                grid.reloadData()
-            })
-        })
-        //this.render(props);
-    }
-
-    getElement() {
-        return this.el;
-    }
-
-    render(props) {
-        //this.el.value = String(props.value);
-    }
-
-    mounted() {
-        //this.el.select();
-    }
-}
-CategoryRenderer = window.CategoryRenderer || class CategoryRenderer {
-    constructor(props) {
-        const el = document.createElement('div');
-        //const { min, max } = props.columnInfo.renderer.options;
-
-        //el.type = 'range';
-        //el.min = String(min);
-        //el.max = String(max);
-        //el.disabled = true;
-        el.classList.add('tui-grid-cell-content')
-        this.el = el;
-        this.render(props);
-    }
-
-    getElement() {
-        return this.el;
-    }
-
-    render(props) {
-        let self = this;
-
-        function searchTree(element, matching) {
-            if (element.id == matching) {
-                return element;
-            } else if (element.children != null) {
-                var i;
-                var result = null;
-                for (i = 0; result == null && i < element.children.length; i++) {
-                    result = searchTree(element.children[i], matching);
-                }
-                if (result) return result;
-            } else if (element.length) {
-                for (i = 0; result == null && i < element.length; i++) {
-                    result = searchTree(element[i], matching);
-                    if (result) return result;
-                }
-            }
-            return null;
-        }
-        categoryPromise.then((rs) => {
-            let selectedCategory = searchTree(rs, props.value)
-            if (selectedCategory) self.el.innerHTML = selectedCategory.name;
-            else self.el.innerHTML = '';
-        })
-
-    }
-    mounted() {
-        //this.el.select();
-    }
-}
-var ImageRenderer = function(props) {
-    var el = document.createElement('div');
-    //const { min, max } = props.columnInfo.renderer.options;
-
-    //el.type = 'range';
-    //el.min = String(min);
-    //el.max = String(max);
-    //el.disabled = true;
-    el.classList.add('tui-grid-cell-thumb')
-    this.el = el;
-    
-
-    this.getElement = ()=> {
-        return this.el;
-    }
-
-    this.render = (props)=> {
-        if (props.value) {
-            this.el.style.backgroundImage = 'url(' + props.value + ')';
-        }
-    }
-    this.render(props);
-}
 var CurrencyFormatter = function(props){
     return new Intl.NumberFormat('vi-VN', {
-        maximumSignificantDigits: 2,
+        maximumSignificantDigits: Math.max(1, (+props.value).toString().length-2),
         style: 'currency',
         currency: 'VND',
         // currencyDisplay: '$',
     }).format(+props.value);
 }
+function ProductDropdownEditor(props){
+    let self = this;
+    self.selectedItem = null;
+    var columnInfo = props.columnInfo;
+    var display_field = columnInfo.display_field;
+    var grid = props.grid;
+    let $el = $([
+        '<div class="tui-grid-editor-dropdown">',
+        '   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">',
+        '       <span></span>',
+        '       <span class="caret"></span>',
+        '   </button>',
+        '   <ul class="dropdown-menu tui-grid-cell-editor-contain">',
+        '       <li class="tui-grid-dropdown-filter"><input type="text" placeholder="Search"/></li>',
+        '   </ul>',
+        '</div>'
+    ].join(''));
+    
+    var el = $el[0];
+    
+    $el.find('input').on('keydown',(ev)=>{
+        var keycode = ev.keyCode;
+        switch(keycode){
+            case 13:
+                var item = $el.find('li.active').data('item')
+                if(item) {
+                    self.setSelectedItem(item)
+                    self.handleChange();
+                }
+                break;
+            case 38:
+                ev.stopPropagation();
+                ev.preventDefault();
+                var prevEl
+                if($el.find('li.active').length == 1){
+                    prevEl = $el.find('li.active').prev();
+                    if(prevEl && prevEl.hasClass('tui-grid-dropdown-filter')) prevEl = null;
+                }else{
+                    prevEl = $el.find('li:last-child');
+                }
+                if(prevEl && prevEl.length == 1){
+                    $el.find('li.active').removeClass('active');
+                    prevEl.addClass('active')
+                    //self.setSelectedItem(prevEl.data('item'))
+                }
+                break;
+            case 40:
+                ev.stopPropagation();
+                ev.preventDefault();
+                var nextEl
+                if($el.find('li.active').length == 1){
+                    nextEl = $el.find('li.active').next();
+                }else{
+                    nextEl = $el.find('li:nth-child(2)');
+                }
+                if(nextEl && nextEl.length == 1){
+                    $el.find('li.active').removeClass('active');
+                    nextEl.addClass('active')
+                    //self.setSelectedItem(nextEl.data('item'))
+                }
+                break;
+            default:
+                console.log(keycode)
+                
+        }
+    })
+    $el.find('input').on('input',(ev)=>{
+        loadData()
+    })
+    $el.find('input').on('click  mouseup mousedown',(ev)=>{
+        ev.stopPropagation();
+        ev.preventDefault();
+        ev.target.focus()
+        return false;
+    })
+    $el.find('>button').keypress((ev)=>{
+        console.log(ev)
+    })
+    $el.on('show.bs.dropdown', function () {
+        setTimeout(()=>{$el.find('input')[0].focus()}, 120)
+        console.log('show.bs.dropdown')
+    })
+    $el.on('hide.bs.dropdown', function () {
+        console.log('hide.bs.dropdown')
+    })
+    var ajaxTimer, ajax;
+    function loadData() {
+        
+        if(ajaxTimer) {
+            clearTimeout(ajaxTimer);
+            if(ajax) ajax.abort();
+        }
+        ajaxTimer = setTimeout(()=>{
+            $el.find('>ul>li:not(:first-child)').remove();
+            $el.find('>ul').append('<li class="tui-grid-searching">Searching...</li>');
+            var value = $el.find('input').val();
+            if(value == ''){
+                productPromise.then((data)=>{
+                    var items = data.contents;
+                    renderItem(items);
+                })
+                return;
+            }
+            ajax = $.ajax({
+                method: 'GET',
+                url: '/api/admin/products',
+                data: {
+                    filter:[{
+                        column: 'name',
+                        value: value
+                    }],
+                    id: props.value
+                },
+                success: function(rs) {
+                    var source = (rs.data.contents)
+                    renderItem(source)
+                },
+                error: function(request) {
+                    //reject(request);
+                }
+            })
+        }, 800);
+    }
+    self.handleChange = ()=>{
+        $el.trigger('change')
+        el.dispatchEvent(
+            new Event('change', {
+                bubbles: true,
+                cancelable: true,
+                view: window,
+        }));
+    }
+    function renderItem(items){
+        $el.find('>ul>li:not(:first-child)').remove();
+        let addOptions = ($el, items, level) => {
+            items.map((c) => {
 
+                if(c.id == props.value){
+                    $el.find('>button>span:first-child').text(c.name);
+                }
+                let li = $([
+                    '<li data-value="'+c.id+'">',
+                    '   <a href="Javascript:"><span>'+c.name+'</span></a>',
+                    '</li>',
+                ].join(''));
+                $el.append(li);
+                li.data('item',c)
+            })
+            $el.find('li')
+                .unbind('click')
+                .click(function(ev){
+                    $el.find('li.active').removeClass('active');
+                    $(this).addClass('active')
+                    self.setSelectedItem($(this).data('item'))
+                    self.handleChange();
+                })
+            
+        }
+        if(items.length>0){
+            addOptions($el.find('>ul'), items)
+            $el.find('li.active').removeClass('active')
+            if(self.selectedItem){
+                $el.find('li[data-value="'+self.selectedItem.id+'"]').addClass('active')
+            }
+        }else{
+            $el.find('>ul').append('<li class="tui-grid-searching">No data to display.</li>');
+        }
+        
+    }
+    var productPromise = new Promise(function(resolve, reject) {
+        $.ajax({
+            method: 'GET',
+            url: '/api/admin/products',
+            data: {
+                id: props.value
+            },
+            success: function(rs) {
+                resolve(rs.data)
+            },
+            error: function(request) {
+                reject(request);
+            }
+        });
+    });
+    productPromise.then((data)=>{
+        console.log(props,'props')
+        var items = data.contents;
+        self.setSelectedItem(data.selected);
+        renderItem(items);
+    })
+
+    this.setSelectedItem = (item)=>{
+        self.selectedItem = item;
+        if(self.selectedItem){
+            $el.find('>button>span:first-child').text(self.selectedItem.name);
+        } else {
+            $el.find('>button>span:first-child').text('Choose:');
+        }
+    }
+
+    // Dispatch it.
+        
+    this.el = el;
+
+    this.getElement = function() {
+        return this.el;
+    }
+
+    this.getValue = function() {
+        return self.selectedItem?self.selectedItem.id:null;
+    }
+    this.getData = function() {
+        return self.selectedItem;
+    }
+    this.mounted = function() {
+        $(this.el).find('>button').focus();
+        var row = grid.getRow(props.rowKey)
+        var displayText = row[display_field];
+        $el.find('>button>span:first-child').text(displayText || 'Choose:');
+        console.log(display_field,displayText,row,'sssss');
+    }
+}
 var InitOrderGrid = () => {
     var onCellUpdated = (ev) => {
         return new Promise(function(resolve, reject){
@@ -568,7 +425,47 @@ var InitOrderGrid = () => {
                 width: 60,
                 align: 'center',
                 renderer: {
-                    type: ActionRenderer,
+                    type: function(props) {
+                        let self = this;
+                        let $el = $([
+                            '<div class="tui-grid-action-dropdown">',
+                            '   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">',
+                            //'       Action',
+                            '       <span class="glyphicon glyphicon-option-vertical"></span>',
+                            '   </button>',
+                            // '   <a href="orders/'+props.value+'/edit" type="button" class="btn btn-default" data-preview><i class="fa fa-pencil"></i></a>',
+                            '   <a href="orders/'+props.value+'" type="button" class="btn btn-default" data-preview><i class="fa fa-eye"></i></a>',
+                            '   <ul class="dropdown-menu -dropdown-menu-right">',
+                            // '       <li><a href="orders/'+props.value+'/edit" ><i class="fa fa-pencil"></i> Edit</a></li>',
+                            '       <li><a href="orders/'+props.value+'" ><i class="fa fa-eye"></i> Show</a></li>',
+                            '       <li><a href="JavaScript:" data-action="delete"><i class="fa fa-trash"></i> Delete</a></li>',
+                            '   </ul>',
+                            '</div>'
+                        ].join(''));
+                        const el = $el[0];
+                        this.el = el;
+                        $el.find('[data-action="delete"]').click(()=>{
+                            Helper.Encore_Admin_Grid_Actions_Delete({
+                                id: props.value,
+                                model: 'Order'
+                            },()=>{
+                                grid.reloadData()
+                            })
+                        })
+                        //this.render(props);
+                    
+                        this.getElement = function() {
+                            return this.el;
+                        }
+                    
+                        this.render = function(props) {
+                            //this.el.value = String(props.value);
+                        }
+                    
+                        this.mounted = function() {
+                            //this.el.select();
+                        }
+                    },
                 }
             },{
                 header: 'No',
@@ -957,31 +854,102 @@ var InitOrderDetailGrid = (id) => {
                     name: 'price_with_discount',
                     align: 'right'
                 },
+                {
+                    name: 'amount',
+                    align: 'right'
+                },
             ]
         },
+        summary: {
+			height: 32,
+			position: 'bottom', // or 'top'
+			columnContent: {
+				amount: {
+					template: function(valueMap) {
+                        var value = new Intl.NumberFormat('vi-VN', {
+                            maximumSignificantDigits: Math.max(1,valueMap.sum.toString().length-2),
+                            style: 'currency',
+                            currency: 'VND',
+                            // currencyDisplay: '$',
+                        }).format(+valueMap.sum);
+						return `Σ: ${value}`;
+					}
+				}
+			}
+		},
         columns: [{
                 header: 'Product',
-                name: 'product_name',
-                
+                name: 'product_id',
+                display_field: 'product_name',
+                onBeforeChange: (ev)=>{
+                },
+                onAfterChange: (ev)=>{
+                    var editor = ev.editor;
+                    gridDetail.setValue(ev.rowKey,'product_name',editor.getData().name)
+                },
+                editor: {
+                    // type: 'combobox',//
+                    type: ProductDropdownEditor,
+                    options: {
+                        source: {
+                            api : '/api/admin/products'
+                        },
+                        search: true
+                    }
+                },
             },{
                 header: 'Color',
-                width: 80,
+                width: 50,
                 name: 'color',
+                // editor: {type: 'image'}
             },{
                 header: 'Size',
-                width: 80,
+                width: 50,
                 name: 'size',
             },{
                 header: 'Qty',
                 name: 'qty',
-                width: 80,
+                width: 50,
                 align: "right",
+                editor: {
+                    type: 'text',
+                    options: {
+                        attributes: {
+                            //type: 'number',
+                            required: "true",
+                            style:'text-align:right;',
+                            //min: 0,
+                            //max: 100,
+                            pattern: "^([1-9][0-9]{0,4})"
+                        }
+                    }
+                },
+                onAfterChange: (ev)=>{
+                    var row = gridDetail.getRow(ev.rowKey)
+                    var amount = row.price_with_discount * ev.value;
+                    gridDetail.setValue(ev.rowKey,'amount', amount)
+                },
             },{
                 header: 'Sale Price',
                 name: 'price_with_discount',
                 align: "right",
                 width: 100,
                 formatter: CurrencyFormatter
+            },{
+                header: 'Amount',
+                name: 'amount',
+                align: "right",
+                width: 100,
+                formatter: function(props){
+                    var row = props.row;
+                    var value = row.qty * row.price_with_discount;
+                    return new Intl.NumberFormat('vi-VN', {
+                        maximumSignificantDigits: Math.max(1,value.toString().length-2),
+                        style: 'currency',
+                        currency: 'VND',
+                        // currencyDisplay: '$',
+                    }).format(+value);
+                }
             },
             
         ]

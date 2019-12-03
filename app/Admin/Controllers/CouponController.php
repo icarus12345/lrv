@@ -113,9 +113,7 @@ class CouponController extends AdminController
             'required'=>'',
         ]);
         $form->setView('admin.form-modal');
-        $form->any(function ($form) {
-            $form->text('code', __('Code11'))->rules('required|min:12|max:12');
-        });
+        
         return $form;
     }
 }

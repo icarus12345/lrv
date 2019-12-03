@@ -30,7 +30,7 @@
     })
 </script>
 
-<div class="modal in" tabindex="-1" role="dialog" id="tui-grid-detail-modal" aria-hidden="false">
+<div class="modal in" tabindex="-1" role="dialog" id="tui-grid-detail-modal" aria-hidden="false" data-keyboard="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

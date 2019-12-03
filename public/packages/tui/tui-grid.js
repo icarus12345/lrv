@@ -2400,7 +2400,10 @@ exports.createRowSpan = createRowSpan;
 function createViewCell(row, column, relationMatched, relationListItems) {
     if (relationMatched === void 0) { relationMatched = true; }
     var name = column.name, formatter = column.formatter, editor = column.editor, validation = column.validation;
+    var display_field = column.display_field;
     var value = column_1.isRowHeader(name) ? getRowHeaderValue(row, name) : row[name];
+    var display_value = row[display_field] || value;
+    
     if (!relationMatched) {
         value = '';
     }
@@ -2414,9 +2417,11 @@ function createViewCell(row, column, relationMatched, relationListItems) {
     return {
         editable: !!editor,
         className: className,
+        formatterProps: formatterProps,
+        display_value: display_value,
         disabled: column_1.isCheckboxColumn(name) ? checkDisabled : disabled,
         invalidStates: getValidationCode(value, validation),
-        formattedValue: getFormattedValue(formatterProps, formatter, value, relationListItems),
+        formattedValue: getFormattedValue(formatterProps, formatter, display_value, relationListItems),
         value: value
     };
 }
@@ -2838,7 +2843,7 @@ function updatePageOptions(data, totalCount) {
         data.pageOptions = tslib_1.__assign(tslib_1.__assign({}, data.pageOptions), { totalCount: totalCount });
     }
 }
-function setValue(store, rowKey, columnName, value) {
+function setValue(store, rowKey, columnName, value, editor) {
     var column = store.column, data = store.data, id = store.id;
     var rawData = data.rawData, sortState = data.sortState;
     var rowIdx = data_2.findIndexByRowKey(data, column, id, rowKey, false);
@@ -2847,7 +2852,7 @@ function setValue(store, rowKey, columnName, value) {
         return;
     }
     var targetColumn = common_1.findProp('name', columnName, column.visibleColumns);
-    var gridEvent = new gridEvent_1.default({ rowKey: rowKey, columnName: columnName, value: value });
+    var gridEvent = new gridEvent_1.default({ rowKey: rowKey, columnName: columnName, value: value, editor: editor });
     if (targetColumn && targetColumn.onBeforeChange) {
         targetColumn.onBeforeChange(gridEvent);
     }
@@ -2875,11 +2880,11 @@ function setValue(store, rowKey, columnName, value) {
         }
     }
     if (targetColumn && targetColumn.onAfterChange) {
-        gridEvent = new gridEvent_1.default({ rowKey: rowKey, columnName: columnName, value: value });
+        gridEvent = new gridEvent_1.default({ rowKey: rowKey, columnName: columnName, value: value, editor: editor });
         targetColumn.onAfterChange(gridEvent);
     }
     if (targetColumn && targetColumn.onCellUpdate) {
-        gridEvent = new gridEvent_1.default({ rowKey: rowKey, columnName: columnName, value: value });
+        gridEvent = new gridEvent_1.default({ rowKey: rowKey, columnName: columnName, value: value, editor: editor });
         // show loading
         var promise = targetColumn.onCellUpdate(gridEvent);
         if(promise) promise.then(function(){
@@ -3575,11 +3580,11 @@ function startEditing(store, rowKey, columnName) {
     }
 }
 exports.startEditing = startEditing;
-function finishEditing(_a, rowKey, columnName, value) {
+function finishEditing(_a, rowKey, columnName, value, data) {
     console.log('finishEditing')
     var focus = _a.focus, id = _a.id;
     var eventBus = eventBus_1.getEventBus(id);
-    var gridEvent = new gridEvent_1.default({ rowKey: rowKey, columnName: columnName, value: value });
+    var gridEvent = new gridEvent_1.default({ rowKey: rowKey, columnName: columnName, value: value, data: data});
     /**
      * Occurs when editing the cell is finished
      * @event Grid#editingFinish
@@ -4498,13 +4503,30 @@ function createColumn(column, columnOptions, relationColumns, gridCopyOptions, t
         onCellUpdate = column.onCellUpdate,
         onBeforeChange = column.onBeforeChange, onAfterChange = column.onAfterChange, whiteSpace = column.whiteSpace, ellipsis = 
         column.ellipsis, valign = column.valign, defaultValue = column.defaultValue, escapeHTML = column.escapeHTML, ignored = column.ignored, 
-        filter = column.filter, className = column.className;
+        filter = column.filter, className = column.className,
+        display_field = column.display_field;
     var editorOptions = createEditorOptions(editor);
     var rendererOptions = createRendererOptions(renderer);
     var filterOptions = filter ? createColumnFilterOption(filter) : null;
     var _a = createColumnHeaderInfo(name, columnHeaderInfo), headerAlign = _a.headerAlign, headerVAlign = _a.headerVAlign, headerRenderer = _a.headerRenderer;
-    return observable_1.observable(tslib_1.__assign(tslib_1.__assign(tslib_1.__assign({ name: name,
-        escapeHTML: escapeHTML, header: header || name, hidden: Boolean(hidden), resizable: common_1.isUndefined(resizable) ? Boolean(columnOptions.resizable) : Boolean(resizable), align: align || 'left', fixedWidth: typeof width === 'number', copyOptions: tslib_1.__assign(tslib_1.__assign({}, gridCopyOptions), copyOptions), baseWidth: (width === 'auto' ? 0 : width) || 0, minWidth: minWidth || columnOptions.minWidth || COLUMN, relationMap: createRelationMap(relations || []), related: common_1.includes(relationColumns, name), sortable: sortable, sortingType: sortingType || 'asc', validation: validation ? tslib_1.__assign({}, validation) : {}, renderer: rendererOptions, formatter: formatter,
+    return observable_1.observable(tslib_1.__assign(tslib_1.__assign(tslib_1.__assign({ 
+        name: name,
+        display_field: display_field,
+        escapeHTML: escapeHTML, 
+        header: header || name, 
+        hidden: Boolean(hidden), 
+        resizable: common_1.isUndefined(resizable) ? Boolean(columnOptions.resizable) : Boolean(resizable), 
+        align: align || 'left', 
+        fixedWidth: typeof width === 'number', 
+        copyOptions: tslib_1.__assign(tslib_1.__assign({}, gridCopyOptions), copyOptions), baseWidth: (width === 'auto' ? 0 : width) || 0, 
+        minWidth: minWidth || columnOptions.minWidth || COLUMN, 
+        relationMap: createRelationMap(relations || []), 
+        related: common_1.includes(relationColumns, name), 
+        sortable: sortable, 
+        sortingType: sortingType || 'asc', 
+        validation: validation ? tslib_1.__assign({}, validation) : {}, 
+        renderer: rendererOptions, 
+        formatter: formatter,
         onBeforeChange: onBeforeChange,
         onAfterChange: onAfterChange,
         onCellUpdate: onCellUpdate,
@@ -6332,15 +6354,24 @@ var ListFilterRow = /** @class */ (function (_super) {
             _this.updateLabel()
         }
         _this.selectAllClick = (ev) => {
-            Array.from(_this.listEl.getElementsByTagName('label'))
+            var visibleEls = Array.from(_this.listEl.getElementsByTagName('label'))
                 .filter((label)=>{
                     var text = label.textContent.toLowerCase();
                     var search = _this.inputFilterEl.value.toLowerCase()
                     return (search == '' || text.indexOf(search)>=0);
-                })
-                .map((label)=>{
+                });
+            var countChecked = visibleEls.filter((label)=>{
+                var input = label.getElementsByTagName('input')[0];
+                return input.checked;
+                });
+            
+            var checkedAll = true;
+            if(countChecked.length == visibleEls.length){
+                checkedAll = false;
+            }
+            visibleEls.map((label)=>{
                     var input = label.getElementsByTagName('input')[0]
-                    input.checked = true;
+                    input.checked = checkedAll;
                 })
             _this.updateLabel()
         }
@@ -6510,8 +6541,9 @@ var ListFilterRow = /** @class */ (function (_super) {
     ListFilterRow.prototype.render = function () {
         var _this = this;
         var _a = _this.props, columnInfo = _a.columnInfo, _grid = _a.grid;
-        var source = columnInfo.filter.source;
-        var search = columnInfo.filter.search;
+        var source = columnInfo.filter && columnInfo.filter.source;
+        var search = columnInfo.filter && columnInfo.filter.search;
+        var button = columnInfo.filter && columnInfo.filter.button;;
         var columnName = columnInfo.name
 
         var filterRowStore = _grid.filterRowStore;
@@ -6555,15 +6587,13 @@ var ListFilterRow = /** @class */ (function (_super) {
                     className: dom_1.cls('filter-input'),
                     onKeyUp: _this.handleKeyPress
                 }),
+                !button?null:
                 preact_1.h("div", {
                         className: dom_1.cls('filter-btns'),
                     },preact_1.h("span", {
                         className: dom_1.cls('filter-btn-check-all'),
                         onclick: _this.selectAllClick
-                    },'Select All'),preact_1.h("span", {
-                        className: dom_1.cls('filter-btn-uncheck-all'),
-                        onclick: _this.clearSelectClick
-                    },'Clear')
+                    },'Check/Uncheck All')
                 ),
                 preact_1.h("div", {
                         className: dom_1.cls('filter-list-container'),
@@ -10016,13 +10046,129 @@ var text_1 = __webpack_require__(56);
 var checkbox_1 = __webpack_require__(57);
 var select_1 = __webpack_require__(58);
 var datePicker_1 = __webpack_require__(59);
+var dom_1 = __webpack_require__(2);
+var common_1 = __webpack_require__(1);
+var ComboboxEditor = function (props) {
+    var el = document.createElement('input');
+    var options = props.columnInfo.editor.options;
+    el.className = dom_1.cls('content-text');
+    el.type = 'text';
+    el.value = String(common_1.isUndefined(props.value) || common_1.isNull(props.value) ? '' : props.value);
+    if(options && options.attributes){
+        for(let attr in options.attributes){
+            el[attr] = options.attributes[attr];
+        }
+    }
+    this.el = el;
+    this.getElement = function () {
+        return this.el;
+    };
+    this.getValue = function () {
+        return this.el.value;
+    };
+    this.mounted = function () {
+        this.el.select();
+    };
+};
+var ImageEditor = function(props) {
+    let self = this;
+    let $el = $([
+        '<div class="tui-grid-editor-dropdown tui-grid-editor-file">',
+        '   <button type="button" class="btn btn-default tui-grid-cell-thumb" data-preview data-action="upload"><i class="fa fa-upload"></i></button>',
+        '   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">',
+        //'       Action',
+        '       <span class="caret"></span>',
+        '   </button>',
+        '   <ul class="dropdown-menu">',
+        '       <li><a href="JavaScript:" data-action="upload"><i class="fa fa-upload"></i> File Upload</a></li>',
+        '       <li><a href="JavaScript:" data-action="browse"><i class="fa fa-folder-open"></i> Browse from Libraries</a></li>',
+        '   </ul>',
+        '   <input type="file" style="display: none;" />',
+        '</div>'
+    ].join(''));
+    const el = $el[0];//document.createElement('input');
+    const {
+        maxLength
+    } = props.columnInfo.editor.options;
+
+    this.value = props.value;
+    this.waiting = false;
+    let fileInput = $el.find('[type="file"]');
+    $el.find('[data-action="upload"]').click((e)=>{
+        fileInput.click();
+    });
+    fileInput.on('change', (e)=>{
+        var reader         = new FileReader();
+        var file           = fileInput[0].files[0];
+        reader.readAsDataURL(file);
+        reader.onload =  (function (file) {
+            return function (_file) {
+                self.value = (_file.target.result);
+                self.preview();
+                self.finishEditing();
+            }.bind(this);
+        })(file);
+    });
+    $el.find('[data-action="browse"]').click((e)=>{
+        self.waiting = true;
+        CKFinder.config( { connectorPath: '/ckfinder/connector' } );
+        CKFinder.modal( {
+            chooseFiles: true,
+            width: 800,
+            height: 600,
+            onInit: function( finder ) {
+                finder.on( 'files:choose', function( evt ) {
+                    self.waiting = false;
+                    var file = evt.data.files.first();
+                    self.value = (file.getUrl());
+                    self.preview();
+                    self.finishEditing();
+                } );
+
+                finder.on( 'file:choose:resizedImage', function( evt ) {
+                    self.waiting = false;
+                    self.value = (evt.data.resizedUrl);
+                    self.preview();
+                    self.finishEditing();
+                } );
+            }
+        } );
+    });
+    this.el = el;
+    this.previewEl = $el.find('[data-preview]');
+        
+    this.finishEditing = function() {
+        this.EditingLayerInnerComp.finishEditing(true)
+    }
+    this.preview = function() {
+        
+        this.previewEl.css({
+            backgroundImage: this.value?'url('+this.value+')':'none'
+        })
+    }
+    this.getElement = function() {
+        return this.el;
+    }
+
+    this.getValue = function() {
+        return this.value;
+    }
+
+    this.mounted = function() {
+        //this.el.select();
+        $(this.el).find('.dropdown-toggle').focus()
+    }
+    this.preview()
+}
 exports.editorMap = {
     text: [text_1.TextEditor, { type: 'text' }],
     password: [text_1.TextEditor, { type: 'password' }],
     checkbox: [checkbox_1.CheckboxEditor, { type: 'checkbox' }],
     radio: [checkbox_1.CheckboxEditor, { type: 'radio' }],
     select: [select_1.SelectEditor],
-    datePicker: [datePicker_1.DatePickerEditor]
+    datePicker: [datePicker_1.DatePickerEditor],
+    combobox: [ComboboxEditor],
+    image: [ImageEditor]
 };
 
 
@@ -11319,9 +11465,12 @@ var ContainerComp = /** @class */ (function (_super) {
                 editing = _a.editing,
                 editingEvent = _a.editingEvent;
             var target = ev.target;
-            // if (dom_1.findParent(target, 'filter-row')) {
-            //     dispatch('setActiveColumnAddress', null);
-            // }else 
+            // if (dom_1.findParent(target, 'cell-editor-contain')) {
+            //     ev.stopPropagation()
+            //     ev.preventDefault()
+            //     console.log('STOPSTOP')
+            //     return;
+            // }
             if (filtering) {
                 
                 if (!dom_1.findParent(target, 'btn-filter') && !dom_1.findParent(target, 'filter-container')) {
@@ -12804,10 +12953,11 @@ var EditingLayerInnerComp = /** @class */ (function (_super) {
         if (this.editor) {
             var _a = this.props, dispatch = _a.dispatch, rowKey = _a.rowKey, columnName = _a.columnName;
             var value = this.editor.getValue();
+            var editor = this.editor;
             if (save) {
-                dispatch('setValue', rowKey, columnName, value);
+                dispatch('setValue', rowKey, columnName, value, editor);
             }
-            dispatch('finishEditing', rowKey, columnName, value);
+            dispatch('finishEditing', rowKey, columnName, value, editor);
         }
     };
     EditingLayerInnerComp.prototype.componentDidMount = function () {

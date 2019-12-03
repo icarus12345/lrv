@@ -49,7 +49,12 @@ class Product extends BaseModel
     {
         return $this->belongsTo(\App\Models\Category::class);
     }
-
+    public function getCategoryName()
+    {
+        if($this->category)
+            return $this->category->name;
+        return null;
+    }
     public function colors()
     {
         return $this->belongsToMany(\App\Models\Color::class, 'product_colors');

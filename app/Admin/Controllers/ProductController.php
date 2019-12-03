@@ -31,12 +31,15 @@ class ProductController extends AdminController
 		$sort_column = $request->sortColumn??'id';
 		$sort_ascending = $request->sortAscending=="true"?'asc':'desc';
 		$filter = $request->filter??null;
-		$rows = Product::filter($filter)
+		$id = $request->id??null;
+		$rows = Product::with(['category'])
+			->filter($filter)
 			->orderBy($sort_column, $sort_ascending)
 			->paginate($perpage);
 		return response()->json([
 			"result"=> true,
 			"data"=> [
+				"selected"=> Product::find($id),
 				"contents"=> $rows->getCollection(),
 				"pagination"=> [
 					"page"=> $rows->currentPage(),

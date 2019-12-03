@@ -12,96 +12,7 @@ var categoryPromise = window.categoryPromise || new Promise(function(resolve, re
 });
 
 
-var ImageEditor = function(props) {
-    let self = this;
-    let $el = $([
-        '<div class="tui-grid-editor-dropdown tui-grid-editor-file">',
-        '   <button type="button" class="btn btn-default tui-grid-cell-thumb" data-preview data-action="upload"><i class="fa fa-upload"></i></button>',
-        '   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">',
-        //'       Action',
-        '       <span class="caret"></span>',
-        '   </button>',
-        '   <ul class="dropdown-menu">',
-        '       <li><a href="JavaScript:" data-action="upload"><i class="fa fa-upload"></i> File Upload</a></li>',
-        '       <li><a href="JavaScript:" data-action="browse"><i class="fa fa-folder-open"></i> Browse from Libraries</a></li>',
-        '   </ul>',
-        '   <input type="file" style="display: none;" />',
-        '</div>'
-    ].join(''));
-    const el = $el[0];//document.createElement('input');
-    const {
-        maxLength
-    } = props.columnInfo.editor.options;
 
-    this.value = props.value;
-    this.waiting = false;
-    let fileInput = $el.find('[type="file"]');
-    $el.find('[data-action="upload"]').click((e)=>{
-        fileInput.click();
-    });
-    fileInput.on('change', (e)=>{
-        var reader         = new FileReader();
-        var file           = fileInput[0].files[0];
-        reader.readAsDataURL(file);
-        reader.onload =  (function (file) {
-            return function (_file) {
-                self.value = (_file.target.result);
-                self.preview();
-                self.finishEditing();
-            }.bind(this);
-        })(file);
-    });
-    $el.find('[data-action="browse"]').click((e)=>{
-        self.waiting = true;
-        CKFinder.config( { connectorPath: '/ckfinder/connector' } );
-        CKFinder.modal( {
-            chooseFiles: true,
-            width: 800,
-            height: 600,
-            onInit: function( finder ) {
-                finder.on( 'files:choose', function( evt ) {
-                    self.waiting = false;
-                    var file = evt.data.files.first();
-                    self.value = (file.getUrl());
-                    self.preview();
-                    self.finishEditing();
-                } );
-
-                finder.on( 'file:choose:resizedImage', function( evt ) {
-                    self.waiting = false;
-                    self.value = (evt.data.resizedUrl);
-                    self.preview();
-                    self.finishEditing();
-                } );
-            }
-        } );
-    });
-    this.el = el;
-    this.previewEl = $el.find('[data-preview]');
-        
-    this.finishEditing = function() {
-        this.EditingLayerInnerComp.finishEditing(true)
-    }
-    this.preview = function() {
-        
-        this.previewEl.css({
-            backgroundImage: this.value?'url('+this.value+')':'none'
-        })
-    }
-    this.getElement = function() {
-        return this.el;
-    }
-
-    this.getValue = function() {
-        return this.value;
-    }
-
-    this.mounted = function() {
-        //this.el.select();
-        $(this.el).find('.dropdown-toggle').focus()
-    }
-    this.preview()
-}
 NumberEditor = window.NumberEditor || class NumberEditor {
     constructor(props) {
         const el = document.createElement('input');
@@ -247,49 +158,7 @@ DropdownEditor = window.DropdownEditor || class DropdownEditor {
         $(this.el).find('>button').focus();
     }
 }
-ActionRenderer = window.ActionRenderer || class ActionRenderer {
-    constructor(props) {
-        let self = this;
-    	let $el = $([
-    		'<div class="tui-grid-action-dropdown">',
-		    '   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">',
-            //'       Action',
-		    '       <span class="glyphicon glyphicon-option-vertical"></span>',
-            '   </button>',
-		    '   <a href="product/'+props.value+'/edit" type="button" class="btn btn-default" data-preview><i class="fa fa-pencil"></i></a>',
-		    '   <ul class="dropdown-menu -dropdown-menu-right">',
-		    '       <li><a href="product/'+props.value+'" ><i class="fa fa-eye"></i> Show</a></li>',
-		    '       <li><a href="product/'+props.value+'/edit" ><i class="fa fa-pencil"></i> Edit</a></li>',
-		    '       <li><a href="JavaScript:" data-action="delete"><i class="fa fa-trash"></i> Delete</a></li>',
-            '   </ul>',
-		    '</div>'
-		].join(''));
-        const el = $el[0];
-        this.el = el;
-        $el.find('[data-action="delete"]').click(()=>{
-            console.log(self)
-            Helper.Encore_Admin_Grid_Actions_Delete({
-                id: props.value,
-                model: 'Product'
-            },()=>{
-                grid.reloadData()
-            })
-        })
-        //this.render(props);
-    }
 
-    getElement() {
-        return this.el;
-    }
-
-    render(props) {
-        //this.el.value = String(props.value);
-    }
-
-    mounted() {
-        //this.el.select();
-    }
-}
 CategoryRenderer = window.CategoryRenderer || class CategoryRenderer {
     constructor(props) {
         const el = document.createElement('div');
@@ -339,6 +208,15 @@ CategoryRenderer = window.CategoryRenderer || class CategoryRenderer {
     mounted() {
         //this.el.select();
     }
+}
+
+var CurrencyFormatter = function(props){
+    return new Intl.NumberFormat('vi-VN', {
+        maximumSignificantDigits: Math.max(1, (+props.value).toString().length-2),
+        style: 'currency',
+        currency: 'VND',
+        // currencyDisplay: '$',
+    }).format(+props.value);
 }
 var ImageRenderer = function(props) {
     var el = document.createElement('div');
@@ -544,7 +422,47 @@ var InitGrid = () => {
             width: 60,
             align: 'center',
             renderer: {
-                type: ActionRenderer,
+                type: function(props) {
+                    let self = this;
+                    let $el = $([
+                        '<div class="tui-grid-action-dropdown">',
+                        '   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">',
+                        //'       Action',
+                        '       <span class="glyphicon glyphicon-option-vertical"></span>',
+                        '   </button>',
+                        '   <a href="product/'+props.value+'/edit" type="button" class="btn btn-default" data-preview><i class="fa fa-pencil"></i></a>',
+                        '   <ul class="dropdown-menu -dropdown-menu-right">',
+                        '       <li><a href="product/'+props.value+'" ><i class="fa fa-eye"></i> Show</a></li>',
+                        '       <li><a href="product/'+props.value+'/edit" ><i class="fa fa-pencil"></i> Edit</a></li>',
+                        '       <li><a href="JavaScript:" data-action="delete"><i class="fa fa-trash"></i> Delete</a></li>',
+                        '   </ul>',
+                        '</div>'
+                    ].join(''));
+                    const el = $el[0];
+                    this.el = el;
+                    $el.find('[data-action="delete"]').click(()=>{
+                        console.log(self)
+                        Helper.Encore_Admin_Grid_Actions_Delete({
+                            id: props.value,
+                            model: 'Product'
+                        },()=>{
+                            grid.reloadData()
+                        })
+                    })
+                    //this.render(props);
+                
+                    this.getElement = function() {
+                        return this.el;
+                    }
+                
+                    this.render = function(props) {
+                        //this.el.value = String(props.value);
+                    }
+                
+                    this.mounted = function() {
+                        //this.el.select();
+                    }
+                },
             }
         },{
                 header: 'Name',
@@ -606,6 +524,7 @@ var InitGrid = () => {
                 filter: {
                     type: 'list',//CategoryEditor
                     search: true,
+                    button: true,
                     source: categoryPromise,
                     // render: ()=>{
                     //     return ''
@@ -628,14 +547,7 @@ var InitGrid = () => {
                     console.log('Before change:' , ev);
                 },
                 onAfterChange: onCellUpdated,
-                formatter: (props) => {
-                    return new Intl.NumberFormat('vi-VN', {
-                        maximumSignificantDigits: 2,
-                        style: 'currency',
-                        currency: 'VND',
-                        // currencyDisplay: '$',
-                    }).format(+props.value);
-                },
+                formatter: CurrencyFormatter,
                 editor: {
                     type: 'text',//NumberEditor,
                     options: {
@@ -720,7 +632,7 @@ var InitGrid = () => {
                     return '<img src="' + props.value + '" height="30"/>';
                 },
                 editor: {
-                    type: ImageEditor,
+                    type: 'image',
                     options: {
 
                     }

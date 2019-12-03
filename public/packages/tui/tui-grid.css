@@ -259,7 +259,7 @@
   position: relative;
 }
 .tui-grid-cell-summary {
-  padding: 0 12px;
+  padding: 4px 5px;
 }
 .tui-grid-cell-disabled input[type='text'],
 .tui-grid-cell-disabled input[type='number'],
@@ -436,7 +436,7 @@
 .tui-grid-summary-area {
   position: relative;
   margin-top: -18px;
-  border-top: 1px solid;
+  border-top: 1px solid #ccc;
   overflow-y: hidden;
   overflow-x: scroll;
 }
@@ -1045,12 +1045,19 @@
     box-shadow: 2px 1px 6px #ccc;
     border-radius: 0;
 }
+.tui-grid-editor-dropdown .dropdown-menu .tui-grid-dropdown-filter{
+  padding: 0 10px;
+}
+.tui-grid-editor-dropdown .dropdown-menu .tui-grid-dropdown-filter input[type='text']{
+  padding: 4px 8px;
+}
 .tui-grid-editor-dropdown .dropdown-menu li > ul{
   /* padding-left: 24px; */
 }
 .tui-grid-editor-dropdown .dropdown-menu li > a:hover{
   background: #f0f0f0;
 }
+.tui-grid-editor-dropdown .dropdown-menu li.active > a,
 .tui-grid-editor-dropdown .dropdown-menu li > a.active{
   background: #03A9F4;
   color:#fff
@@ -1285,16 +1292,23 @@ input[type=checkbox]:checked~.custom-input:after {
   width: 220px;
 }
 .tui-grid-filter-btns{
-  display: flex;
+  /* display: flex; */
   padding: 2px 7px;
 }
 .tui-grid-filter-btns>span+span{
   border-left:0;
 }
 .tui-grid-filter-btns>span{
-  border: 1px solid #ccc;
-  padding: 4px;
+  /* border: 1px solid #ccc; */
+  padding: 2px;
+  text-decoration: underline;
   text-align: center;
-  width: 50%;
+  /* width: 50%; */
   cursor: pointer;
+  display: block;
+}
+.tui-grid-searching{
+  color:#999;
+  text-align: center;
+  padding: 40px 0;
 }
