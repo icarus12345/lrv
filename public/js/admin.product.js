@@ -61,6 +61,8 @@ CategoryEditor = window.CategoryEditor || class CategoryEditor {
             }
             addOptions(this.el, rs)
             el.value = String(props.value);
+        }).catch(function(error){
+            console.log('Promise Reject')
         })
 
 
@@ -138,6 +140,8 @@ DropdownEditor = window.DropdownEditor || class DropdownEditor {
                             view: window,
                     }));
                 })
+        }).catch(function(error){
+            console.log('Promise Reject')
         })
 
 
@@ -202,6 +206,8 @@ CategoryRenderer = window.CategoryRenderer || class CategoryRenderer {
             let selectedCategory = searchTree(rs, props.value)
             if (selectedCategory) self.el.innerHTML = selectedCategory.name;
             else self.el.innerHTML = '';
+        }).catch(function(error){
+            console.log('Promise Reject')
         })
 
     }

@@ -183,7 +183,7 @@
   border-width: 1px;
   white-space: nowrap;
   box-sizing: border-box;
-  margin: 0 0 0 -1px;
+  margin: 0 0 0 0px;
 }
 .tui-grid-layer-editing textarea {
   position: absolute;
@@ -442,7 +442,7 @@
 }
 .tui-grid-no-scroll-x .tui-grid-summary-area {
   margin-top: -1px;
-  margin-bottom: 1px;
+  margin-bottom: 0px;
   overflow-x: hidden;
 }
 .tui-grid-no-scroll-x .tui-grid-summary-area-right {
@@ -1254,7 +1254,7 @@ input[type=checkbox]:checked~.custom-input:after {
   visibility: visible;
   visibility: initial
 }
-.tui-grid-cell-loading{
+td.tui-grid-cell-loading{
   position: relative;
 }
 .tui-grid-cell-loading:after{
@@ -1311,4 +1311,13 @@ input[type=checkbox]:checked~.custom-input:after {
   color:#999;
   text-align: center;
   padding: 40px 0;
+}
+.tui-grid-cell {
+  /* background-color: #f4f4f4; */
+  /* border-color: #eee; */
+  border-left-width: 0;
+  border-right-width: 0;
+  /* border-top-width: 1px; */
+  /* border-bottom-width: 1px; */
+  /* color: #333; */
 }

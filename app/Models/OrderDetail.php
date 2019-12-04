@@ -31,6 +31,24 @@ class OrderDetail extends Model
     {
         return $this->belongsTo(\App\Models\Product::class);
     }
+
+    public function setQtyAttribute($qty)
+	{
+		$this->attributes['qty'] = $qty;
+		$this->attributes['amount'] = $qty * $this->attributes['price_with_discount'];
+    }
+    
+    public function setProductIdAttribute($product_id)
+	{
+        $this->attributes['product_id'] = $product_id;
+        $product = $this->product;
+        if($product){
+            
+            $this->attributes['price'] = $product->price;
+            $this->attributes['price_with_discount'] = $product->price_with_discount;
+            $this->attributes['amount'] = $this->attributes['qty'] * $this->attributes['price_with_discount'];
+        }
+	}
 	
 	public function getProductNameAttribute()
     {

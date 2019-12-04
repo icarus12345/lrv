@@ -18,6 +18,7 @@ $factory->define(Product::class, function (Faker $faker) {
 		'desc_vi' => $faker->text(191),
 		'desc_en' => $faker->text(191),
 		'instock' => rand(10,50),
+		'rating' => rand(1,5),
 		'instock' => rand(0,150),
 		'discount' => rand(0,50),
 		'price' => rand(100,500)*1000,

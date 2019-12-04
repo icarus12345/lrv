@@ -31,6 +31,7 @@ class CreateOrdersTable extends Migration
             $table->decimal('tax_amount', 11, 2)->default(0);
             $table->boolean('flat_rate')->default(false);
             $table->decimal('ship_amount', 11, 2)->default(0);
+            $table->integer('discount')->nullable()->default(0);
             $table->decimal('discount_amount', 11, 2)->default(0);
             $table->decimal('total_amount', 11, 2)->default(0);
             $table->decimal('billing_amount', 11, 2)->default(0);

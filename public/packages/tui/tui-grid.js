@@ -2889,6 +2889,8 @@ function setValue(store, rowKey, columnName, value, editor) {
         var promise = targetColumn.onCellUpdate(gridEvent);
         if(promise) promise.then(function(){
             // hide loading
+        }).catch(function(error){
+            console.log('Promise Reject')
         })
     }
 }
@@ -6411,6 +6413,8 @@ var ListFilterRow = /** @class */ (function (_super) {
                     }
                     addItem(_this.listEl, rs)
                     _this.updateLabel()
+                }).catch(function(error){
+                    console.log('Promise Reject')
                 })
             }
             _this.updateLabel()
@@ -10306,33 +10310,68 @@ var SelectEditor = /** @class */ (function () {
         var el = document.createElement('select');
         var options = props.columnInfo.editor.options;
         var listItems = editor_1.getListItems(props);
-        listItems.forEach(function (_a) {
-            var text = _a.text, value = _a.value;
-            el.appendChild(_this.createOptions(text, value));
-        });
-        el.value = String(props.value);
+        var displayField = options?(options.displayField||'text'):'text';
+        var valueField = options?(options.valueField||'value'):'value';
+        this.createOptions = function (text, value) {
+            var option = document.createElement('option');
+            option.setAttribute('value', String(value));
+            option.innerText = text;
+            return option;
+        };
+        
+        if(options.source){
+            if(typeof options.source == 'function') {
+                var source = options.source(props);
+                if(source && source.then){
+                    // promise
+                    _this.hasLoading = true
+                    source.then(function(data){
+                        if(data){
+
+                            data.forEach(function (_a) {
+                                var text = _a[displayField], value = _a[valueField];
+                                el.appendChild(_this.createOptions(text, value));
+                            });
+                            el.value = String(props.value);
+                        }
+                        _this.el.parentNode.classList.remove('tui-grid-cell-loading')
+                    }).catch(function(error){
+                        console.log('Promise Reject')
+                        _this.el.parentNode.classList.remove('tui-grid-cell-loading')
+                    })
+                } else {
+                    listItems = source
+                }
+            } else {
+                listItems = source
+            }
+        }
+        if(listItems) {
+            listItems.forEach(function (_a) {
+                var text = _a[displayField], value = _a[valueField];
+                el.appendChild(_this.createOptions(text, value));
+            });
+            el.value = String(props.value);
+        }
         if(options && options.attributes){
             for(let attr in options.attributes){
                 el[attr] = options.attributes[attr];
             }
         }
         this.el = el;
+        this.getElement = function () {
+            return this.el;
+        };
+        this.getValue = function () {
+            return this.el.value;
+        };
+        this.mounted = function () {
+            if(this.hasLoading) {
+                this.el.parentNode.classList.add('tui-grid-cell-loading')
+            }
+            this.el.focus();
+        };
     }
-    SelectEditor.prototype.createOptions = function (text, value) {
-        var option = document.createElement('option');
-        option.setAttribute('value', String(value));
-        option.innerText = text;
-        return option;
-    };
-    SelectEditor.prototype.getElement = function () {
-        return this.el;
-    };
-    SelectEditor.prototype.getValue = function () {
-        return this.el.value;
-    };
-    SelectEditor.prototype.mounted = function () {
-        this.el.focus();
-    };
     return SelectEditor;
 }());
 exports.SelectEditor = SelectEditor;
@@ -14747,7 +14786,7 @@ exports.presetDefault = {
         showVerticalBorder: false
     },
     frozenBorder: {
-        border: '#aaa'
+        border: '#ddd'
     },
     area: {
         header: {

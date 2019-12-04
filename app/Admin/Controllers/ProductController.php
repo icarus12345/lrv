@@ -26,7 +26,13 @@ class ProductController extends AdminController
      */
     protected $title = 'App\Models\Product';
 
-	public function list(Request $request){
+	public function apiDetail(Request $request, $id){
+		return response()->json([
+			"result"=> true,
+			"data"=> Product::with(['colors','sizes'])->find($id)
+		]);
+	}
+	public function apiList(Request $request){
 		$perpage = $request->perPage??10;
 		$sort_column = $request->sortColumn??'id';
 		$sort_ascending = $request->sortAscending=="true"?'asc':'desc';

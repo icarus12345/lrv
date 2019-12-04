@@ -107,6 +107,8 @@ function ProductDropdownEditor(props){
                 productPromise.then((data)=>{
                     var items = data.contents;
                     renderItem(items);
+                }).catch(function(error){
+                    console.log('Promise Reject')
                 })
                 return;
             }
@@ -196,6 +198,8 @@ function ProductDropdownEditor(props){
         var items = data.contents;
         self.setSelectedItem(data.selected);
         renderItem(items);
+    }).catch(function(error){
+        console.log('Promise Reject')
     })
 
     this.setSelectedItem = (item)=>{
@@ -824,7 +828,50 @@ var InitOrderGrid = () => {
 }
 
 var InitOrderDetailGrid = (id) => {
-    if(window.gridDetail) gridDetail.destroy()
+    if(window.gridDetail) gridDetail.destroy();
+    var onCellUpdated = (ev) => {
+        let row = gridDetail.getRow(ev.rowKey)
+        // let params = {}
+        // params[ev.columnName] = ev.value;
+        let data = {
+            pk: row.id,
+            name: ev.columnName,
+            value: ev.value,
+            _editable: 1,
+            _token: $.admin.token,
+        }
+        NProgress.start()
+        gridDetail.addCellClassName(ev.rowKey,ev.columnName, 'tui-grid-cell-loading')
+        $.ajax({
+            method: 'PUT',
+            url: 'order-detail/' + row.id,
+            data: data,
+            complete: function(xhr, stat) {
+                NProgress.done();
+                gridDetail.removeCellClassName(ev.rowKey,ev.columnName,'tui-grid-cell-loading')
+            },
+            success: function(rs) {
+                //resolve(rs)
+                Helper.Resolver(rs);
+            },
+            error: function(request) {
+                Helper.Catcher(request)
+            }
+        });
+    }
+    $.ajax({
+        method: 'get',
+        url: '/api/admin/orders-detail/' + id,
+        complete: function(xhr, stat) {
+            NProgress.done();
+        },
+        success: function (rs) {
+            gridDetail.resetData(rs.data.contents)
+        },
+        error: function(rs) {
+            
+        }
+    });
     window.gridDetail = new tui.Grid({
         el: document.getElementById('tui-grid-detail'),
         rowHeight: 32,
@@ -834,14 +881,14 @@ var InitOrderDetailGrid = (id) => {
         }],
         scrollX: false,
         scrollY: false,
-        data: {
-            api: {
-                readData: {
-                    url: '/api/admin/orders-detail/'+id,
-                    method: 'GET',
-                },
-            },
-        },
+        // data: {
+        //     api: {
+        //         readData: {
+        //             url: '/api/admin/orders-detail/'+id,
+        //             method: 'GET',
+        //         },
+        //     },
+        // },
         header: {
             align: 'left',
             height: 36,
@@ -884,8 +931,18 @@ var InitOrderDetailGrid = (id) => {
                 onBeforeChange: (ev)=>{
                 },
                 onAfterChange: (ev)=>{
+                    var row = gridDetail.getRow(ev.rowKey)
                     var editor = ev.editor;
-                    gridDetail.setValue(ev.rowKey,'product_name',editor.getData().name)
+                    var name = editor.getData().name;
+                    var price = +editor.getData().price;
+                    var discount = +editor.getData().discount;
+                    console.log(editor.getData(),'editor.getData()')
+                    var price_with_discount = price - (price*discount/100);
+                    var amount = price_with_discount * row.qty;
+                    gridDetail.setValue(ev.rowKey,'amount', amount)
+                    gridDetail.setValue(ev.rowKey,'product_name', name)
+                    gridDetail.setValue(ev.rowKey,'price_with_discount', price_with_discount)
+                    onCellUpdated(ev)
                 },
                 editor: {
                     // type: 'combobox',//
@@ -902,10 +959,66 @@ var InitOrderDetailGrid = (id) => {
                 width: 50,
                 name: 'color',
                 // editor: {type: 'image'}
+                editor: {
+                    // type: 'combobox',//
+                    type: 'select',
+                    options: {
+                        attributes: {
+                            required : 'required'
+                        },
+                        source: function(props){
+                            // return [{text: "Red", value: "red"}]
+                            var row = gridDetail.getRow(props.rowKey)
+                            return new Promise(function(resolve, reject){
+                                $.ajax({
+                                    method: 'GET',
+                                    url: '/api/admin/products/'+ row.product_id,
+                                    success: function(rs) {
+                                        resolve(rs.data.colors)
+                                    },
+                                    error: function(request) {
+                                        reject(request);
+                                    }
+                                });
+                            })
+                        },
+                        displayField: 'name',
+                        valueField: 'name',
+                    }
+                },
+                onAfterChange: onCellUpdated
             },{
                 header: 'Size',
                 width: 50,
                 name: 'size',
+                editor: {
+                    // type: 'combobox',//
+                    type: 'select',
+                    options: {
+                        attributes: {
+                            required : 'required'
+                        },
+                        source: function(props){
+                            // return [{text: "Red", value: "red"}]
+                            var row = gridDetail.getRow(props.rowKey)
+                            return new Promise(function(resolve, reject){
+                                $.ajax({
+                                    method: 'GET',
+                                    url: '/api/admin/products/'+ row.product_id,
+                                    success: function(rs) {
+                                        resolve(rs.data.sizes)
+                                    },
+                                    error: function(request) {
+                                        reject(request);
+                                    }
+                                });
+                            })
+                        },
+                        displayField: 'name',
+                        valueField: 'name',
+                    }
+                },
+                onAfterChange: onCellUpdated
             },{
                 header: 'Qty',
                 name: 'qty',
@@ -928,6 +1041,7 @@ var InitOrderDetailGrid = (id) => {
                     var row = gridDetail.getRow(ev.rowKey)
                     var amount = row.price_with_discount * ev.value;
                     gridDetail.setValue(ev.rowKey,'amount', amount)
+                    onCellUpdated(ev)
                 },
             },{
                 header: 'Sale Price',

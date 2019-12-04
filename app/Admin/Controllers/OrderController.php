@@ -17,17 +17,18 @@ class OrderController extends AdminController
      *
      * @var string
      */
-    protected $title = 'App\Models\Order';
+    protected $title = 'Orders';
 
     
     public function orderDetailList(Request $request, $order_id){
 		$order = Order::find($order_id);
-            $order_details = $order->order_details()->take(10)->get()->map(function ($order_detail) {
-                return $order_detail->only(['id', 'product_name', 'color','size','qty','price_with_discount','product_id','amount']);
-            });
+        $order_details = $order->order_details()->take(10)->get()->map(function ($order_detail) {
+            return $order_detail->only(['id', 'product_name', 'color','size','qty','price_with_discount','product_id','amount']);
+        });
 		return response()->json([
 			"result"=> true,
 			"data"=> [
+                "order" => $order,
 				"contents"=> $order_details->toArray(),
 			]
 		]);

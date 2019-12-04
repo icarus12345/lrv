@@ -20,11 +20,12 @@ class Order extends BaseModel
         'city',
         'postcode_zip',
         'phone',
-        'coupon_id',
+        'coupon_code',
         'amount',
         'tax_amount',
         'flat_rate',
         'ship_amount',
+        'discount',
         'discount_amount',
         'total_amount',
         'billing_amount',
@@ -94,5 +95,42 @@ class Order extends BaseModel
 			$query->where('status','Canceled');
 		}
         return $query;
+    }
+
+    public function caculator(){
+
+        $amount = 0;
+        $tax_amount = 0;
+        $ship_amount = $this->ship_amount;
+        $discount = $this->discount;
+        $discount_amount = $this->discount_amount;
+        $total_amount = 0;
+        foreach ($this->order_details as $detail) {
+            $product = $detail->product;
+            $qty = $detail->qty;
+            $subAmount = 0;
+            if ($product) {
+                $price = $product->price;
+                $price_with_discount = $product->price_with_discount;
+                $subAmount = $qty * $price_with_discount;
+            }
+            $amount += $subAmount;
+        }
+        
+
+        
+        if($discount){
+            $discount_amount = $amount * $discount / 100;
+        }
+        
+        $total_amount = $amount - $discount_amount + $ship_amount;
+        
+        $tax = \App\Helpers::getTax();
+        $tax_amount = $total_amount * $tax / 100;
+        
+        $this->amount = $amount;
+        $this->discount_amount = $discount_amount;
+        $this->tax_amount = $tax_amount;
+        $this->total_amount = $total_amount + $tax_amount;
     }
 }
