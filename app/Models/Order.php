@@ -110,8 +110,8 @@ class Order extends BaseModel
             $qty = $detail->qty;
             $subAmount = 0;
             if ($product) {
-                $price = $product->price;
-                $price_with_discount = $product->price_with_discount;
+                $price = $detail->price;
+                $price_with_discount = $detail->price_with_discount;
                 $subAmount = $qty * $price_with_discount;
             }
             $amount += $subAmount;

@@ -859,19 +859,19 @@ var InitOrderDetailGrid = (id) => {
             }
         });
     }
-    $.ajax({
-        method: 'get',
-        url: '/api/admin/orders-detail/' + id,
-        complete: function(xhr, stat) {
-            NProgress.done();
-        },
-        success: function (rs) {
-            gridDetail.resetData(rs.data.contents)
-        },
-        error: function(rs) {
+    // $.ajax({
+    //     method: 'get',
+    //     url: '/api/admin/orders-detail/' + id,
+    //     complete: function(xhr, stat) {
+    //         NProgress.done();
+    //     },
+    //     success: function (rs) {
+    //         gridDetail.resetData(rs.data.contents)
+    //     },
+    //     error: function(rs) {
             
-        }
-    });
+    //     }
+    // });
     window.gridDetail = new tui.Grid({
         el: document.getElementById('tui-grid-detail'),
         rowHeight: 32,
@@ -881,14 +881,14 @@ var InitOrderDetailGrid = (id) => {
         }],
         scrollX: false,
         scrollY: false,
-        // data: {
-        //     api: {
-        //         readData: {
-        //             url: '/api/admin/orders-detail/'+id,
-        //             method: 'GET',
-        //         },
-        //     },
-        // },
+        data: {
+            api: {
+                readData: {
+                    url: '/api/admin/orders-detail/'+id,
+                    method: 'GET',
+                },
+            },
+        },
         header: {
             align: 'left',
             height: 36,
@@ -933,15 +933,19 @@ var InitOrderDetailGrid = (id) => {
                 onAfterChange: (ev)=>{
                     var row = gridDetail.getRow(ev.rowKey)
                     var editor = ev.editor;
-                    var name = editor.getData().name;
-                    var price = +editor.getData().price;
-                    var discount = +editor.getData().discount;
-                    console.log(editor.getData(),'editor.getData()')
-                    var price_with_discount = price - (price*discount/100);
-                    var amount = price_with_discount * row.qty;
-                    gridDetail.setValue(ev.rowKey,'amount', amount)
-                    gridDetail.setValue(ev.rowKey,'product_name', name)
-                    gridDetail.setValue(ev.rowKey,'price_with_discount', price_with_discount)
+                    var data = editor.getData();
+                    if(data){
+
+                        var name = editor.getData().name;
+                        var price = +editor.getData().price;
+                        var discount = +editor.getData().discount;
+                        console.log(editor.getData(),'editor.getData()')
+                        var price_with_discount = price - (price*discount/100);
+                        var amount = price_with_discount * row.qty;
+                        gridDetail.setValue(ev.rowKey,'amount', amount)
+                        gridDetail.setValue(ev.rowKey,'product_name', name)
+                        gridDetail.setValue(ev.rowKey,'price_with_discount', price_with_discount)
+                    }
                     onCellUpdated(ev)
                 },
                 editor: {
@@ -1064,7 +1068,53 @@ var InitOrderDetailGrid = (id) => {
                         // currencyDisplay: '$',
                     }).format(+value);
                 }
-            },
+            },{
+                header: '#',
+                name: 'id',
+                className: "tui-grid-cell-action",
+                width: 40,
+                minWidth: 40,
+                align: 'center',
+                renderer: {
+                    type: function(props) {
+                        let self = this;
+                        let $el = $([
+                            '<div class="tui-grid-action-dropdown">',
+                            '   <a href="JavaScript:" data-action="delete" type="button" class="btn btn-default"><i class="fa fa-trash-o"></i></a>',
+                            '</div>'
+                        ].join(''));
+                        const el = $el[0];
+                        this.el = el;
+                        $el.find('[data-action="delete"]').click(()=>{
+                            Helper.Encore_Admin_Grid_Actions_Delete({
+                                id: props.value,
+                                model: 'OrderDetail'
+                            },()=>{
+                                if(gridDetail.getRowCount()>1){
+                                    gridDetail.removeRow(props.rowKey)
+                                }else{
+                                    $('#tui-grid-detail-modal').modal('hide');
+                                    var cell = grid.getFocusedCell();
+                                    grid.removeRow(cell.rowKey)
+                                }
+                            })
+                        })
+                        //this.render(props);
+                    
+                        this.getElement = function() {
+                            return this.el;
+                        }
+                    
+                        this.render = function(props) {
+                            //this.el.value = String(props.value);
+                        }
+                    
+                        this.mounted = function() {
+                            //this.el.select();
+                        }
+                    },
+                }
+            }
             
         ]
     });

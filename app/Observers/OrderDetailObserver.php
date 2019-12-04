@@ -17,7 +17,7 @@ class OrderDetailObserver
     {
         //
     }
-
+    
     /**
      * Handle the order "updated" event.
      *
@@ -69,10 +69,18 @@ class OrderDetailObserver
      * @param  \App\Order  $order
      * @return void
      */
-    public function deleted(Order $order)
+    public function deleted(OrderDetail $orderDetail)
     {
         //
-        $order->order_details()->delete();
+        $order = $orderDetail->order;
+        if($order->order_details()->count()){
+
+            $order->caculator();
+            $order->save();
+        }else{
+            $order->delete();
+        }
+
     }
 
     /**
@@ -81,7 +89,7 @@ class OrderDetailObserver
      * @param  \App\Order  $order
      * @return void
      */
-    public function restored(Order $order)
+    public function restored(OrderDetail $orderDetail)
     {
         //
     }
@@ -92,7 +100,7 @@ class OrderDetailObserver
      * @param  \App\Order  $order
      * @return void
      */
-    public function forceDeleted(Order $order)
+    public function forceDeleted(OrderDetail $orderDetail)
     {
         //
     }
