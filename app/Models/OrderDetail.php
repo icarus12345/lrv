@@ -41,9 +41,8 @@ class OrderDetail extends Model
     public function setProductIdAttribute($product_id)
 	{
         $this->attributes['product_id'] = $product_id;
-        $product = $this->product;
+        $product = $this->product()->first();
         if($product){
-            
             $this->attributes['price'] = $product->price;
             $this->attributes['price_with_discount'] = $product->price_with_discount;
             $this->attributes['amount'] = $this->attributes['qty'] * $this->attributes['price_with_discount'];

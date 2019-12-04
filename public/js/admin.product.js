@@ -309,7 +309,7 @@ var InitGrid = () => {
             type: 'checkbox',
             align: 'center',
             header: `
-                <label for="all-checkbox" class="checkbox">
+                <label class="checkbox">
                     <input type="checkbox" id="all-checkbox" class="hidden-input" name="_checked" />
                     <span class="custom-input"></span>
                 </label>
@@ -320,7 +320,6 @@ var InitGrid = () => {
             
                     const label = document.createElement('label');
                     label.className = 'checkbox';
-                    label.setAttribute('for', String(rowKey));
             
                     const hiddenInput = document.createElement('input');
                     hiddenInput.className = 'hidden-input';

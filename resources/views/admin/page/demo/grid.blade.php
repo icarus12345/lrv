@@ -22,11 +22,11 @@
     </div>
     <div class="pull-right">
         <div class="btn-group pull-right" style="margin-right: 10px">
-            <a href="/admin/product?_export_=all" target="_blank" class="btn btn-sm btn-twitter" title="Export"><i class="fa fa-download"></i><span class="hidden-xs"> Export</span></a>
+            <a href="product?_export_=all" target="_blank" class="btn btn-sm btn-twitter" title="Export"><i class="fa fa-download"></i><span class="hidden-xs"> Export</span></a>
         </div>
                 
         <div class="btn-group pull-right grid-create-btn" style="margin-right: 10px">
-            <a href="/admin/product/create" class="btn btn-sm btn-success" title="New">
+            <a href="product/create" class="btn btn-sm btn-success" title="New">
                 <i class="fa fa-plus"></i><span class="hidden-xs">&nbsp;&nbsp;New</span>
             </a>
         </div>

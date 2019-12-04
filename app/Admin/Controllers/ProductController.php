@@ -24,7 +24,7 @@ class ProductController extends AdminController
      *
      * @var string
      */
-    protected $title = 'App\Models\Product';
+    protected $title = 'Product';
 
 	public function apiDetail(Request $request, $id){
 		return response()->json([
@@ -78,7 +78,10 @@ class ProductController extends AdminController
      */
     protected function grid()
     {
-		return view('admin.page.demo.grid');//->render();
+		if(!$this->request->_export_){
+
+			return view('admin.page.demo.grid');//->render();
+		}
         $grid = new Grid(new Product);
 		$grid->model()->where('type', $this->request->type);
 

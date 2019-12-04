@@ -14,7 +14,7 @@ function ProductDropdownEditor(props){
     var display_field = columnInfo.display_field;
     var grid = props.grid;
     let $el = $([
-        '<div class="tui-grid-editor-dropdown">',
+        '<div class="tui-grid-editor-dropdown open">',
         '   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">',
         '       <span></span>',
         '       <span class="caret"></span>',
@@ -295,24 +295,23 @@ var InitOrderGrid = () => {
             type: 'checkbox',
             align: 'center',
             header: `
-                <label for="all-checkbox" class="checkbox">
+                <label class="checkbox">
                     <input type="checkbox" id="all-checkbox" class="hidden-input" name="_checked" />
                     <span class="custom-input"></span>
                 </label>
             `,
             renderer: {
                 type: function(props) {
-                    const { grid, rowKey } = props;
+                    var { grid, rowKey } = props;
             
-                    const label = document.createElement('label');
+                    var label = document.createElement('label');
                     label.className = 'checkbox';
-                    label.setAttribute('for', String(rowKey));
             
-                    const hiddenInput = document.createElement('input');
+                    var hiddenInput = document.createElement('input');
                     hiddenInput.className = 'hidden-input';
                     hiddenInput.id = String(rowKey);
             
-                    const customInput = document.createElement('span');
+                    var customInput = document.createElement('span');
                     customInput.className = 'custom-input';
             
                     label.appendChild(hiddenInput);
@@ -320,11 +319,11 @@ var InitOrderGrid = () => {
             
                     hiddenInput.type = 'checkbox';
                     hiddenInput.addEventListener('change', () => {
-                    if (hiddenInput.checked) {
-                        grid.check(rowKey);
-                    } else {
-                        grid.uncheck(rowKey);
-                    }
+                        if (hiddenInput.checked) {
+                            grid.check(rowKey);
+                        } else {
+                            grid.uncheck(rowKey);
+                        }
                     });
             
                     this.el = label;
@@ -336,8 +335,8 @@ var InitOrderGrid = () => {
                     }
                     
                     this.render = function(props) {
-                        const hiddenInput = this.el.querySelector('.hidden-input');
-                        const checked = Boolean(props.value);
+                        var hiddenInput = this.el.querySelector('.hidden-input');
+                        var checked = Boolean(props.value);
                         
                         hiddenInput.checked = checked;
                     }
@@ -423,7 +422,7 @@ var InitOrderGrid = () => {
             // minWidth: 300
         },
         columns: [{
-                header: '#',
+                header: '',
                 name: 'id',
                 className: "tui-grid-cell-action",
                 width: 60,
@@ -673,17 +672,17 @@ var InitOrderGrid = () => {
                 width: 60,
                 renderer: {
                     type: function (props){
-                        const { grid, rowKey } = props;
+                        var { grid, rowKey } = props;
                 
-                        const label = document.createElement('label');
+                        var label = document.createElement('label');
                         label.className = 'checkbox';
-                        label.setAttribute('for', String(rowKey));
+                        // label.setAttribute('for', String(rowKey));
                 
-                        const hiddenInput = document.createElement('input');
+                        var hiddenInput = document.createElement('input');
                         hiddenInput.className = 'hidden-input';
                         hiddenInput.id = String(rowKey);
                 
-                        const customInput = document.createElement('span');
+                        var customInput = document.createElement('span');
                         customInput.className = 'custom-input';
                 
                         label.appendChild(hiddenInput);
@@ -691,13 +690,13 @@ var InitOrderGrid = () => {
                 
                         hiddenInput.type = 'checkbox';
                         hiddenInput.addEventListener('change', () => {
-                        if (hiddenInput.checked) {
-                            console.log('^^')
-                            //grid.check(rowKey);
-                        } else {
-                            console.log('^^')
-                            //grid.uncheck(rowKey);
-                        }
+                            if (hiddenInput.checked) {
+                                console.log('^^')
+                                //grid.check(rowKey);
+                            } else {
+                                console.log('^^')
+                                //grid.uncheck(rowKey);
+                            }
                         });
                 
                         this.el = label;
@@ -709,11 +708,11 @@ var InitOrderGrid = () => {
                         }
                 
                         this.render = function (props) {
-                            const hiddenInput = this.el.querySelector('.hidden-input');
+                            var hiddenInput = this.el.querySelector('.hidden-input');
                             
                         }
                         this.render(props);
-                        const checked = Boolean(props.value);
+                        var checked = Boolean(props.value);
                     
                             hiddenInput.checked = checked;
                     }
@@ -936,11 +935,12 @@ var InitOrderDetailGrid = (id) => {
                     var data = editor.getData();
                     if(data){
 
-                        var name = editor.getData().name;
-                        var price = +editor.getData().price;
-                        var discount = +editor.getData().discount;
-                        console.log(editor.getData(),'editor.getData()')
-                        var price_with_discount = price - (price*discount/100);
+                        var name = data.name;
+                        var price = +data.price;
+                        var discount = +data.discount;
+                        var price_with_discount = +data.price_with_discount;
+                        console.log(data,'editor.getData()')
+                        // var price_with_discount = price - (price*discount/100);
                         var amount = price_with_discount * row.qty;
                         gridDetail.setValue(ev.rowKey,'amount', amount)
                         gridDetail.setValue(ev.rowKey,'product_name', name)
@@ -1037,15 +1037,31 @@ var InitOrderDetailGrid = (id) => {
                             style:'text-align:right;',
                             //min: 0,
                             //max: 100,
-                            pattern: "^([1-9][0-9]{0,4})"
+                            pattern: "^([1-9][0-9]{0,4})|0"
                         }
                     }
                 },
                 onAfterChange: (ev)=>{
                     var row = gridDetail.getRow(ev.rowKey)
-                    var amount = row.price_with_discount * ev.value;
-                    gridDetail.setValue(ev.rowKey,'amount', amount)
-                    onCellUpdated(ev)
+                    if(ev.value == 0){
+                        Helper.Encore_Admin_Grid_Actions_Delete({
+                            id: row.id,
+                            model: 'OrderDetail'
+                        },()=>{
+                            if(gridDetail.getRowCount()>1){
+                                gridDetail.removeRow(ev.rowKey)
+                            }else{
+                                $('#tui-grid-detail-modal').modal('hide');
+                                var cell = grid.getFocusedCell();
+                                grid.removeRow(cell.rowKey)
+                            }
+                        })
+                    } else {
+
+                        var amount = row.price_with_discount * ev.value;
+                        gridDetail.setValue(ev.rowKey,'amount', amount)
+                        onCellUpdated(ev)
+                    }
                 },
             },{
                 header: 'Sale Price',
@@ -1069,7 +1085,7 @@ var InitOrderDetailGrid = (id) => {
                     }).format(+value);
                 }
             },{
-                header: '#',
+                header: '',
                 name: 'id',
                 className: "tui-grid-cell-action",
                 width: 40,

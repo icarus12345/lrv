@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Models\Order;
+use App\Models\Product;
 use App\Models\OrderDetail;
 
 class OrderDetailObserver
@@ -27,40 +27,58 @@ class OrderDetailObserver
     public function updated(OrderDetail $orderDetail)
     {
         //
-        $order = $orderDetail->order;
-        $avaiable = [
-            'Approved',
-            'Unpaid',
-            'Paid',
-            'Shipping',
-            'Done',
-        ];
-        $unavaiable = [
-            'Requested',
-            'Canceled',
-        ];
-        if(
-            $orderDetail->getOriginal('qty') != $orderDetail->qty ||
-            $orderDetail->getOriginal('product_id') != $orderDetail->product_id
-        ){
-            // update order amount
-            $order->caculator();
-            $order->save();
-
-            // check & update stock
+        // if($orderDetail->qty == 0) {
+        //     $orderDetail->delete();
+        // } else {
+            $order = $orderDetail->order;
+            $avaiable = [
+                'Approved',
+                'Unpaid',
+                'Paid',
+                'Shipping',
+                'Done',
+            ];
+            $unavaiable = [
+                'Requested',
+                'Canceled',
+            ];
             if(
-                in_array($order->status, $avaiable) &&
-                $orderDetail->getOriginal('qty') != $orderDetail->qty
+                $orderDetail->getOriginal('qty') != $orderDetail->qty ||
+                $orderDetail->getOriginal('product_id') != $orderDetail->product_id
             ){
-                // update stock
-                $product = $orderDetail->product;
-                if ($product) {
-                    $diffQty = $orderDetail->qty - $orderDetail->getOriginal('qty');
-                    $product->instock -= $diffQty;
-                    $product->save();
+                // update order amount
+                $order->caculator();
+                $order->save();
+
+                // check & update stock
+                if(
+                    in_array($order->status, $avaiable) &&
+                    $orderDetail->getOriginal('qty') != $orderDetail->qty
+                ){
+                    // update stock
+                    $product = Product::find($orderDetail->product_id);
+                    if ($product) {
+                        $diffQty = $orderDetail->qty - $orderDetail->getOriginal('qty');
+                        $product->instock -= $diffQty;
+                        $product->save();
+                    }
+                }elseif($orderDetail->getOriginal('product_id') != $orderDetail->product_id){
+                    // update stock
+                    $product = Product::find($orderDetail->product_id);
+                    if ($product) {
+                        $diffQty = $orderDetail->qty;
+                        $product->instock -= $diffQty;
+                        $product->save();
+                    }
+                    $product = Product::find($orderDetail->getOriginal('product_id'));
+                    if ($product) {
+                        $diffQty = $orderDetail->qty;
+                        $product->instock += $diffQty;
+                        $product->save();
+                    }
                 }
             }
-        }
+        // }
     }
 
     /**

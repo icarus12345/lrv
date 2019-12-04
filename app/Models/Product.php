@@ -201,6 +201,7 @@ class Product extends BaseModel
         $attributes['labels'] = $this->labels;
         $attributes['content'] = $this->content;
 		$attributes['image'] = $this->image;
+		$attributes['price_with_discount'] = $this->price_with_discount;
 		//$attributes['colors'] = $this->colors;
 		//$attributes['sizes'] = $this->sizes;
 
@@ -366,13 +367,13 @@ class Product extends BaseModel
 	
 	public function getPriceWithDiscountAttribute()
     {
-		$price = $this->attributes['price'] - $this->attributes['price']*$this->attributes['discount']/100;
+		$price = (float)$this->attributes['price'] - (float)$this->attributes['price']*(int)$this->attributes['discount']/100;
         return $price;
     }
 	
     public function getPriceWithDiscountFormatAttribute()
     {
-		$price = \App\Helpers::formatPrice($this->attributes['price'] - $this->attributes['price']*$this->attributes['discount']/100);
+		$price = \App\Helpers::formatPrice($this->price_with_discount);
         return $price;
     }
 
