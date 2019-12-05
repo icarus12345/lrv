@@ -499,6 +499,11 @@ var InitGrid = () => {
                         attributes: {
                             required: "true",
                             pattern: ".{0,50}"
+                        },
+                        validation: function(editor){
+                            var value = editor.getValue();
+                            if(value == '') return "The Name is required !";
+                            return true;
                         }
                     }
                 },
@@ -562,7 +567,11 @@ var InitGrid = () => {
                             min: 0,
                             style:'text-align:right;',
                             // pattern: "[0-9.]{0,11}"
-                            pattern: "^([1-9][0-9]{0,10}([.][0-9]{1,2})?)|^(0.[0-9]{1,2})|0"
+                            pattern: "^([1-9][0-9]{0,8}([.][0-9]{1,2})?)|^(0.[0-9]{1,2})|0",
+                        },
+                        validity: {
+                            patternMismatch: 'The Price must be to numeric and in range [1-100M]',
+                            valueMissing: 'The Price is required !'
                         }
                     }
                 },

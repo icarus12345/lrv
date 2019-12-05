@@ -6035,6 +6035,7 @@ var HeaderAreaComp = /** @class */ (function (_super) {
         _this.startSelectedName = null;
         _this.handleDblClick = function (ev) {
             ev.stopPropagation();
+            ev.preventDefault();
         };
         _this.handleMouseMove = function (ev) {
             var _a = dom_1.getCoordinateWithOffset(ev.pageX, ev.pageY), pageX = _a[0], pageY = _a[1];
@@ -6049,16 +6050,16 @@ var HeaderAreaComp = /** @class */ (function (_super) {
             if(_this.context.store.cellEditor){
                 let celleditor = _this.context.store.cellEditor;
                 let validation = celleditor.props.columnInfo.validation
-                
-                if(celleditor.el.checkValidity && !celleditor.el.checkValidity()){
-                    window.event.stopPropagation();
-                    //window.event.defaultPrevented();
-                    setTimeout(()=>{
-                        celleditor.el.focus();
-                    }, 250);
-                    return false;
+                var editingLayerInnerComp = celleditor.EditingLayerInnerComp
+                var isValid = editingLayerInnerComp.checkValidity();
+                if(!isValid || (celleditor.el.checkValidity && !celleditor.el.checkValidity())){
+                        ev.stopPropagation();
+                        ev.preventDefault();
+                        setTimeout(()=>{
+                            celleditor.el.focus();
+                        }, 120);
+                        return false;
                 }
-                
             }
 
             if (
@@ -6288,6 +6289,7 @@ var DatePickerFilterRow = /** @class */ (function (_super) {
         _this.toggleDatePicker = function (ev) {
             _this.datePickerEl.toggle();
             ev.stopPropagation()
+            ev.preventDefault()
         };
         return _this;
     }
@@ -6394,6 +6396,9 @@ var ListFilterRow = /** @class */ (function (_super) {
                             var label = document.createElement('label');
                             var checkbox = document.createElement('input');
                             var span = document.createElement('span');
+
+                            label.classList.add('checkbox');
+                            span.classList.add('custom-input');
                             li.classList.add(dom_1.cls('check-list-item'));
                             checkbox.type="checkbox"
                             checkbox.value=c.id
@@ -6461,6 +6466,7 @@ var ListFilterRow = /** @class */ (function (_super) {
 
         _this.toggleList = function (ev) {
             ev.stopPropagation()
+            ev.preventDefault()
             if(!_this.wrapper){
                 return;
             }
@@ -11527,14 +11533,15 @@ var ContainerComp = /** @class */ (function (_super) {
                     if(ev.target == celleditor.el || $.contains(celleditor.el,ev.target)){
                         return;
                     }
-                    
-                    if(celleditor.el.checkValidity && !celleditor.el.checkValidity()){
-                        window.event.stopPropagation();
-                        //window.event.defaultPrevented();
-                        setTimeout(()=>{
-                            celleditor.el.focus();
-                        }, 250);
-                        return false;
+                    var editingLayerInnerComp = celleditor.EditingLayerInnerComp
+                    var isValid = editingLayerInnerComp.checkValidity();
+                    if(!isValid || (celleditor.el.checkValidity && !celleditor.el.checkValidity())){
+                            ev.stopPropagation();
+                            ev.preventDefault();
+                            setTimeout(()=>{
+                                celleditor.el.focus();
+                            }, 120);
+                            return false;
                     }
                     celleditor.EditingLayerInnerComp.finishEditing(true)
 
@@ -12253,21 +12260,22 @@ var BodyCellComp = /** @class */ (function (_super) {
             var _a = dom_1.getCoordinateWithOffset(ev.pageX, ev.pageY), pageX = _a[0], pageY = _a[1];
             _this.props.dispatch('dragMoveRowHeader', { pageX: pageX, pageY: pageY });
         };
-        _this.handleMouseDown = function (name, rowKey) {
+        _this.handleMouseDown = function (name, rowKey, ev) {
             // Cell mouse down
             console.log('BodyCellComp::handleMouseDown')
             // check validation
             if(_this.context.store.cellEditor){
                 let celleditor = _this.context.store.cellEditor;
                 let validation = celleditor.props.columnInfo.validation
-                
-                if(celleditor.el.checkValidity && !celleditor.el.checkValidity()){
-                    window.event.stopPropagation();
-                    //window.event.defaultPrevented();
-                    setTimeout(()=>{
-                        celleditor.el.focus();
-                    }, 250);
-                    return false;
+                var editingLayerInnerComp = celleditor.EditingLayerInnerComp
+                var isValid = editingLayerInnerComp.checkValidity();
+                if(!isValid || (celleditor.el.checkValidity && !celleditor.el.checkValidity())){
+                        ev.stopPropagation();
+                        ev.preventDefault();
+                        setTimeout(()=>{
+                            celleditor.el.focus();
+                        }, 120);
+                        return false;
                 }
                 
             }
@@ -12368,8 +12376,8 @@ var BodyCellComp = /** @class */ (function (_super) {
             ) : (
                         preact_1.h("td", tslib_1.__assign({}, attrs, rowSpanAttr, { style: style, class: classNames, ref: function (el) {
                             _this.el = el;
-                        }, onMouseDown: function () { 
-                            return _this.handleMouseDown(name, rowKey); 
+                        }, onMouseDown: function (ev) { 
+                            return _this.handleMouseDown(name, rowKey, ev); 
                         } }))
             );
     };
@@ -12415,6 +12423,7 @@ var TreeCellContentsComp = /** @class */ (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.handleClick = function (ev) {
             ev.stopPropagation();
+            ev.preventDefault();
             var _a = _this.props, dispatch = _a.dispatch, rowKey = _a.rowKey;
             var target = ev.target;
             if (dom_1.findParent(target, 'tree-button-collapse')) {
@@ -12934,52 +12943,83 @@ var EditingLayerInnerComp = /** @class */ (function (_super) {
     tslib_1.__extends(EditingLayerInnerComp, _super);
     function EditingLayerInnerComp() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.handleInput = function (ev) {
+            var isValid = _this.checkValidity();
+        }
         _this.handleKeyDown = function (ev) {
             var keyName = keyboard_1.getKeyStrokeString(ev);
             var editor = _this.editor;
+            
             switch (keyName) {
                 case 'enter':
-                        if(editor.el.checkValidity){
-                            if(editor.el.checkValidity())
+                        var isValid = _this.checkValidity();
+                        if(isValid){
+                            if(editor.el.checkValidity){
+                                if(editor.el.checkValidity()){
+                                    _this.finishEditing(true);
+                                }
+                            } else {
                                 _this.finishEditing(true);
-                        } else {
-                            _this.finishEditing(true);
+                            }
                         }
                     break;
                 case 'esc':
-                    _this.finishEditing(false);
+                        console.log('ESC')
+                        _this._valid = true;
+                        _this.editor.getElement().classList.remove('is-invalid')
+                        _this.errorEl.innerHTML = '';
+                        _this.finishEditing(false);
                     break;
                 case 'tab':
-                        if(editor.el.checkValidity){
-                            if(editor.el.checkValidity()){
+                        var isValid = _this.checkValidity();
+                        if(isValid){
+                            if(editor.el.checkValidity){
+                                if(editor.el.checkValidity()){
+                                    _this.moveTabFocus(ev, 'nextCell');
+                                }else{
+                                    setTimeout(()=>{
+                                        editor.el.focus();
+                                    }, 120);
+                                }
+                            } else {
                                 _this.moveTabFocus(ev, 'nextCell');
-                            }else{
-                                setTimeout(()=>{
-                                    editor.el.focus();
-                                }, 250);
                             }
                         } else {
-                            _this.moveTabFocus(ev, 'nextCell');
+                            setTimeout(()=>{
+                                editor.el.focus();
+                            }, 120);
+                            ev.stopPropagation();
+                            ev.preventDefault();
                         }
                     
                     break;
                 case 'shift-tab':
-                        if(editor.el.checkValidity){
-                            if(editor.el.checkValidity()){
+                        var isValid = _this.checkValidity();
+                        if(isValid){
+                            if(editor.el.checkValidity){
+                                if(editor.el.checkValidity()){
+                                    _this.moveTabFocus(ev, 'prevCell');
+                                }else{
+                                    setTimeout(()=>{
+                                        editor.el.focus();
+                                    }, 250);
+                                }
+                            } else {
                                 _this.moveTabFocus(ev, 'prevCell');
-                            }else{
-                                setTimeout(()=>{
-                                    editor.el.focus();
-                                }, 250);
                             }
                         } else {
-                            _this.moveTabFocus(ev, 'prevCell');
+                            setTimeout(()=>{
+                                editor.el.focus();
+                            }, 120);
+                            ev.stopPropagation();
+                            ev.preventDefault();
                         }
                     break;
                 default:
                 // do nothing;
             }
         };
+        _this._valid = true;
         return _this;
     }
     EditingLayerInnerComp.prototype.moveTabFocus = function (ev, command) {
@@ -12988,6 +13028,30 @@ var EditingLayerInnerComp = /** @class */ (function (_super) {
         dispatch('moveTabFocus', command);
         dispatch('setScrollToFocus');
     };
+    EditingLayerInnerComp.prototype.checkValidity = function () {
+        var _a = this.props, columnInfo = _a.columnInfo;
+        this._valid = true;
+        this.editor.getElement().classList.remove('is-invalid')
+        this.errorEl.innerHTML = '';
+        if(columnInfo.editor.options && columnInfo.editor.options.validity){
+            var validityMsg = columnInfo.editor.options.validity;
+            var validity = this.editor.getElement().validity;
+            for(var v in validityMsg) {
+                if(validity[v]){
+                    this.errorEl.innerHTML = this.errorEl.innerHTML+validityMsg[v];
+                }
+            }
+        }
+        if(columnInfo.editor.options && columnInfo.editor.options.validation){
+            var message = columnInfo.editor.options.validation(this.editor);
+            if(message!== true) {
+                this._valid = false;
+                this.editor.getElement().classList.add('is-invalid')
+                this.errorEl.innerHTML = message;
+            }
+        }
+        return this._valid;
+    }
     EditingLayerInnerComp.prototype.finishEditing = function (save) {
         if (this.editor) {
             var _a = this.props, dispatch = _a.dispatch, rowKey = _a.rowKey, columnName = _a.columnName;
@@ -13012,6 +13076,7 @@ var EditingLayerInnerComp = /** @class */ (function (_super) {
         if (editorEl && this.contentEl) {
 
             this.contentEl.appendChild(editorEl);
+            // this.contentEl.insertBefore(editorEl, this.contentEl.childNodes[0]);
             this.editor = cellEditor;
             var editorWidth = editorEl.getBoundingClientRect().width;
             if (editorWidth > width) {
@@ -13021,6 +13086,9 @@ var EditingLayerInnerComp = /** @class */ (function (_super) {
             if (common_1.isFunction(cellEditor.mounted)) {
                 cellEditor.mounted();
             }
+            this.errorEl = document.createElement('span')
+            this.contentEl.appendChild(this.errorEl);
+            this.errorEl.classList.add(dom_1.cls('cell-error-editor'))
         }
     };
     EditingLayerInnerComp.prototype.componentWillUnmount = function () {
@@ -13047,9 +13115,17 @@ var EditingLayerInnerComp = /** @class */ (function (_super) {
         var _a = this.props, top = _a.top, left = _a.left, width = _a.width, height = _a.height, contentHeight = _a.contentHeight;
         var lineHeight = contentHeight + "px";
         var styles = { top: top, left: left, width: width, height: height, lineHeight: lineHeight };
-        return (preact_1.h("div", { style: styles, class: dom_1.cls('layer-editing', 'cell-content', 'cell-content-editor'), onKeyDown: this.handleKeyDown, ref: function (el) {
-                _this.contentEl = el;
-            } }));
+        return (
+            preact_1.h("div", { 
+                style: styles, 
+                class: dom_1.cls('layer-editing', 'cell-content', 'cell-content-editor'), 
+                onInput: this.handleInput, 
+                onKeyDown: this.handleKeyDown, 
+                ref: function (el) {
+                    _this.contentEl = el;
+                } 
+            })
+        );
     };
     return EditingLayerInnerComp;
 }(preact_1.Component));
