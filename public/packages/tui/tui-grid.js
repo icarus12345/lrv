@@ -3606,8 +3606,13 @@ function finishEditing(_a, rowKey, columnName, value, data) {
 exports.finishEditing = finishEditing;
 function changeFocus(store, rowKey, columnName, id) {
     var data = store.data, focus = store.focus, column = store.column;
-    if (focus_1.isFocusedCell(focus, rowKey, columnName) ||
-        (columnName && column_1.isHiddenColumn(column, columnName))) {
+    if (focus_1.isFocusedCell(focus, rowKey, columnName)){
+        focus.dblFocus = true;
+        return;
+    }else{
+        focus.dblFocus = false;
+    }
+    if ((columnName && column_1.isHiddenColumn(column, columnName))) {
         return;
     }
     var rawData = data.rawData, sortState = data.sortState;
@@ -8025,7 +8030,7 @@ var Grid = /** @class */ (function () {
         if (rowKey !== null && columnName !== null) {
             value = this.getValue(rowKey, columnName);
         }
-        return { rowKey: rowKey, columnName: columnName, value: value };
+        return { rowKey: rowKey, columnName: columnName, value: value , focus: _a};
     };
     /**
      * Remove focus from the focused cell.
@@ -11304,6 +11309,7 @@ exports.Root = Root;
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(0);
 var preact_1 = __webpack_require__(3);
+var instance_1 = __webpack_require__(7);
 var focus_1 = __webpack_require__(16);
 var leftSide_1 = __webpack_require__(74);
 var rightSide_1 = __webpack_require__(91);
@@ -11415,10 +11421,25 @@ var ContainerComp = /** @class */ (function (_super) {
              * @property {string} columnName - columnName of the target cell
              * @property {Grid} instance - Current grid instance
              */
+            
             eventBus.trigger('click', gridEvent);
-            if (!gridEvent.isStopped() && editingEvent === 'click') {
+            if (!gridEvent.isStopped() && editingEvent === 'dblclick') {
+                //if(gridEvent.columnName == )
+                // check click to selected cell
+                var columnName = _a.focus.columnName;
+                var rowKey = _a.focus.rowKey;
+                if(gridEvent.targetType == 'cell'){
+                    var gridId = _this.props.gridId
+                    var grid = instance_1.getInstance(gridId)
+                    var focusCell = grid.getFocusedCell()
+                    if(focusCell.focus.dblFocus){
+                        _this.startEditing(event.target);
+                    }
+                }
+            }else if (!gridEvent.isStopped() && editingEvent === 'click') {
                 _this.startEditing(event.target);
             }
+
         };
         _this.handleMouseout = function (event) {
             var _a = _this.props, eventBus = _a.eventBus, dispatch = _a.dispatch, renderState = _a.renderState;
@@ -11446,6 +11467,7 @@ var ContainerComp = /** @class */ (function (_super) {
             }
             var _a = _this.props, dispatch = _a.dispatch, editing = _a.editing, eventBus = _a.eventBus, filtering = _a.filtering;
             var el = _this.el;
+            
             var gridEvent = new gridEvent_1.default({ event: event });
             /**
              * Occurs when a mouse button is downed on the Grid.
@@ -11463,6 +11485,9 @@ var ContainerComp = /** @class */ (function (_super) {
             }
             if (dom_1.findParent(target, 'filter-container')) {
                 return;
+            }
+            if(gridEvent.targetType == 'cell'){
+                
             }
             eventBus.trigger('mousedown', gridEvent);
             if (!gridEvent.isStopped()) {
@@ -11638,7 +11663,8 @@ exports.Container = hoc_1.connect(function (_a) {
         eventBus: eventBus_1.getEventBus(id),
         scrollX: dimension.scrollX,
         scrollY: dimension.scrollY,
-        renderState: renderState
+        renderState: renderState,
+        focus: focus
     });
 })(ContainerComp);
 
