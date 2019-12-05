@@ -63,6 +63,30 @@ class OrderObserver
                     }
                 }
             }
+            if(
+                $order->status == 'done'
+            ){
+                // update sold
+                foreach ($order->order_details as $detail) {
+                    $product = $detail->product;
+                    if ($product) {
+                        $product->sold+=$detail->qty;
+                        $product->save();
+                    }
+                }
+            }
+            if(
+                $order->getOriginal('status') == 'done'
+            ){
+                // update sold
+                foreach ($order->order_details as $detail) {
+                    $product = $detail->product;
+                    if ($product) {
+                        $product->sold-=$detail->qty;
+                        $product->save();
+                    }
+                }
+            }
         }
     }
 

@@ -412,6 +412,9 @@ var InitGrid = () => {
                 }, {
                     name: 'instock',
                     align: 'right'
+                }, {
+                    name: 'sold',
+                    align: 'right'
                 },
             ]
         },
@@ -633,6 +636,14 @@ var InitGrid = () => {
                         }
                     }
                 },
+            },
+            {
+                header: 'Sold',
+                name: 'sold',
+                sortable: true,
+                align: "right",
+                width: 80,
+                
             },
             {
                 header: 'Image',

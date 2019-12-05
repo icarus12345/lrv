@@ -539,13 +539,13 @@ var InitOrderGrid = () => {
                 filter: {
                     type: 'select',//CategoryEditor
                     source: [
-                        {id: 'Requested', name: 'Requested'},
-                        {id: 'Approved', name: 'Approved'},
-                        {id: 'Unpaid', name: 'Unpaid'},
-                        {id: 'Paid', name: 'Paid'},
-                        {id: 'Shipping', name: 'Shipping'},
-                        {id: 'Done', name: 'Done'},
-                        {id: 'Canceled', name: 'Canceled'}
+                        {id: '=Requested', name: 'Requested'},
+                        {id: '=Approved', name: 'Approved'},
+                        {id: '=Unpaid', name: 'Unpaid'},
+                        {id: '=Paid', name: 'Paid'},
+                        {id: '=Shipping', name: 'Shipping'},
+                        {id: '=Done', name: 'Done'},
+                        {id: '=Canceled', name: 'Canceled'}
                     ],
                     // render: ()=>{
                     //     return ''

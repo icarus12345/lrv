@@ -3659,7 +3659,6 @@ function initFocus(_a) {
 }
 exports.initFocus = initFocus;
 function saveAndFinishEditing(store, value) {
-    console.log('saveAndFinishEditing')
     // @TODO: remove 'value' paramter
     // saveAndFinishEditing(store: Store)
     var focus = store.focus;
@@ -5202,7 +5201,7 @@ function unsort(store, columnName) {
 }
 exports.unsort = unsort;
 function initSortState(data) {
-    data.sortState.columns = [{ columnName: 'sortKey', ascending: true }];
+    if(!data.sortState.columns || data.sortState.columns.length==0) data.sortState.columns = [{ columnName: 'sortKey', ascending: true }];
     observable_1.notify(data, 'sortState');
 }
 exports.initSortState = initSortState;
@@ -6303,7 +6302,6 @@ var DatePickerFilterRow = /** @class */ (function (_super) {
     };
     DatePickerFilterRow.prototype.componentWillUnmount = function () {
         this.datePickerEl.destroy();
-        console.log('DatePickerFilterRow::componentWillUnmount')
     };
     DatePickerFilterRow.prototype.render = function () {
         var _this = this;
@@ -6438,7 +6436,6 @@ var ListFilterRow = /** @class */ (function (_super) {
         _this.applyFilter = (ev)=>{
             if(filterTimer) clearTimeout(filterTimer);
             var value = _this.getValue();
-            console.log('FILTER:LIST')
             if(value.toString() != filterRowStore.get(columnName).toString()){
                 filterRowStore.set(columnName, value)
                 _grid.readData(1)
@@ -6515,7 +6512,6 @@ var ListFilterRow = /** @class */ (function (_super) {
             var ch = ev.target.parentElement.nextSibling
             if(ch && ch.tagName == 'UL'){
                 // checked chidrens
-                console.log('check chidrens')
                 Array.from(ch.getElementsByTagName('input'))
                     .map((input)=>{
                         input.checked = ev.target.checked;
@@ -6547,11 +6543,9 @@ var ListFilterRow = /** @class */ (function (_super) {
     }
     ListFilterRow.prototype.componentDidMount = function () {
         this.addEvents()
-        console.log('componentDidMount',this.wrapper)
     };
     ListFilterRow.prototype.componentWillUnmount = function () {
         //this.listEl.destroy();
-        console.log('componentWillUnmount',this.wrapper)
     };
     ListFilterRow.prototype.render = function () {
         var _this = this;
@@ -6721,7 +6715,6 @@ var TextFilterRow = /** @class */ (function (_super) {
             this.el.appendChild(rendererEl);
             _this.inputEl = rendererEl
             _this.renderer = renderer
-            console.log(rendererEl,'rendererEl')
             rendererEl.addEventListener('keyup', (ev)=>{
                 var keyCode = ev.keyCode;
                 if (keyboard_1.isNonPrintableKey(keyCode)) {
@@ -10347,7 +10340,6 @@ var SelectEditor = /** @class */ (function () {
                         }
                         _this.el.parentNode.classList.remove('tui-grid-cell-loading')
                     }).catch(function(error){
-                        console.log('Promise Reject')
                         _this.el.parentNode.classList.remove('tui-grid-cell-loading')
                     })
                 } else {
@@ -11995,6 +11987,8 @@ var SortingButtonComp = /** @class */ (function (_super) {
             var th = dom_1.findParent(target, 'cell');
             var targetColumnName = th.getAttribute('data-column-name');
             var targetAscending = _this.props.defaultAscending;
+            if(!sortState.taolaomialao) sortState.taolaomialao = [];
+            sortState.taolaomialao.push(targetColumnName)
             if (sortState) {
                 var columns = sortState.columns;
                 var index = common_1.findPropIndex('columnName', targetColumnName, columns);
@@ -12990,7 +12984,6 @@ var EditingLayerInnerComp = /** @class */ (function (_super) {
                         }
                     break;
                 case 'esc':
-                        console.log('ESC')
                         _this._valid = true;
                         _this.editor.getElement().classList.remove('is-invalid')
                         _this.errorEl.innerHTML = '';
@@ -13090,7 +13083,6 @@ var EditingLayerInnerComp = /** @class */ (function (_super) {
         }
     };
     EditingLayerInnerComp.prototype.componentDidMount = function () {
-        console.log('EditingLayerInnerComp::componentDidMount')
         var _a = this.props, grid = _a.grid, rowKey = _a.rowKey, columnInfo = _a.columnInfo, value = _a.value, width = _a.width;
         var EditorClass = columnInfo.editor.type;
         var editorProps = { grid: grid, rowKey: rowKey, columnInfo: columnInfo, value: value };
@@ -13118,7 +13110,6 @@ var EditingLayerInnerComp = /** @class */ (function (_super) {
         }
     };
     EditingLayerInnerComp.prototype.componentWillUnmount = function () {
-        console.log('EditingLayerInnerComp::componentWillUnmount')
         this.context.store.cellEditor = null;
         if (this.props.forcedDestroyEditing) {
             this.finishEditing(true);
@@ -13128,7 +13119,6 @@ var EditingLayerInnerComp = /** @class */ (function (_super) {
         }
     };
     EditingLayerInnerComp.prototype.componentWillReceiveProps = function (nextProps) {
-        console.log('EditingLayerInnerComp::componentWillReceiveProps')
         var _a = this.props, prevFocusedColumnName = _a.focusedColumnName, prevFocusedRowKey = _a.focusedRowKey;
         var focusedColumnName = nextProps.focusedColumnName, focusedRowKey = nextProps.focusedRowKey;
         if (focusedColumnName !== prevFocusedColumnName || focusedRowKey !== prevFocusedRowKey) {
@@ -13136,7 +13126,6 @@ var EditingLayerInnerComp = /** @class */ (function (_super) {
         }
     };
     EditingLayerInnerComp.prototype.render = function () {
-        console.log('EditingLayerInnerComp::render')
         var _this = this;
         var _a = this.props, top = _a.top, left = _a.left, width = _a.width, height = _a.height, contentHeight = _a.contentHeight;
         var lineHeight = contentHeight + "px";
