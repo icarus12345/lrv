@@ -16,6 +16,9 @@ class OrderDetailObserver
     public function created(OrderDetail $orderDetail)
     {
         //
+        $order = $orderDetail->order;
+        $order->caculator();
+        $order->save();
     }
     
     /**

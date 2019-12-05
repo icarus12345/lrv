@@ -45,7 +45,9 @@ class OrderDetail extends Model
         if($product){
             $this->attributes['price'] = $product->price;
             $this->attributes['price_with_discount'] = $product->price_with_discount;
-            $this->attributes['amount'] = $this->attributes['qty'] * $this->attributes['price_with_discount'];
+            if(!empty($this->attributes['qty'])){
+                $this->attributes['amount'] = $this->attributes['qty'] * $this->attributes['price_with_discount'];
+            }
         }
 	}
 	

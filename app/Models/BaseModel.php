@@ -23,6 +23,12 @@ class BaseModel extends Model
         return \App::getLocale();
     }
 
+    public function scopeSort($query, $column, $ascending) {
+        if ($this->localeField && in_array($column, $this->localeField)) {
+            $column = "{$column}_{$this->locale}";
+        }
+        return $query->orderBy($column, $ascending);
+    }
     /**
      * Scopes.
      *

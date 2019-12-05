@@ -40,7 +40,7 @@ class ProductController extends AdminController
 		$id = $request->id??null;
 		$rows = Product::with(['category'])
 			->filter($filter)
-			->orderBy($sort_column, $sort_ascending)
+			->sort($sort_column, $sort_ascending)
 			->paginate($perpage);
 		return response()->json([
 			"result"=> true,
