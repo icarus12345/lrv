@@ -1138,7 +1138,7 @@
 }
 .tui-grid-filter-row input[type="number"],
 .tui-grid-filter-row input[type="text"]{
-    background: url(https://findicons.com/files/icons/1389/g5_system/16/toolbar_find.png) no-repeat 4px center;
+    background: url(https://findicons.com/files/icons/1389/g5_system/16/toolbar_find.png) #fff no-repeat 4px center;
     background-size: 16px;
     padding-left: 20px;
 }

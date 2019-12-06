@@ -597,7 +597,9 @@ var InitGrid = () => {
                     console.log('Before change:' , ev);
                 },
                 onAfterChange: onCellUpdated,
-                
+                formatter: function(props){
+                    return props.value + '%'
+                },
                 editor: {
                     type: 'text',//NumberEditor,
                     options: {

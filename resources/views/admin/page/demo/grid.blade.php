@@ -21,7 +21,7 @@
         </ul>
     </div>
     <div class="pull-right">
-        <div class="btn-group pull-right" style="margin-right: 10px">
+        <div class="btn-group pull-right">
             <a href="product?_export_=all" target="_blank" class="btn btn-sm btn-twitter" title="Export"><i class="fa fa-download"></i><span class="hidden-xs"> Export</span></a>
         </div>
                 

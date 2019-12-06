@@ -21,7 +21,7 @@
             <li><a href="JavaScript:" class="grid-batch-delete">Batch delete </a></li>
         </ul>
     </div>
-    <div class="btn-group pull-right" style="margin-right: 10px">
+    <div class="btn-group pull-right">
         <a href="/admin/orders?_export_=all" target="_blank" class="btn btn-sm btn-twitter" title="Export"><i class="fa fa-download"></i><span class="hidden-xs"> Export</span></a>
     </div>
 </div>

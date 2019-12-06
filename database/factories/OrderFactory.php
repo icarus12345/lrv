@@ -36,16 +36,19 @@ $factory->afterCreating(Order::class, function ($order, $faker) {
     for($i = 0; $i<$item; $i++){
         $qty = rand(1,10);
         $product =  Product::inRandomOrder()->first();
+        $price = $product->price;
+        $discount = $product->discount;
+        $price_with_discount = $product->price_with_discount;
         OrderDetail::create([
             'order_id'  => $order->id,
             'product_id'=> $product->id, 
             'color' => $faker->randomElement(['Red','Green','Yellow','Black']), 
             'size'  => $faker->randomElement(['S','M','L','XL','Small','Big']), 
             'qty' => $qty, 
-            'price' => $product->price,
-            'price_with_discount'  => $product->price_with_discount,
-            'discount' => $product->discount,
-            'amount' => $product->price_with_discount * $qty,
+            'price' => $price,
+            'price_with_discount'  => $price_with_discount,
+            'discount' => $discount,
+            'amount' => $price_with_discount * $qty,
         ]);
     }
 });

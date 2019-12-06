@@ -41,7 +41,7 @@
                             pointBackgroundColor: "#2196F3",
                             pointBorderColor: "#2196F3",
                             data: chartData,
-                            borderWidth: 4,
+                            borderWidth: 2,
                             pointBorderWidth: 1,
                             fill: false,
                             //lineTension: .1

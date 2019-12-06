@@ -399,6 +399,10 @@ var InitOrderGrid = () => {
                     align: 'right'
                 },
                 {
+                    name: 'discount',
+                    align: 'right'
+                },
+                {
                     name: 'discount_amount',
                     align: 'right'
                 },
@@ -718,6 +722,19 @@ var InitOrderGrid = () => {
                             hiddenInput.checked = checked;
                     }
                 }
+            },{
+                header: 'Discount %',
+                name: 'discount',
+                filter: {
+                    type: 'text'
+                },
+                align: "right",
+                sortable: true,
+                width: 100,
+                formatter: function(props){
+                    return props.value + '%'
+                }
+            
             },{
                 header: 'Discount Amount',
                 name: 'discount_amount',
