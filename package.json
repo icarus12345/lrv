@@ -24,6 +24,7 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
+        "chart.js": "^2.9.3",
         "tui-date-picker": "^4.0.2",
         "tui-dom": "^3.0.0"
     }

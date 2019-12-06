@@ -28,7 +28,7 @@ $factory->define(Order::class, function (Faker $faker) {
         'billing_amount'  => 0,
         'total_item'  => 0,
         'currency' => 'VND',
-        'status' => 'Requested'
+        'status' => $faker->randomElement(['Requested','Approved','Unpaid','Paid','Canceled','Done'])
     ];
 });
 $factory->afterCreating(Order::class, function ($order, $faker) {

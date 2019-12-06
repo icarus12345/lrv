@@ -19,9 +19,9 @@
  */
 
 Encore\Admin\Form::forget(['map', 'editor']);
+Admin::js('/vendor/chart.js/dist/Chart.min.js');
 Admin::css('/css/admin.css');
 Admin::js('/js/admin.js');
-
 
 use Encore\Admin\Form;
 use Encore\Admin\Show;

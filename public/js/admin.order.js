@@ -426,6 +426,7 @@ var InitOrderGrid = () => {
                 name: 'id',
                 className: "tui-grid-cell-action",
                 width: 60,
+                sortable: true,
                 align: 'center',
                 renderer: {
                     type: function(props) {
@@ -471,13 +472,13 @@ var InitOrderGrid = () => {
                     },
                 }
             },{
-                header: 'No',
+                header: 'Order No.',
                 name: 'no',
                 // filter: {
                 //     type: 'text'
                 // },
                 // sortable: true,
-                width: 100,
+                width: 82,
                 renderer: {
                     type: function (props){
                         const { grid, rowKey } = props;
