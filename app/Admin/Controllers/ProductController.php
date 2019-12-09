@@ -144,12 +144,15 @@ class ProductController extends AdminController
     {
         $form = new Form(new Product);
 		$form->column(6, function($form){
-			$form->select('category_id', trans('Category'))
+			$form->select2('category_id', trans('Category'))
+				->attribute([
+					'required'=>'',
+				])
 				->options(Category::selectOptions(function($query){
 					if($this->request->type) return $query->where('type', $this->request->type);
 					return $query;
-				}))
-				->disableHorizontal();
+				}));
+				// ->disableHorizontal();
 		});
 		$form->column(6, function($form){
 			/*
@@ -157,7 +160,7 @@ class ProductController extends AdminController
 				->options(['' => 'None', 'new' => 'New', 'hot' => 'Hot'])
 				->disableHorizontal();
 			*/
-			$form->checkbox('labels')
+			$form->checkbox2('labels')
 				->options([
 					'new' => 'New',
 					'hot' => 'Hot',
@@ -170,45 +173,58 @@ class ProductController extends AdminController
         foreach ($locales as $locale) {
 			$lang = "(".__("common.locales.{$locale}").")";
 			$form->column(6, function($form) use ($locale,$lang) {
-				$form->text("name_{$locale}", trans('admin.title').$lang)
+				$form->text2("name_{$locale}", trans('admin.title').$lang)
 					->rules('required')
-					->disableHorizontal();
-				$form->textarea("desc_{$locale}", trans('admin.description').$lang)
+					->attribute([
+						'required'=>'',
+					]);
+					// ->disableHorizontal();
+				$form->textarea2("desc_{$locale}", trans('admin.description').$lang)
+					->rows(2)
 					->rules('required')
-					->disableHorizontal();
-				$form->ckeditor("content_{$locale}", __('Content').$lang)
+					->attribute([
+						'required'=>'',
+					]);
+					// ->disableHorizontal();
+				$form->ckeditor2("content_{$locale}", __('Content').$lang)
 					->rules('required')
-					->disableHorizontal();
+					->attribute([
+						'required'=>'',
+					]);
+					// ->disableHorizontal();
 			});
         }
 		$form->column(2, function($form){
-			$form->number('price', 'Price')
-				->min(10)
+			$form->text2('price', 'Price')
+				// ->min(10)
 				->rules(['required','numeric'])
 				->attribute([
-					'style' => 'width: 100%;',
-				])
-				->disableHorizontal();
+					'required'=>'',
+					'pattern' => "^([1-9][0-9]{0,8}([.][0-9]{1,2})?)|^(0.[0-9]{1,2})|0",
+				]);
+				// ->disableHorizontal();
 		});
 		$form->column(2, function($form){
-			$form->number('instock', 'Instock')
-				->min(0)
+			$form->text2('instock', 'Instock')
+				// ->min(0)
 				->attribute([
-					'style' => 'width: 100%;',
-				])
-				->disableHorizontal();
+					'required'=>'',
+					'pattern' => "^(-?[1-9][0-9]{0,4}?)$|0",
+				]);
+				// ->disableHorizontal();
 		});
 		$form->column(2, function($form){
-			$form->number('discount', 'Discount')
-				->min(0)
+			$form->text2('discount', 'Discount')
+				// ->min(0)
 				->attribute([
-					'style' => 'width: 100%;',
-				])
-				->max(100)
-				->disableHorizontal();
+					'required'=>'',
+					'pattern' => "^([1-9][0-9]{0,1})|100|0"
+				]);
+				// ->max(100)
+				// ->disableHorizontal();
 		});
         $form->column(6, function($form){
-			$form->tags('tags')
+			$form->tags2('tags')
 				->disableHorizontal();
 		});
 		$form->column(12, function($form){
@@ -232,7 +248,7 @@ class ProductController extends AdminController
 			// 	return $value;
 			// })
 			// ->disableHorizontal();
-			$form->multipleSelect('colors')
+			$form->multipleSelect2('colors')
 				->options(Color::pluck('name', 'id'))
 				->disableHorizontal();
 		});
@@ -248,7 +264,7 @@ class ProductController extends AdminController
 		// 		return $value;
 		// 	})
 		// 	->disableHorizontal();
-			$form->multipleSelect('sizes')
+			$form->multipleSelect2('sizes')
 				->options(Size::pluck('name', 'id'))
 				->disableHorizontal();
 		});

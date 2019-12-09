@@ -32,3 +32,12 @@ Form::extend('browses', \App\Admin\Extensions\Form\Browses::class);
 
 Show::extend('browse', \App\Admin\Extensions\Show\Browse::class);
 Show::extend('browses', \App\Admin\Extensions\Show\Browses::class);
+
+Form::extend('text2', \App\Admin\Extensions\Form2\Text2::class);
+Form::extend('select2', \App\Admin\Extensions\Form2\Select2::class);
+Form::extend('checkbox2', \App\Admin\Extensions\Form2\Checkbox2::class);
+Form::extend('textarea2', \App\Admin\Extensions\Form2\Textarea2::class);
+Form::extend('number2', \App\Admin\Extensions\Form2\Number2::class);
+Form::extend('tags2', \App\Admin\Extensions\Form2\Tags2::class);
+Form::extend('multipleSelect2', \App\Admin\Extensions\Form2\MultipleSelect2::class);
+Form::extend('ckeditor2', \App\Admin\Extensions\Form2\CKEditor2::class);
