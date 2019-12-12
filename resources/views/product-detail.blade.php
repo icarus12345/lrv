@@ -126,28 +126,28 @@
                             @for ($i = 0; $i < $top_sales->count(); $i+=3)
                             <div class="single-p-item mb-n25">
                                 @for ($j = $i;$j<$i+3 && $j <= $top_sales->count(); $j++)
-                                <?php $product = $top_sales[$j]; ?>
+                                <?php $item = $top_sales[$j]; ?>
                                 <!-- Single Product -->
                                 <div class="single-product row mb-3">
                                     <div class="col-lg-6 col-md-4 col-4 mb-2">
                                         <div class="product-img">
-                                            <a href="/product/detail/{{$product->id}}" title="{{$product->name}}">
-                                                <div class="cover prod-thumb" style="background-image:url('{{$product->image_path}}')" ></div>
+                                            <a href="/product/detail/{{$item->id}}" title="{{$item->name}}">
+                                                <div class="cover prod-thumb" style="background-image:url('{{$item->image_path}}')" ></div>
                                             </a>                                            
                                         </div>                                        
                                     </div>
                                     <div class="col-lg-6 col-md-8 col-8 mb-2">
                                         <div class="product-content d-flex flex-column">
-                                            <h5><a href="/product/detail/{{$product->id}}" title="{{$product->name}}">{{$product->name}}</a></h5>
+                                            <h5><a href="/product/detail/{{$item->id}}" title="{{$item->name}}">{{$item->name}}</a></h5>
                                             <!--Product Rating-->
                                             <div class="rating-icon mb-2">
-                                                {!!$product->star!!}
+                                                {!!$item->star!!}
                                             </div>
                                             <!--Product Price-->
                                             <div class="product-price">
-                                                <span class="new-price">{!!$product->price_with_discount_format!!}</span>
+                                                <span class="new-price">{!!$item->price_with_discount_format!!}</span>
                                                 @if($product->discount)
-                                                <span class="old-price">{!!$product->price_with_format!!}</span>
+                                                <span class="old-price">{!!$item->price_with_format!!}</span>
                                                 @endif
                                             </div>  
                                         </div>

@@ -1,5 +1,5 @@
-<div class="{{$viewClass['form-group']}} {!! !$errors->has($errorKey) ? '' : 'has-error' !!}">
-    <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
+<div class="form-group-2 {{$viewClass['form-group']}} {!! !$errors->has($errorKey) ? '' : 'has-error' !!}">
+    
     <div class="{{$viewClass['field']}}">
         @include('admin::form.error')
         <div class="browse" id="browse-{{$id}}">
@@ -18,6 +18,7 @@
             </div>
             <input type="hidden" value="{{$value??''}}" />
         </div>
+        <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
         @include('admin::form.help-block')
     </div>
 </div>

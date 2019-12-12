@@ -42,7 +42,7 @@ class CouponController extends AdminController
 			//$actions->disableDelete();
 			//$actions->disableEdit();
 			// add action
-			$actions->add(new PopupEdit);
+			// $actions->add(new PopupEdit);
 			$actions->add(new \App\Admin\Extensions\Action\CouponEdit);
         });
         return function($row) use ($grid){
@@ -89,22 +89,22 @@ class CouponController extends AdminController
     {
         $form = new MForm(new Coupon);
 
-        $form->text('code', __('Code'))
+        $form->text2('code', __('Code'))
             ->rules('required|min:12|max:12')
             ->attribute([
                 'required'=>'',
                 'pattern'=>"[0-9A-Za-z]{12,12}"
             ]);
-        $form->date('expried', __('Expried'))
+        $form->date2('expried', __('Expried'))
             ->default(date('Y-m-d'));
-        $form->decimal('value', __('Value'))
+        $form->decimal2('value', __('Value'))
             ->default(0.00)
             ->attribute([
                 'style' => 'width: 110px;',
                 //'required'=>'',
                 'pattern'=>"[0-9.]+"
             ]);
-        $form->select('type', __('Type'))->options([
+        $form->select2('type', __('Type'))->options([
 			'Discount'=>'Discount',
 			'Complimentary'=>'Complimentary',
 			'Cash'=>'Cash'

@@ -1,7 +1,7 @@
-<div class="{{$viewClass['form-group']}} {!! !$errors->has($errorKey) ? '' : 'has-error' !!}">
-    <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
+<div class=" form-group-2{{$viewClass['form-group']}} {!! !$errors->has($errorKey) ? '' : 'has-error' !!}">
+    
     <div class="{{$viewClass['field']}}">
-        @include('admin::form.error')
+        
         <div class="browses" id="browses-{{$id}}">
             <ul class="browses-preview">
 				@if($value)
@@ -34,7 +34,9 @@
             </div>
             
         </div>
+        <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
         @include('admin::form.help-block')
+        @include('admin::form.error')
     </div>
 </div>
 @include('ckfinder::setup')

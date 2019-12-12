@@ -84,7 +84,9 @@ class CouponEdit extends RowAction
                 modal
                     .addClass('modal flex-modal')
                     .modal('show')
-                console.log(event)
+                modal.on('hidden.bs.modal',function(){
+                    $(this).remove();
+                })
                 $(response).find("script[data-exec-on-popstate]").each(function () {
                     $.globalEval(this.text || this.textContent || this.innerHTML || '');
                 });

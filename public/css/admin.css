@@ -234,6 +234,9 @@
 .form-group-2>div textarea{
   resize: vertical;
 }
+.form-group-2>div input[type="text"]{
+  min-width: 100%;
+}
 
 .form-group-2>div .select2 .select2-selection--single,
 .form-group-2>div .select2 .select2-selection--multiple,
@@ -300,6 +303,10 @@
 .form-group-2>div .select2.select2-container--open .select2-selection--single{
   /* background: #00bcd41f; */
 }
+.form-group-2>div input[type="text"] + div + label,
+.form-group-2>div input[type="text"] + div + label,
+.form-group-2>div .browse +label,
+.form-group-2>div .browses +label,
 .form-group-2>div.checkbox2 > label,
 .form-group-2>div .select2+label,
 .form-group-2>div input[type="text"]+label,
@@ -317,11 +324,15 @@
   width: 100%;
   text-align: left !important;
 }
+.form-group-2>div .browse +label,
+.form-group-2>div .browses +label,
 .form-group-2>div .document-editor-preview +label,
 .form-group-2 .select2.select2-container--focus+label,
 .form-group-2>div.checkbox2 > label,
 .form-group-2>div .has-value+.select2 + label,
 .form-group-2>div .select2.select2-container--open + label,
+.form-group-2>div input[type="text"].has-value + div + label,
+.form-group-2>div input[type="text"]:focus + div + label,
 .form-group-2>div input[type="text"].has-value + label,
 .form-group-2>div input[type="text"]:focus + label,
 .form-group-2>div textarea.has-value + label,
@@ -471,6 +482,7 @@ border-bottom-color: #FF5722;
   width: 100%;
   max-width: 660px;
 }
+.document-editor .ck.ck-editor__editable,
 .document-editor .ck.ck-editor__main>.ck-editor__editable {
   min-height: 240px;
   max-height: calc(100vh - 20px - 40px);
@@ -482,10 +494,20 @@ border-bottom-color: #FF5722;
 .document-editor .ck.ck-toolbar.ck-rounded-corners{
   border-radius: 0;
 }
+.document-editor .ck-rounded-corners .ck.ck-toolbar, 
+.document-editor .ck.ck-toolbar.ck-rounded-corners {
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
 body.has-document-editor-show{
   overflow-y: hidden;
 }
 body .ck.ck-reset,body .ck.ck-reset_all,body .ck.ck-reset_all *,
 body .ck.ck-balloon-panel{
   z-index: 1112;
+}
+.box-info-default{
+  max-width: 960px;
+  margin: auto;
 }

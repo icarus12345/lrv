@@ -1,6 +1,6 @@
-<div class="-box -box-info">
-    <div class="-box-header -with-border">
-        <h3 class="box-title">{{ $form->title() }}AAAA</h3>
+<div class="box box-info-default">
+    <div class="box-header">
+        <h3 class="box-title">{{ $form->title() }}</h3>
 
         <div class="box-tools">
             {!! $form->renderTools() !!}

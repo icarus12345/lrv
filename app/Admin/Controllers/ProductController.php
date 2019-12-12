@@ -268,6 +268,7 @@ class ProductController extends AdminController
 				->options(Size::pluck('name', 'id'))
 				->disableHorizontal();
 		});
+		$form->setView('admin.form');
         return $form;
     }
 }

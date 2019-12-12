@@ -19,7 +19,6 @@ class CKEditor2 extends Textarea
     {
         $ckfinderUrl = route('ckfinder_connector');
         $this->script = "
-            CKEDITOR.disableAutoInline = true;
             
             /*
             CKEDITOR.inline( 'cke-{$this->id}', {
