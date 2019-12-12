@@ -77,22 +77,28 @@ class ContentController extends AdminController
         $locales = \Config::get('app.locales');
         foreach ($locales as $locale) {
             $lang = "(".__("common.locales.{$locale}").")";
-            $form->text("title_{$locale}", trans('admin.title').$lang)
-                ->rules('required')
-                ->disableHorizontal();
+            $form->column(6, function($form) use ($locale,$lang) {
+                $form->text2("title_{$locale}", trans('admin.title').$lang)
+                    ->rules('required')
+                    ->disableHorizontal();
+            });
         }
-        $form->browse('image')
-            ->disableHorizontal();
-            // $form->textarea("desc_{$locale}", trans('admin.description').$lang)
-                // ->rules('required')
-                // ->disableHorizontal();
+        $form->column(12, function($form){
+            $form->browse('image')
+                ->disableHorizontal();
+                // $form->textarea("desc_{$locale}", trans('admin.description').$lang)
+                    // ->rules('required')
+                    // ->disableHorizontal();
+        });
         foreach ($locales as $locale) {
             $lang = "(".__("common.locales.{$locale}").")";
-            $form->ckeditor("content_{$locale}", __('Content').$lang)
-                ->rules('required')
-                ->disableHorizontal();
+            $form->column(6, function($form) use ($locale,$lang) {
+                $form->ckeditor2("content_{$locale}", __('Content').$lang)
+                    ->rules('required')
+                    ->disableHorizontal();
+            });
         }
-
+        $form->setView('admin.form');
         return $form;
     }
 }

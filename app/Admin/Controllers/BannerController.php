@@ -70,14 +70,14 @@ class BannerController extends AdminController
     {
         $form = new Form(new Banner);
 
-        $form->text('name_vi', __('Name vi'));
-        $form->text('name_en', __('Name en'));
-        $form->text('desc_vi', __('Desc vi'));
-        $form->text('desc_en', __('Desc en'));
+        $form->text2('name_vi', __('Name vi'));
+        $form->text2('name_en', __('Name en'));
+        $form->text2('desc_vi', __('Desc vi'));
+        $form->text2('desc_en', __('Desc en'));
         $form->browse('image', __('Image'));
-        $form->url('link', __('Link'));
+        $form->url2('link', __('Link'));
         $form->hidden('type')->value($this->request->type);
-
+        $form->setView('admin.form');
         return $form;
     }
 }

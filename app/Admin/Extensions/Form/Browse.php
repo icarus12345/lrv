@@ -18,6 +18,7 @@ class Browse extends Text
 	protected $icon = 'fa-image';
     protected $view = 'admin.form.browse';
     //protected $elementClass = ['browse'];
+    protected $horizontal = false;
 	
 	
 	

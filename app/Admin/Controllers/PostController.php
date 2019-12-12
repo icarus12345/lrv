@@ -91,29 +91,31 @@ class PostController extends AdminController
     protected function form()
     {
         $form = new Form(new Post);
-        
-        $form->select('category_id', trans('admin.parent_id'))->options(Category::selectOptions(function($query){
-            if($this->request->type) $query->where('type', $this->request->type??'gid');
-            return $query;
-        }));
-		$locales = \Config::get('app.locales');
+        $form->column(12, function($form){
+            $form->select2('category_id', trans('admin.parent_id'))->options(Category::selectOptions(function($query){
+                if($this->request->type) $query->where('type', $this->request->type??'gid');
+                return $query;
+            }));
+        });
+        $locales = \Config::get('app.locales');
         foreach ($locales as $locale) {
-			$lang = "(".__("common.locales.{$locale}").")";
-			$form->text("title_{$locale}", trans('admin.title').$lang)
-				->rules('required');
-		}
-		foreach ($locales as $locale) {
-			$lang = "(".__("common.locales.{$locale}").")";
-			$form->textarea("desc_{$locale}", trans('admin.description').$lang)
-				->rules('required');
-		}
-		foreach ($locales as $locale) {
-			$lang = "(".__("common.locales.{$locale}").")";		
-			$form->ckeditor("content_{$locale}", __('Content').$lang)
-				->rules('required');
-		}
-		$form->browse('image');
-		$form->tags('tags');
+            $lang = "(".__("common.locales.{$locale}").")";
+            $form->column(6, function($form) use($lang, $locale) {
+                $form->text2("title_{$locale}", trans('admin.title').$lang)
+                    ->rules('required');
+                $form->textarea2("desc_{$locale}", trans('admin.description').$lang)
+                    ->rules('required');
+                $form->ckeditor2("content_{$locale}", __('Content').$lang)
+                    ->rules('required');
+            });
+        }
+        $form->column(6, function($form){
+            $form->browse('image');
+        });
+        $form->column(6, function($form){
+            $form->tags2('tags');
+        });
+        $form->setView('admin.form');
         return $form;
     }
 }

@@ -44,3 +44,4 @@ Form::extend('multipleSelect2', \App\Admin\Extensions\Form2\MultipleSelect2::cla
 Form::extend('ckeditor2', \App\Admin\Extensions\Form2\CKEditor2::class);
 Form::extend('date2', \App\Admin\Extensions\Form2\Date2::class);
 Form::extend('decimal2', \App\Admin\Extensions\Form2\Decimal2::class);
+Form::extend('url2', \App\Admin\Extensions\Form2\Url2::class);

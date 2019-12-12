@@ -234,6 +234,9 @@
 .form-group-2>div textarea{
   resize: vertical;
 }
+.form-group-2>div input[type="url"],
+.form-group-2>div input[type="number"],
+.form-group-2>div input[type="email"],
 .form-group-2>div input[type="text"]{
   min-width: 100%;
 }
@@ -241,6 +244,9 @@
 .form-group-2>div .select2 .select2-selection--single,
 .form-group-2>div .select2 .select2-selection--multiple,
 .form-group-2>div textarea,
+.form-group-2>div input[type="url"],
+.form-group-2>div input[type="number"],
+.form-group-2>div input[type="email"],
 .form-group-2>div input[type="text"]{
   border-color: transparent;
   /* border-bottom: 1px solid #ccc; */
@@ -259,6 +265,9 @@
 .form-group-2>div .document-editor-preview ~ .line,
 .form-group-2>div .select2 ~ .line,
 .form-group-2>div textarea ~ .line,
+.form-group-2>div input[type="url"] ~ .line,
+.form-group-2>div input[type="number"] ~ .line,
+.form-group-2>div input[type="email"] ~ .line,
 .form-group-2>div input[type="text"] ~ .line{
   position: absolute;
   background: #f9f9f9;
@@ -283,14 +292,26 @@
 .form-group-2>div input[type="text"]:focus{
 }
 .form-group-2>div select.has-value ~ .line,
+.form-group-2>div input[type="url"].has-value ~ .line,
+.form-group-2>div input[type="number"].has-value ~ .line,
+.form-group-2>div input[type="email"].has-value ~ .line,
 .form-group-2>div input[type="text"].has-value ~ .line,
+.form-group-2>div input[type="url"]:focus ~ .line,
+.form-group-2>div input[type="number"]:focus ~ .line,
+.form-group-2>div input[type="text"]:focus ~ .line,
 .form-group-2>div input[type="text"]:focus ~ .line,
 .form-group-2>div textarea.has-value ~ .line,
 .form-group-2>div textarea:focus ~ .line{
 }
 
 .form-group-2>div .select2.select2-container--open ~ .line,
+.form-group-2>div input[type="url"].has-value:focus ~ .line,
+.form-group-2>div input[type="number"].has-value:focus ~ .line,
+.form-group-2>div input[type="email"].has-value:focus ~ .line,
 .form-group-2>div input[type="text"].has-value:focus ~ .line,
+.form-group-2>div input[type="url"]:focus ~ .line,
+.form-group-2>div input[type="number"]:focus ~ .line,
+.form-group-2>div input[type="email"]:focus ~ .line,
 .form-group-2>div input[type="text"]:focus ~ .line,
 .form-group-2>div textarea.has-value:focus ~ .line,
 .form-group-2>div textarea:focus ~ .line{
@@ -309,6 +330,9 @@
 .form-group-2>div .browses +label,
 .form-group-2>div.checkbox2 > label,
 .form-group-2>div .select2+label,
+.form-group-2>div input[type="url"]+label,
+.form-group-2>div input[type="number"]+label,
+.form-group-2>div input[type="email"]+label,
 .form-group-2>div input[type="text"]+label,
 .form-group-2>div textarea+label,
 .form-group-2>div .document-editor-preview +label{
@@ -333,7 +357,13 @@
 .form-group-2>div .select2.select2-container--open + label,
 .form-group-2>div input[type="text"].has-value + div + label,
 .form-group-2>div input[type="text"]:focus + div + label,
+.form-group-2>div input[type="url"].has-value + label,
+.form-group-2>div input[type="number"].has-value + label,
+.form-group-2>div input[type="email"].has-value + label,
 .form-group-2>div input[type="text"].has-value + label,
+.form-group-2>div input[type="url"]:focus + label,
+.form-group-2>div input[type="number"]:focus + label,
+.form-group-2>div input[type="email"]:focus + label,
 .form-group-2>div input[type="text"]:focus + label,
 .form-group-2>div textarea.has-value + label,
 .form-group-2>div textarea:focus + label{
@@ -382,13 +412,22 @@
   pointer-events: none;
 }
 
+.form-group-2>div input[type="url"].has-value:invalid:focus ~ .line,
+.form-group-2>div input[type="number"].has-value:invalid:focus ~ .line,
+.form-group-2>div input[type="email"].has-value:invalid:focus ~ .line,
 .form-group-2>div input[type="text"].has-value:invalid:focus ~ .line,
 .form-group-2>div select:invalid+.select2.select2-container--open ~ .line,
 .form-group-2 input[type="text"]:invalid ~ .line,
 .form-group-2 textarea:invalid ~ .line,
 .form-group-2 .document-editor-preview:empty ~ .line,
 .form-group-2 select:invalid ~ .line,
+.form-group-2 input[type="url"]:invalid:focus ~ .line,
+.form-group-2 input[type="number"]:invalid:focus ~ .line,
+.form-group-2 input[type="email"]:invalid:focus ~ .line,
 .form-group-2 input[type="text"]:invalid:focus ~ .line,
+.form-group-2 input[type="url"]:focus:invalid ~ .line,
+.form-group-2 input[type="number"]:focus:invalid ~ .line,
+.form-group-2 input[type="email"]:focus:invalid ~ .line,
 .form-group-2 input[type="text"]:focus:invalid ~ .line,
 .form-group-2 textarea:invalid:focus ~ .line,
 .form-group-2 select:invalid:focus ~ .line,

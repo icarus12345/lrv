@@ -79,7 +79,7 @@ class CategoryController extends AdminController
         $form = new Form(new Category);
         $form->display('id', 'ID');
         $form->hidden('type')->value($this->request->type);
-        $form->select('parent_id', trans('admin.parent_id'))->options(Category::selectOptions(function($query){
+        $form->select2('parent_id', trans('admin.parent_id'))->options(Category::selectOptions(function($query){
             if($this->request->type) {
 				return $query->where('type', $this->request->type);
 			}
@@ -87,7 +87,7 @@ class CategoryController extends AdminController
         }));
         $locales = \Config::get('app.locales');
         foreach ($locales as $locale) {
-            $form->text("name_{$locale}", trans('admin.title')."(".__("common.locales.{$locale}").")")->rules('required');
+            $form->text2("name_{$locale}", trans('admin.title')."(".__("common.locales.{$locale}").")")->rules('required');
         }
         // $form->icon('icon', trans('admin.icon'))->default('fa-bars')->rules('required')->help($this->iconHelp());
         // $form->text('uri', trans('admin.uri'));
@@ -98,6 +98,7 @@ class CategoryController extends AdminController
 
         $form->display('created_at', trans('admin.created_at'));
         $form->display('updated_at', trans('admin.updated_at'));
+        $form->setView('admin.form');
         return $form;
     }
 

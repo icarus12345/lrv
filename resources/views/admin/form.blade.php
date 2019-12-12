@@ -10,7 +10,7 @@
     <!-- form start -->
     {!! $form->open(['class' => "form-horizontal"]) !!}
 
-    <div class="-box-body">
+    <div class="box-body">
 
         @if(!$tabObj->isEmpty())
             @include('admin::form.tab', compact('tabObj'))

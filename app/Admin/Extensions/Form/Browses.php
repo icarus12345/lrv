@@ -19,7 +19,7 @@ class Browses extends Textarea
 	protected $icon = 'fa-image';
     protected $view = 'admin.form.browses';
     //protected $elementClass = ['browse'];
-	
+	protected $horizontal = false;
 	
 	
     public function render()
