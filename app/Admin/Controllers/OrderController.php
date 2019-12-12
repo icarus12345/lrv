@@ -62,7 +62,8 @@ class OrderController extends AdminController
      */
     protected function grid()
     {
-        return view('admin.page.demo.order-grid');//->render();
+        
+        //return view('admin.page.demo.order-grid');//->render();
         $grid = new Grid(new Order);
 
         $grid->column('id', __('Id'));
@@ -76,7 +77,7 @@ class OrderController extends AdminController
 
 				return new Table(['ID', 'Product', 'Color','Size','Qty','Price'], $order_details->toArray());
 			});
-        $grid->column('name', __('Customer'))
+        $grid->column('name1111', __('Customer111'))
 			->filter();
         $grid->column('company', __('Company'))
             ->filter()

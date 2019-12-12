@@ -253,7 +253,7 @@
   min-height: 180px;
   padding: 6px 12px;
 }
-.form-group-2>div textarea+.cke_textarea_inline ~ .line,
+.form-group-2>div .document-editor-preview ~ .line,
 .form-group-2>div .select2 ~ .line,
 .form-group-2>div textarea ~ .line,
 .form-group-2>div input[type="text"] ~ .line{
@@ -285,7 +285,7 @@
 .form-group-2>div textarea.has-value ~ .line,
 .form-group-2>div textarea:focus ~ .line{
 }
-.form-group-2>div textarea+.cke_textarea_inline.cke_focus ~ .line,
+
 .form-group-2>div .select2.select2-container--open ~ .line,
 .form-group-2>div input[type="text"].has-value:focus ~ .line,
 .form-group-2>div input[type="text"]:focus ~ .line,
@@ -304,7 +304,7 @@
 .form-group-2>div .select2+label,
 .form-group-2>div input[type="text"]+label,
 .form-group-2>div textarea+label,
-.form-group-2>div textarea+.cke_textarea_inline +label{
+.form-group-2>div .document-editor-preview +label{
   position: absolute;
   top: 7px;left: 0;
   font-weight: normal;
@@ -315,10 +315,9 @@
   pointer-events: none;
   color: #777;
   width: 100%;
-  text-align: left;
+  text-align: left !important;
 }
-.form-group-2>div textarea.has-value+.cke_textarea_inline +label,
-.form-group-2>div textarea+.cke_textarea_inline.cke_focus +label,
+.form-group-2>div .document-editor-preview +label,
 .form-group-2 .select2.select2-container--focus+label,
 .form-group-2>div.checkbox2 > label,
 .form-group-2>div .has-value+.select2 + label,
@@ -329,20 +328,59 @@
 .form-group-2>div textarea:focus + label{
   top: -20px;
   font-size: 12px;
+  text-align: left;
+}
+.document-editor-box:before{
+  height: 220px;
+  content: '';
+  display: block;
 }
 
+.document-editor-preview{
+  position: absolute;
+    left: 50%;
+    top: 0;
+    padding: 10px;
+    background: #fff;
+    width: 660px;
+    -webkit-box-shadow: 0 0 20px #ccc;
+    -moz-box-shadow: 0 0 20px #ccc;
+    box-shadow: 0 0 20px #ccc;
+    height: 880px;
+    -webkit-transform: scale(.25) translateX(-50%);
+    -moz-transform: scale(.25) translateX(-50%);
+    transform: scale(.25) translateX(-50%);
+    -webkit-transform-origin: top left;
+    -moz-transform-origin: top left;
+    transform-origin: top left;
+    overflow: hidden;
+    cursor: pointer;
+}
+.form-group-2 .document-editor-preview:empty{
+  -webkit-box-shadow: 0 0 20px #ff572294;
+  -moz-box-shadow: 0 0 20px #ff572294;
+  box-shadow: 0 0 20px #ff572294;
+}
+.document-editor-preview+textarea{
+  height: 120px !important;
+  height: 120px !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  opacity: 0;
+  pointer-events: none;
+}
 
 .form-group-2>div input[type="text"].has-value:invalid:focus ~ .line,
 .form-group-2>div select:invalid+.select2.select2-container--open ~ .line,
 .form-group-2 input[type="text"]:invalid ~ .line,
 .form-group-2 textarea:invalid ~ .line,
-.form-group-2 textarea:invalid + .cke_textarea_inline ~ .line,
+.form-group-2 .document-editor-preview:empty ~ .line,
 .form-group-2 select:invalid ~ .line,
 .form-group-2 input[type="text"]:invalid:focus ~ .line,
 .form-group-2 input[type="text"]:focus:invalid ~ .line,
 .form-group-2 textarea:invalid:focus ~ .line,
 .form-group-2 select:invalid:focus ~ .line,
-.form-group-2 textarea:invalid + .cke_textarea_inline.cke_focus ~ .line,
 .form-group-2.has-error .form-control ~ .line{
 border-bottom-color: #FF5722;
 }
@@ -389,4 +427,65 @@ border-bottom-color: #FF5722;
     background: #00BCD4;
     border-color: transparent;
     border-radius: 3px;
+}
+.document-editor.document-editor-show{
+  display: flex;
+}
+.document-editor{
+  display: none;
+  position: fixed;
+  z-index: 1111;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  padding: 10px;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,.2);
+  flex-direction: column;
+    flex-flow: column;
+}
+.document-editor .document-editor__editable-container .cke_chrome{
+  border:0
+}
+.document-editor .document-editor__editable-container>textarea{
+  display: none;
+}
+.document-editor .document-editor__editable-container{
+  max-width: 660px;
+ 
+  background: #fff;
+  width: 100%;
+  overflow-x: hidden;
+}
+.document-editor-footer h4{
+  padding: 0 10px;
+  line-height: 40px;
+  margin: 0;
+}
+.toolbar-container,
+.document-editor-footer{
+  background: #fff;
+  height: 40px;
+  width: 100%;
+  max-width: 660px;
+}
+.document-editor .ck.ck-editor__main>.ck-editor__editable {
+  min-height: 240px;
+  max-height: calc(100vh - 20px - 40px);
+  overflow-y: auto;
+}
+.document-editor .ck-rounded-corners .ck.ck-editor__editable:not(.ck-editor__nested-editable), 
+.document-editor .ck.ck-editor__editable:not(.ck-editor__nested-editable).ck-rounded-corners,
+.document-editor .ck-rounded-corners .ck.ck-toolbar, 
+.document-editor .ck.ck-toolbar.ck-rounded-corners{
+  border-radius: 0;
+}
+body.has-document-editor-show{
+  overflow-y: hidden;
+}
+body .ck.ck-reset,body .ck.ck-reset_all,body .ck.ck-reset_all *,
+body .ck.ck-balloon-panel{
+  z-index: 1112;
 }
