@@ -10402,6 +10402,7 @@ var DatePickerEditor = /** @class */ (function () {
         this.el.appendChild(datepickerInputContainer);
         var calendarWrapper = this.createCalendarWrapper();
         var usageStatistics = props.grid.usageStatistics, columnInfo = props.columnInfo, value = props.value;
+        var _grid = props.grid;
         var options = tslib_1.__assign({ showIcon: true }, columnInfo.editor.options);
         if (options.showIcon) {
             var icon = this.createIcon();
@@ -10429,6 +10430,17 @@ var DatePickerEditor = /** @class */ (function () {
         this.datePickerEl.on('close', function () {
             _this.focus();
         });
+        this.datePickerEl.on('open', ()=>{
+                var r1 = _grid.gridEl.getBoundingClientRect()
+                var r2 = _this.inputEl.getBoundingClientRect()
+                var left = r2.left - r1.left
+                if(left + 276 > r1.width){
+                    _this.datePickerEl._element.style.right = '0'
+                } else {
+                    _this.datePickerEl._element.style.right = 'auto'
+                }
+                
+        });
     }
     DatePickerEditor.prototype.createWrapper = function () {
         var el = document.createElement('div');
@@ -10443,12 +10455,13 @@ var DatePickerEditor = /** @class */ (function () {
     };
     DatePickerEditor.prototype.createCalendarWrapper = function () {
         var calendarWrapper = document.createElement('div');
-        calendarWrapper.style.marginTop = '-4px';
+        // calendarWrapper.style.marginTop = '-4px';
         this.el.appendChild(calendarWrapper);
         return calendarWrapper;
     };
     DatePickerEditor.prototype.openDatePicker = function () {
         this.datePickerEl.open();
+        
     };
     DatePickerEditor.prototype.createIcon = function () {
         var _this = this;
@@ -10841,7 +10854,8 @@ function create(_a) {
             return offsets;
         },
         get totalRowHeight() {
-            return this.heights.length ? common_1.last(this.offsets) + common_1.last(this.heights) : 0;
+            var nodataHeight = dimension.bodyHeight - dimension.scrollXHeight - dimension.tableBorderWidth;
+            return this.heights.length ? common_1.last(this.offsets) + common_1.last(this.heights) : nodataHeight;
         }
     });
 }

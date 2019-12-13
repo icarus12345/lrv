@@ -404,6 +404,16 @@
   -webkit-box-shadow: 0 0 20px #ff572294;
   -moz-box-shadow: 0 0 20px #ff572294;
   box-shadow: 0 0 20px #ff572294;
+  border-radius: 20px;
+}
+.form-group-2 .document-editor-preview:empty:after{
+  content: 'Click here to edit';
+  font-size: 50px;
+  color: #ccc;
+  text-align: center;
+  display: block;
+  margin: auto;
+  margin-top: 45%
 }
 .document-editor-preview+textarea{
   height: 120px !important;

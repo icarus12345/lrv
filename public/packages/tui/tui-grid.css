@@ -312,6 +312,14 @@
   border: solid 1px #03A9F4;
   box-shadow: 0 0 0 0.2rem rgb(167, 218, 241);
 }
+.tui-grid-cell-content input[type='text'].tui-timepicker-spinbox-input{
+  box-shadow: none;
+  border-color: #ccc;
+}
+.tui-timepicker-btn .tui-ico-t-btn {
+  display: block;
+  margin: auto;
+}
 .tui-grid-cell-content input[type='text'].is-invalid,
 .tui-grid-cell-content input[type='number'].is-invalid,
 .tui-grid-cell-content input[type='email'].is-invalid,
