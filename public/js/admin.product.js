@@ -140,6 +140,14 @@ DropdownEditor = window.DropdownEditor || class DropdownEditor {
                             view: window,
                     }));
                 })
+                $el.on('show.bs.dropdown', function(){
+                    var r = this.getBoundingClientRect()
+                    if(r.bottom + 320 > window.innerHeight) {
+                        $el.addClass('dropup')
+                    }else{
+                        $el.removeClass('dropup')
+                    }
+                });
         }).catch(function(error){
             console.log('Promise Reject')
         })
@@ -251,6 +259,7 @@ var ImageRenderer = function(props) {
 
 var InitGrid = () => {
     var onCellUpdated = (ev) => {
+        if(!ev.value) return;
         let row = grid.getRow(ev.rowKey)
         // let params = {}
         // params[ev.columnName] = ev.value;

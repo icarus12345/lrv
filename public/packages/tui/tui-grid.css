@@ -1033,14 +1033,19 @@
   background: #fff;
 }
 
-.tui-grid-action-dropdown .dropdown-menu,
+.tui-grid-action-dropdown ul.dropdown-menu,
+.tui-grid-action-dropdown div.dropdown-menu >ul{
+  max-height: 320px;
+  overflow-y: auto;
+}
 .tui-grid-editor-dropdown .dropdown-menu{
   font-size: inherit;
   padding: 5px 0;
   min-width: 100%;
   border: 1px solid #ccc;
-    box-shadow: 2px 1px 6px #ccc;
-    border-radius: 0;
+  box-shadow: 2px 1px 6px #ccc;
+  border-radius: 0;
+  
 }
 .tui-grid-editor-dropdown .dropdown-menu .tui-grid-dropdown-filter{
   padding: 0 10px;

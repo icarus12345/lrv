@@ -10433,13 +10433,19 @@ var DatePickerEditor = /** @class */ (function () {
         this.datePickerEl.on('open', ()=>{
                 var r1 = _grid.gridEl.getBoundingClientRect()
                 var r2 = _this.inputEl.getBoundingClientRect()
-                var left = r2.left - r1.left
+                var r3 = _this.datePickerEl._element.getBoundingClientRect()
+                var left = r2.left - r1.left;
+                
                 if(left + 276 > r1.width){
                     _this.datePickerEl._element.style.right = '0'
                 } else {
                     _this.datePickerEl._element.style.right = 'auto'
                 }
-                
+                if(r3.bottom > window.innerHeight) {
+                    _this.datePickerEl._element.style.bottom = '32px'
+                }else{
+                    _this.datePickerEl._element.style.bottom = 'auto'
+                }
         });
     }
     DatePickerEditor.prototype.createWrapper = function () {
