@@ -2,7 +2,7 @@
 
     
     <div class="document-editor-box">
-        <div class="document-editor-preview">{!! old($column, $value) !!}</div>
+        <div class="document-editor-preview ck ck-content">{!! old($column, $value) !!}</div>
         <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
         <!-- <span class="line"></span> -->
     </div>
