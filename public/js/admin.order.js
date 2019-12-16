@@ -513,7 +513,8 @@ var InitOrderGrid = () => {
                 header: 'Total Amount',
                 name: 'total_amount',
                 filter: {
-                    type: 'text'
+                    type: 'text',
+                    // value: '>0'
                 },
                 align: "right",
                 sortable: true,
@@ -543,7 +544,9 @@ var InitOrderGrid = () => {
                 },
                 filter: {
                     type: 'select',//CategoryEditor
+                    value: '!=Done,!=Canceled',
                     source: [
+                        {id: '!=Done,!=Canceled', name: 'Pending'},
                         {id: '=Requested', name: 'Requested'},
                         {id: '=Approved', name: 'Approved'},
                         {id: '=Unpaid', name: 'Unpaid'},
@@ -564,6 +567,14 @@ var InitOrderGrid = () => {
                 },
                 sortable: true,
                 width: 180,
+            },{
+                header: 'Phone',
+                name: 'phone',
+                filter: {
+                    type: 'text'
+                },
+                sortable: true,
+                width: 100,
             },{
                 header: 'Company',
                 name: 'company',
@@ -615,14 +626,6 @@ var InitOrderGrid = () => {
             },{
                 header: 'Postcode/Zip',
                 name: 'postcode_zip',
-                filter: {
-                    type: 'text'
-                },
-                sortable: true,
-                width: 100,
-            },{
-                header: 'Phone',
-                name: 'phone',
                 filter: {
                     type: 'text'
                 },

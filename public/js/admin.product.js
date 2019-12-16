@@ -802,6 +802,7 @@ var InitGrid = () => {
                 filter: {
                     type: 'date'
                 },
+                onAfterChange: onCellUpdated,
 				editor: {
 					type: 'datePicker',
 					options: {

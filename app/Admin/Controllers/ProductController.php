@@ -127,7 +127,7 @@ class ProductController extends AdminController
         }
 		foreach ($locales as $locale) {
 			$lang = "(".__("common.locales.{$locale}").")";
-            $show->field("content_{$locale}", trans('Content').$lang)->rules('required');
+            $show->field("content_{$locale}", trans('Content').$lang)->typho();
         }
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
@@ -213,7 +213,7 @@ class ProductController extends AdminController
 				]);
 				// ->disableHorizontal();
 		});
-		$form->column(2, function($form){
+        $form->column(2, function ($form) {
 			$form->text2('discount', 'Discount')
 				// ->min(0)
 				->attribute([

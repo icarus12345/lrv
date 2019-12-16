@@ -175,7 +175,11 @@ class OrderController extends AdminController
      */
     protected function detail($id)
     {
-        $show = new Show(Order::findOrFail($id));
+        $order = Order::findOrFail($id);
+        return view('admin.page.demo.order-detail', [
+            'order' => $order
+        ]);
+        $show = new Show($order);
 
         $show->field('id', __('Id'));
         $show->field('user_id', __('User id'));

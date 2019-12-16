@@ -66,4 +66,14 @@ class OrderDetail extends Model
 
         return $attributes;
     }
+
+    public function getPriceWithDiscountFormatAttribute()
+    {
+        return  \App\Helpers::formatPrice($this->price_with_discount);
+    }
+
+    public function getAmountFormatAttribute()
+    {
+        return  \App\Helpers::formatPrice($this->amount);
+    }
 }

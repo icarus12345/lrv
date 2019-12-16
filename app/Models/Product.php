@@ -74,6 +74,11 @@ class Product extends BaseModel
     {
         return $this->hasMany(\App\Models\ProductSize::class);
     }
+
+    public function inventory_header()
+    {
+        return $this->belongsTo(InventoryHeader::class, 'product_id');
+    }
 	
 	/**
      * Get the name.

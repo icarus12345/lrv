@@ -6741,7 +6741,7 @@ var TextFilterRow = /** @class */ (function (_super) {
     TextFilterRow.prototype.render = function () {
         var _this = this;
         var columnInfo = this.props.columnInfo;
-        var selectOption = filter_1.filterSelectOption[columnInfo.filter.type];
+        var value = typeof columnInfo.filter.value != 'undefind'?columnInfo.filter.value:'';
         // var dispatch = this.context.dispatch;
         var type = typeof columnInfo.filter.type;
             return (
@@ -6764,7 +6764,7 @@ var TextFilterRow = /** @class */ (function (_super) {
                         placeHolder: 'Search',
                         className: dom_1.cls('filter-input'), 
                         onKeyUp: this.handleChange, 
-                        //value: value ,
+                        value: value ,
                     })
                 )
             );
@@ -6784,8 +6784,6 @@ var SelectFilterRow = /** @class */ (function (_super) {
         var filterRowStore = _grid.filterRowStore;
         var columnInfo = _a.columnInfo;
         var columnName = (columnInfo.name)
-        
-        
         
         _this.handleChange = common_1.debounce(function (ev) {
            
@@ -6848,7 +6846,7 @@ var SelectFilterRow = /** @class */ (function (_super) {
     SelectFilterRow.prototype.render = function () {
         var _this = this;
         var columnInfo = this.props.columnInfo;
-        
+        var value = typeof columnInfo.filter.value != 'undefind'?columnInfo.filter.value:'';
         var source = columnInfo.filter.source;
         // var dispatch = this.context.dispatch;
         var type = typeof columnInfo.filter.type;
@@ -6870,7 +6868,7 @@ var SelectFilterRow = /** @class */ (function (_super) {
                         }, 
                         className: dom_1.cls('filter-select'), 
                         onChange: this.handleChange, 
-                        //value: value ,
+                        value: value ,
                     }, preact_1.h('option', {
                         value: ''
                     }, 'Choose:'),source.map((d)=>{
@@ -7753,6 +7751,11 @@ var Grid = /** @class */ (function () {
                 })
             }
         };
+        options.columns.map(function(c){
+            if(c.filter && typeof c.filter.value != 'undefined'){
+                filterRowStore.set(c.name, c.filter.value)
+            }
+        });
         
         var dataProvider = serverSideDataProvider_1.createProvider(store, dispatch, options.data, filterRowStore);
         var dataManager = modifiedDataManager_1.createManager();

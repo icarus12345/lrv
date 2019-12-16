@@ -1,24 +1,19 @@
-<style>
-    td .form-group {
-        margin-bottom: 0 !important;
-    }
-</style>
-
-<div class="row">
-    <div class="{{$viewClass['label']}}"><h4 class="pull-right">{{ $label }}</h4></div>
+<br/>
+<div class="">
+    <div class="{{$viewClass['label']}}"><h4>{{ $label }}</h4></div>
     <div class="{{$viewClass['field']}}">
         <div id="has-many-{{$column}}" style="margin-top: 15px;">
             <table class="table table-has-many has-many-{{$column}}">
                 <thead>
                 <tr>
-                    @foreach($headers as $header)
-                        <th>{{ $header }}</th>
+                    @foreach($headers as $columnIndex => $header)
+                        <th width="{{$widths[$columnIndex]??''}}">{{ $header }}</th>
                     @endforeach
 
                     <th class="hidden"></th>
 
                     @if($options['allowDelete'])
-                        <th></th>
+                        <th width="96"></th>
                     @endif
                 </tr>
                 </thead>
@@ -43,7 +38,7 @@
                         @if($options['allowDelete'])
                             <td class="form-group">
                                 <div>
-                                    <div class="remove btn btn-warning btn-sm pull-right"><i class="fa fa-trash">&nbsp;</i>{{ trans('admin.remove') }}</div>
+                                    <div class="remove btn btn-warning btn-sm pull-right" style="width:80px"><i class="fa fa-trash">&nbsp;</i>{{ trans('admin.remove') }}</div>
                                 </div>
                             </td>
                         @endif
@@ -59,16 +54,16 @@
 
                     <td class="form-group">
                         <div>
-                            <div class="remove btn btn-warning btn-sm pull-right"><i class="fa fa-trash">&nbsp;</i>{{ trans('admin.remove') }}</div>
+                            <div class="remove btn btn-warning btn-sm pull-right" style="width:80px"><i class="fa fa-trash">&nbsp;</i>{{ trans('admin.remove') }}</div>
                         </div>
                     </td>
                 </tr>
             </template>
 
             @if($options['allowCreate'])
-                <div class="form-group">
+                <div class="" style="padding-right: 8px">
                     <div class="{{$viewClass['field']}}">
-                        <div class="add btn btn-success btn-sm"><i class="fa fa-save"></i>&nbsp;{{ trans('admin.new') }}</div>
+                        <div class="add btn btn-success btn-sm" style="width:80px"><i class="fa fa-save"></i>&nbsp;{{ trans('admin.new') }}</div>
                     </div>
                 </div>
             @endif
@@ -76,5 +71,5 @@
     </div>
 </div>
 
-<hr style="margin-top: 0px;">
+
 

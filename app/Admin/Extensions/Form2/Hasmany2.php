@@ -2,29 +2,31 @@
 
 namespace App\Admin\Extensions\Form2;
 
-use Encore\Admin\Form\Field\Text;
+use Encore\Admin\Form\Field\HasMany;
 
-class Text2 extends Text
+class HasMany2 extends HasMany
 {
     public static $js = [
     ];
     public static $css = [
     ];
 	// protected $icon = 'fa-image';
-    protected $view = 'admin.form2.input';
+    protected $views = [
+        'default' => 'admin.form2.hasmany',
+        'tab'     => 'admin.form2.hasmanytab',
+        'table'   => 'admin.form2.hasmanytable',
+    ];
     protected $horizontal = false;
     protected $placeholder = ' ';
     protected $groupClass = [''];
 	
-    
-    public function setFieldWidth($width){
-        $this->variables['style'] = "width: {$width}px";
+	public function setFieldWidth($widths){
+        $this->variables['widths'] = $widths;
         return $this;
     }
 	
     public function render()
     {
-        // $this->script = "$('#browse-{$this->id}').browse();";
         return parent::render();
     }
 }

@@ -35,5 +35,10 @@ Route::group([
 	Route::resource('coupons', 'CouponController');
 	Route::resource('order-detail', 'OrderDetailController');
 
+	$router->resource('locations', 'LocationController');
+	$router->resource('warehouses', 'WarehouseController');
+	$router->resource('inventories', 'InventoryController');
+	$router->resource('inventory-headers', 'InventoryHeaderController');
+
 	//Route::get('products/list', 'ProductController@list')->name('product.list');
 });

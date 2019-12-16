@@ -23,8 +23,8 @@
     </div>
     @include('admin::form.help-block')
     @include('admin::form.error')
+    <script>
+        var el = document.getElementById('form-group-{{$id}}').getElementsByTagName('select')[0]
+        el.classList.toggle('has-value', !!el.value)
+    </script>
 </div>
-<script>
-    var el = document.getElementById('form-group-{{$id}}').getElementsByTagName('select')[0]
-    el.classList.toggle('has-value', !!el.value)
-</script>

@@ -29,5 +29,7 @@ class AppServiceProvider extends ServiceProvider
         \App\Models\Product::observe(\App\Observers\ProductObserver::class);
         \App\Models\Order::observe(\App\Observers\OrderObserver::class);
         \App\Models\OrderDetail::observe(\App\Observers\OrderDetailObserver::class);
+        \App\Models\InventoryHeader::observe(\App\Observers\InventoryHeaderObserver::class);
+        \App\Models\InventoryLine::observe(\App\Observers\InventoryLineObserver::class);
     }
 }

@@ -14,7 +14,7 @@ class Number2 extends Number
     protected $view = 'admin.form2.input';
     protected $horizontal = false;
     protected $placeholder = ' ';
-    protected $groupClass = [''];
+    protected $groupClass = ['number2'];
 	
 	
 	

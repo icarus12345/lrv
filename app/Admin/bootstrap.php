@@ -34,6 +34,8 @@ Form::extend('browses', \App\Admin\Extensions\Form\Browses::class);
 Show::extend('browse', \App\Admin\Extensions\Show\Browse::class);
 Show::extend('browses', \App\Admin\Extensions\Show\Browses::class);
 
+Show::extend('typho', \App\Admin\Extensions\Show\Typho::class);
+
 Form::extend('text2', \App\Admin\Extensions\Form2\Text2::class);
 Form::extend('select2', \App\Admin\Extensions\Form2\Select2::class);
 Form::extend('checkbox2', \App\Admin\Extensions\Form2\Checkbox2::class);
@@ -45,3 +47,4 @@ Form::extend('ckeditor2', \App\Admin\Extensions\Form2\CKEditor2::class);
 Form::extend('date2', \App\Admin\Extensions\Form2\Date2::class);
 Form::extend('decimal2', \App\Admin\Extensions\Form2\Decimal2::class);
 Form::extend('url2', \App\Admin\Extensions\Form2\Url2::class);
+Form::extend('hasMany2', \App\Admin\Extensions\Form2\HasMany2::class);
