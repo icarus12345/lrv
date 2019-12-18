@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class InventoryLine extends Model
 {
     protected $fillable = [
-        'inventory_header_id', 'product_id', 'warehouse_id', 'line_memo', 'qty', 'price', 'amount'
+        'inventory_header_id', 'product_id', 'warehouse_id', 'line_memo', 'qty', 'price', 'amount','refer_id'
     ];
 
     public function warehouse()

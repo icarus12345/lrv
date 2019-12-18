@@ -78,10 +78,10 @@
         <!-- accepted payments column -->
         <div class="col-xs-6">
           <p class="lead">Note:</p>
-          <img src="../../dist/img/credit/visa.png" alt="Visa">
+          <!-- <img src="../../dist/img/credit/visa.png" alt="Visa">
           <img src="../../dist/img/credit/mastercard.png" alt="Mastercard">
           <img src="../../dist/img/credit/american-express.png" alt="American Express">
-          <img src="../../dist/img/credit/paypal2.png" alt="Paypal">
+          <img src="../../dist/img/credit/paypal2.png" alt="Paypal"> -->
 
           <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">{{$order->note}}</p>
         </div>
@@ -129,4 +129,103 @@
           </button> -->
         </div>
       </div>
+      <br/>
+                <ul class="timeline timeline-inverse">
+                  @if($order->status == \App\Models\Order::STATUS_REQUESTED)
+                    <li>
+                      <i class="fa fa-check bg-green"></i>
+                      <div class="timeline-item" style="border: none">
+                        <button class="btn btn-default" onclick="ApproveOrder({{$order->id}})">Approve</button>
+                      </div>
+<script>
+var ApproveOrder = (id) => {
+    swal({
+        title: "Are you sure to approve this order ?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Confirm",
+        showLoaderOnConfirm: true,
+        cancelButtonText: "Cancel",
+        preConfirm: function() {
+            return new Promise(function(resolve, reject) {
+                let data = {
+                    pk: id,
+                    name: 'status',
+                    value: 'Approved',
+                    _editable: 1,
+                    _token: $.admin.token,
+                }
+                NProgress.start()
+                $.ajax({
+                    method: 'PUT',
+                    url: '',
+                    data: data,
+                    complete: function(xhr, stat) {
+                        NProgress.done();
+                    },
+                    success: function (data) {
+                        resolve(data);
+                    },
+                    error: function(request) {
+                        reject()
+                        Helper.Catcher(request)
+                    }
+                });
+            });
+        }
+    }).then(function(result) {
+        var data = result.value;
+        if (typeof data === 'object') {
+            if (data.status) {
+                swal(data.message, '', 'success');
+                $.admin.reload();
+            } else {
+                swal(data.message, '', 'error');
+            }
+        }else{
+            swal('Oops !', '', 'error');
+        }
+    });
+}
+</script>
+                    </li>
+                  @endif
+                  @foreach($order->histories as $his)
+                  <li>
+                    @switch($his->type)
+                        @case(\App\Models\Order::STATUS_PAID)
+                            <i class="fa fa-money bg-blue"></i>
+                            @break
+                        @case(\App\Models\Order::STATUS_DONE)
+                            <i class="fa fa-check bg-green"></i>
+                            @break
+                        @case(\App\Models\Order::STATUS_APPROVED)
+                        <i class="fa fa-check bg-yellow"></i>
+                        @break
+                        @case(\App\Models\Order::STATUS_CANCELED)
+                            <i class="fa fa-times bg-red"></i>
+                            @break
+                        @case(\App\Models\Order::STATUS_SHIPPING)
+                            <i class="fa fa-truck bg-blue"></i>
+                            @break
+                        @default
+                        <i class="fa fa-clock-o"></i>
+                    @endswitch
+
+                    <div class="timeline-item">
+                      <span class="time"><i class="fa fa-clock-o"></i> {{$his->created_at}}</span>
+
+                      <!-- <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3> -->
+
+                      <div class="timeline-body">{{$his->message}}</div>
+                    </div>
+                  </li>
+                  @endforeach
+
+                  <li>
+                    <i class="fa fa-clock-o bg-gray"></i>
+                  </li>
+
+                </ul>
     </section>

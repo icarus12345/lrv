@@ -32,6 +32,23 @@ class OrderDetail extends Model
         return $this->belongsTo(\App\Models\Product::class);
     }
 
+    public function scopeWithWarehouse($query)
+    {
+        $query
+            // ->leftjoin('inventory_headers as ih', 'ih.document_no', '=' ,'order_details.order_id')
+            ->leftjoin('inventory_lines as il', function($join){
+                $join->on('order_details.id', '=' ,'il.refer_id')
+                ->where('il.product_id', \DB::raw('order_details.product_id'));
+            })
+            ->leftjoin('warehouses as wh', 'il.warehouse_id', '=' ,'wh.id')
+            ->addSelect([
+                'inventory_header_id',
+                \DB::raw('il.id as inventory_line_id'), 
+                \DB::raw('wh.id as warehouse_id'), 
+                \DB::raw('wh.name as warehouse_name')
+            ]);
+    }
+
     public function setQtyAttribute($qty)
 	{
 		$this->attributes['qty'] = $qty;

@@ -10314,6 +10314,7 @@ var editor_1 = __webpack_require__(32);
 var SelectEditor = /** @class */ (function () {
     function SelectEditor(props) {
         var _this = this;
+        _this.selectedItem = null;
         var el = document.createElement('select');
         var options = props.columnInfo.editor.options;
         var listItems = editor_1.getListItems(props);
@@ -10334,7 +10335,7 @@ var SelectEditor = /** @class */ (function () {
                     _this.hasLoading = true
                     source.then(function(data){
                         if(data){
-
+                            listItems = data
                             data.forEach(function (_a) {
                                 var text = _a[displayField], value = _a[valueField];
                                 el.appendChild(_this.createOptions(text, value));
@@ -10364,12 +10365,29 @@ var SelectEditor = /** @class */ (function () {
                 el[attr] = options.attributes[attr];
             }
         }
+        el.addEventListener('change', function(){
+            var selectedValue = _this.getValue();
+            var selectedItem = undefined;
+            listItems.forEach(function (_a) {
+                var value = _a[valueField];
+                if(value == selectedValue) {
+                    selectedItem = _a;
+                }
+            });
+            _this.setSelectedItem(selectedItem);
+        })
         this.el = el;
         this.getElement = function () {
             return this.el;
         };
         this.getValue = function () {
             return this.el.value;
+        };
+        this.setSelectedItem = (item)=>{
+            this.selectedItem = item;
+        }
+        this.getSelectedItem = function () {
+            return this.selectedItem;
         };
         this.mounted = function () {
             if(this.hasLoading) {

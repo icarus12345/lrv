@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Order;
+use App\Models\OrderHistory;
 
 class OrderObserver
 {
@@ -15,6 +16,7 @@ class OrderObserver
     public function created(Order $order)
     {
         //
+        
     }
 
     /**
@@ -27,15 +29,15 @@ class OrderObserver
     {
         //
         $avaiable = [
-            'Approved',
-            'Unpaid',
-            'Paid',
-            'Shipping',
-            'Done',
+            Order::STATUS_APPROVED,
+            Order::STATUS_UNPAID,
+            Order::STATUS_PAID,
+            Order::STATUS_SHIPPING,
+            Order::STATUS_DONE,
         ];
         $unavaiable = [
-            'Requested',
-            'Canceled',
+            Order::STATUS_REQUESTED,
+            Order::STATUS_CANCELED,
         ];
         if($order->getOriginal('status') != $order->status){
             if(
@@ -46,8 +48,8 @@ class OrderObserver
                 foreach ($order->order_details as $detail) {
                     $product = $detail->product;
                     if ($product) {
-                        $product->instock-=$detail->qty;
-                        $product->save();
+                        // $product->instock-=$detail->qty;
+                        // $product->save();
                     }
                 }
             } else if(
@@ -58,13 +60,13 @@ class OrderObserver
                 foreach ($order->order_details as $detail) {
                     $product = $detail->product;
                     if ($product) {
-                        $product->instock+=$detail->qty;
-                        $product->save();
+                        // $product->instock+=$detail->qty;
+                        // $product->save();
                     }
                 }
             }
             if(
-                $order->status == 'done'
+                $order->status == Order::STATUS_DONE
             ){
                 // update sold
                 foreach ($order->order_details as $detail) {
@@ -76,7 +78,7 @@ class OrderObserver
                 }
             }
             if(
-                $order->getOriginal('status') == 'done'
+                $order->getOriginal('status') == Order::STATUS_DONE
             ){
                 // update sold
                 foreach ($order->order_details as $detail) {
@@ -87,6 +89,42 @@ class OrderObserver
                     }
                 }
             }
+            $admin = \Auth::guard('admin')->user();
+            switch($order->status){
+
+                case Order::STATUS_APPROVED:
+                    $message = "Approved by {$admin->name}.";
+                    break;
+                case Order::STATUS_UNPAID:
+                    $message = "{$admin->name} changed status to Unpaid.";
+                    break;
+                case Order::STATUS_PAID:
+                    $message = "{$admin->name} changed status to Paid.";
+                    break;
+                case Order::STATUS_SHIPPING:
+                    $message = "{$admin->name} changed status to Shipping.";
+                    break;
+                case Order::STATUS_DONE:
+                    $message = "{$admin->name} changed status to Done.";
+                    break;
+                case Order::STATUS_CANCELED:
+                    $message = "Canceled by {$admin->name}.";
+                    break;
+                case Order::STATUS_REQUESTED:
+                    $message = "{$admin->name} changed status to Requested.";
+                    break;
+
+                default:
+                    $message = "Unknown";
+            }
+
+            OrderHistory::create([
+                'created_by' => $admin->id,
+                'header_id' => $order->id,   
+                'title' => $message, 
+                'message'=> $message, 
+                'type'=> $order->status, 
+            ]);
         }
     }
 

@@ -2,9 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Warehouse extends Model
+use App\Models\BaseModel;
+class Warehouse extends BaseModel
 {
     protected $fillable = [
         'location_id', 'name', 'address' , 'lat' , 'lon', 'status'
@@ -22,5 +21,9 @@ class Warehouse extends Model
     public function location()
     {
         return $this->belongsTo(\App\Models\Location::class);
+    }
+    public function inventories()
+    {
+        return $this->hasMany(\App\Models\Inventory::class);
     }
 }

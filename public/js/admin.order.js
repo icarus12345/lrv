@@ -222,7 +222,7 @@ function ProductDropdownEditor(props){
     this.getValue = function() {
         return self.selectedItem?self.selectedItem.id:null;
     }
-    this.getData = function() {
+    this.getSelectedItem = function() {
         return self.selectedItem;
     }
     this.mounted = function() {
@@ -446,6 +446,8 @@ var InitOrderGrid = () => {
                             '   <ul class="dropdown-menu -dropdown-menu-right">',
                             // '       <li><a href="orders/'+props.value+'/edit" ><i class="fa fa-pencil"></i> Edit</a></li>',
                             '       <li><a href="orders/'+props.value+'" ><i class="fa fa-eye"></i> Show</a></li>',
+                            '       <li><a href="JavaScript:" data-action="out-of-stock"><i class="fa fa-truck"></i> Out of stock</a></li>',
+                            '       <li class="driver"></li>',
                             '       <li><a href="JavaScript:" data-action="delete"><i class="fa fa-trash"></i> Delete</a></li>',
                             '   </ul>',
                             '</div>'
@@ -459,6 +461,10 @@ var InitOrderGrid = () => {
                             },()=>{
                                 grid.reloadData()
                             })
+                        })
+                        $el.find('[data-action="out-of-stock"]').click(()=>{
+                            $('#tui-grid-out-of-stock-modal').modal('show')
+                            InitOutOfStockGrid(props.value)
                         })
                         //this.render(props);
                     
@@ -904,7 +910,7 @@ var InitOrderDetailGrid = (id) => {
         data: {
             api: {
                 readData: {
-                    url: '/api/admin/orders-detail/'+id,
+                    url: '/api/admin/orders/detail/'+id,
                     method: 'GET',
                 },
             },
@@ -953,7 +959,7 @@ var InitOrderDetailGrid = (id) => {
                 onAfterChange: (ev)=>{
                     var row = gridDetail.getRow(ev.rowKey)
                     var editor = ev.editor;
-                    var data = editor.getData();
+                    var data = editor.getSelectedItem();
                     if(data){
 
                         var name = data.name;
@@ -1153,6 +1159,199 @@ var InitOrderDetailGrid = (id) => {
                 }
             }
             
+        ]
+    });
+}
+
+var InitOutOfStockGrid = (id) => {
+    if(window.gridOutOfStock) gridOutOfStock.destroy();
+    $('#createInventoryJournal').unbind('click')
+        .click(function(){
+            var validate = gridOutOfStock.validate();
+            if(validate.length == 0) {
+                swal({
+                    title: "Are you sure to update out of stock ?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Confirm",
+                    showLoaderOnConfirm: true,
+                    cancelButtonText: "Cancel",
+                    preConfirm: function() {
+                        return new Promise(function(resolve, reject) {
+                            NProgress.start()
+                            var rows = gridOutOfStock.getData()
+                            var inventory_header_id = '';
+                            let data = {
+                                document_no: id,
+                                title: 'Out Of Stock ORD000' + id,
+                                posting_date: moment().format('YYYY-MM-DD'),
+                                lines: rows.map(function(row){
+                                    inventory_header_id = row.inventory_header_id;
+                                    return {
+                                        id: row.inventory_line_id,
+                                        warehouse_id: row.warehouse_id,
+                                        product_id: row.product_id,
+                                        qty: row.qty * -1,
+                                        refer_id: row.id,
+                                        _remove_: 0
+                                    };
+                                }),
+                                _token: $.admin.token,
+                            };
+                            if(inventory_header_id){
+                                data._method = "PUT"
+                            }
+                            $.ajax({
+                                method: 'POST',
+                                url: 'inventory-headers/' + (inventory_header_id || ''),
+                                data: data,
+                                complete: function(xhr, stat) {
+                                    NProgress.done();
+                                },
+                                success: function (data) {
+                                    resolve(data);
+                                },
+                                error: function(request) {
+                                    reject()
+                                    Helper.Catcher(request)
+                                }
+                            });
+                        });
+                    }
+                }).then(function(result) {
+                    var data = result.value;
+                    if (typeof data === 'object') {
+                        if (data.status) {
+                            swal(data.message, '', 'success');
+                            $('#tui-grid-out-of-stock-modal').modal('hide')
+                        } else {
+                            swal(data.message, '', 'error');
+                        }
+                    }else{
+                        swal('Oops !', '', 'error');
+                    }
+                });
+            }
+        })
+    // $.ajax({
+    //     method: 'get',
+    //     url: '/api/admin/orders-detail/' + id,
+    //     complete: function(xhr, stat) {
+    //         NProgress.done();
+    //     },
+    //     success: function (rs) {
+    //         gridDetail.resetData(rs.data.contents)
+    //     },
+    //     error: function(rs) {
+            
+    //     }
+    // });
+    var warehousePromise = new Promise(function(resolve, reject){
+        $.ajax({
+            method: 'GET',
+            url: '/api/admin/warehouses',
+            data: {
+                perPage: 1000
+            },
+            success: function(rs) {
+                resolve(rs.data.contents)
+            },
+            error: function(request) {
+                reject(request);
+            }
+        });
+    })
+    window.gridOutOfStock = new tui.Grid({
+        el: document.getElementById('tui-grid-out-of-stock'),
+        rowHeight: 32,
+        minRowHeight: 32,
+        rowHeaders: [{
+            type: 'rowNum',
+        }],
+        scrollX: false,
+        scrollY: false,
+        data: {
+            api: {
+                readData: {
+                    url: '/api/admin/orders/out-of-stock/'+id,
+                    method: 'GET',
+                },
+            },
+        },
+        header: {
+            align: 'left',
+            height: 36,
+        },
+        
+        columns: [{
+                header: 'Product',
+                name: 'product_id',
+                display_field: 'product_name',
+                
+            },{
+                header: 'Color',
+                width: 50,
+                name: 'color',
+                
+            },{
+                header: 'Size',
+                width: 50,
+                name: 'size',
+            },{
+                header: 'Qty',
+                name: 'qty',
+                width: 50,
+                align: "right",
+            },{
+                header: 'Warehouse',
+                name: 'warehouse_id',
+                validation: { required: true },
+                display_field: 'warehouse_name',
+                width: 120,
+                onBeforeChange: (ev)=>{
+                    var row = gridOutOfStock.getRow(ev.rowKey)
+                    var editor = ev.editor;
+                    var data = editor.getSelectedItem();
+                    console.log(data,'selectedItem')
+                    if(data){
+
+                        var name = data.name;
+                        gridOutOfStock.setValue(ev.rowKey,'warehouse_name', name);
+                        gridOutOfStock.removeCellClassName(ev.rowKey,ev.columnName,'tui-grid-cell-loading')
+                    }
+                },
+                editor: {
+                    // type: 'combobox',//
+                    type: 'select',
+                    options: {
+                        attributes: {
+                            required : 'required'
+                        },
+                        source: function(props){
+                            var row = gridOutOfStock.getRow(props.rowKey)
+                            return new Promise(function(resolve, reject){
+                                $.ajax({
+                                    method: 'GET',
+                                    url: '/api/admin/warehouses/avaiable-by-product-id',
+                                    data: {
+                                        product_id: row.product_id,
+                                        qty: row.qty,
+                                    },
+                                    success: function(rs) {
+                                        resolve(rs.data)
+                                    },
+                                    error: function(request) {
+                                        reject(request);
+                                    }
+                                });
+                            }) 
+                        },
+                        displayField: 'name',
+                        valueField: 'id',
+                    }
+                },
+            }
         ]
     });
 }

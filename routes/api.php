@@ -37,8 +37,11 @@ Route::group([
         ->where(['id'=>'[0-9]+'])
         ->name('api.product.detail');
 
+    Route::get('warehouses', '\App\Admin\Controllers\WarehouseController@list')->name('warehouses.list');
+    Route::get('warehouses/avaiable-by-product-id', '\App\Admin\Controllers\WarehouseController@avaiable')->name('warehouses.avaiable');
     Route::get('orders', '\App\Admin\Controllers\OrderController@list')->name('order.list');
-    Route::get('orders-detail/{order_id}', '\App\Admin\Controllers\OrderController@orderDetailList')->name('order.detail.list');
+    Route::get('orders/detail/{order_id}', '\App\Admin\Controllers\OrderController@orderDetailList')->name('order.detail.list');
+    Route::get('orders/out-of-stock/{order_id}', '\App\Admin\Controllers\OrderController@orderOutOfStock')->name('order.outofstock');
 
     // Route::put('product/{id}', '\App\Admin\Controllers\ProductController@apiUpdate')->name('product.update');
 });

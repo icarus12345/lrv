@@ -7,6 +7,7 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Illuminate\Http\Request;
 
 class WarehouseController extends AdminController
 {
@@ -16,6 +17,39 @@ class WarehouseController extends AdminController
      * @var string
      */
     protected $title = 'App\Models\Warehouse';
+
+    public function avaiable(Request $request){
+        $product_id = $request->product_id;
+        $qty = $request->qty;
+        $rows = Warehouse::whereHas('inventories', function ($query) use($product_id, $qty) {
+                $query->where('product_id', $product_id)
+                    ->where('qty','>=', $qty);
+            })
+            ->get();
+		return response()->json([
+			"result"=> true,
+			"data"=> $rows,
+		]);
+    }
+    public function list(Request $request){
+		$perpage = $request->perPage??10;
+		$sort_column = $request->sortColumn??'id';
+		$sort_ascending = $request->sortAscending=="true"?'asc':'desc';
+		$filter = $request->filter??null;
+		$rows = Warehouse::filter($filter)
+			->orderBy($sort_column, $sort_ascending)
+			->paginate($perpage);
+		return response()->json([
+			"result"=> true,
+			"data"=> [
+				"contents"=> $rows->getCollection(),
+				"pagination"=> [
+					"page"=> $rows->currentPage(),
+					"totalCount"=> $rows->total()
+				]
+			]
+		]);
+    }
 
     /**
      * Make a grid builder.

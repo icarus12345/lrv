@@ -20,6 +20,25 @@ class OrderController extends AdminController
     protected $title = 'Orders';
 
     
+    public function orderOutOfStock(Request $request, $order_id){
+        $order = Order::find($order_id);
+        
+        $outOfStockData = !$order?[]:$order->order_details()
+            ->select('order_details.*')
+            ->withWareHouse()
+            ->get()
+            // ->map(function ($order_detail) {
+            //     return $order_detail->only(['id', 'product_name', 'color','size','product_id','qty']);
+            // })
+            ->toArray();
+		return response()->json([
+			"result"=> true,
+			"data"=> [
+                "order" => $order,
+				"contents"=> $outOfStockData,
+			]
+		]);
+    }
     public function orderDetailList(Request $request, $order_id){
         $order = Order::find($order_id);
         

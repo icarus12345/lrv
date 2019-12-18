@@ -71,4 +71,8 @@
 
 	Route::get('locale/{locale}', 'HomeController@locale')->name('locale');
 	Route::get('currency/{currency}', 'HomeController@currency')->name('currency');
+
+	Route::get('vnpay/create', 'VNPayController@vnpayCreate')->name('vnpay.create');
+	Route::get('vnpay/return', 'VNPayController@vnpayReturn')->name('vnpay.return');
+	Route::get('vnpay/ipn', 'VNPayController@vnpayIpn')->name('vnpay.ipn');
 #});

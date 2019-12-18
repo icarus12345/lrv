@@ -436,6 +436,7 @@ var InitGrid = () => {
             header: '#',
             name: 'id',
             className: "tui-grid-cell-action",
+            sortable: true,
             width: 60,
             align: 'center',
             renderer: {
@@ -798,6 +799,7 @@ var InitGrid = () => {
             {
 				header: 'Created',
                 name: 'created_at',
+                sortable: true,
                 width: 140,
                 filter: {
                     type: 'date'

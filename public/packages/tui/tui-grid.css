@@ -320,6 +320,7 @@
   display: block;
   margin: auto;
 }
+.tui-grid-cell-content select:invalid:not(.tui-time-picker-select),
 .tui-grid-cell-content input[type='text'].is-invalid,
 .tui-grid-cell-content input[type='number'].is-invalid,
 .tui-grid-cell-content input[type='email'].is-invalid,

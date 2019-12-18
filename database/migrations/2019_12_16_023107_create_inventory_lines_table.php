@@ -23,6 +23,7 @@ class CreateInventoryLinesTable extends Migration
             $table->integer('qty')->default(0);
 
             $table->integer('warehouse_id');
+            $table->integer('refer_id')->nullable();
             $table->decimal('price',11,2)->default(0);
             $table->decimal('amount',11,2)->default(0);
 

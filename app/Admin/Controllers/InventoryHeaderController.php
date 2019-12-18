@@ -105,6 +105,7 @@ class InventoryHeaderController extends AdminController
                 $form->select2('product_id', __('Product'))
                     ->options(\App\Models\Product::all()->pluck('name', 'id'));
                 $form->text2('qty');
+                $form->hidden('refer_id');
             })
             ->setFieldWidth([null,null,100])
             ->mode('table');

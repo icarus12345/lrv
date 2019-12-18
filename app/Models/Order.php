@@ -7,6 +7,13 @@ use App\Models\BaseModel;
 
 class Order extends BaseModel
 {
+    const STATUS_REQUESTED = 'Requested';
+    const STATUS_APPROVED = 'Approved';
+    const STATUS_UNPAID = 'Unpaid';
+    const STATUS_PAID = 'Paid';
+    const STATUS_SHIPPING = 'Shipping';
+    const STATUS_DONE = 'Done';
+    const STATUS_CANCELED = 'Canceled';
     //
     protected $fillable = [
         'user_id',
@@ -46,6 +53,11 @@ class Order extends BaseModel
     public function products()
     {
         return $this->belongsToMany(\App\Models\Product::class, 'order_details');
+    }
+
+    public function histories()
+    {
+        return $this->hasMany(\App\Models\OrderHistory::class, 'header_id')->orderBy('id','desc');
     }
     
     public function order_details()

@@ -44,7 +44,21 @@
                 <div id="tui-grid-detail"></div>
             </div>
         </div>
-<!-- /.modal-content -->
     </div>
-<!-- /.modal-dialog -->
+</div>
+<div class="modal in" tabindex="-1" role="dialog" id="tui-grid-out-of-stock-modal" aria-hidden="false" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Out Of Stock</h4>
+            </div>
+            <div class="modal-body">
+                <div id="tui-grid-out-of-stock"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="createInventoryJournal" class="btn btn-default" type="button">Submit</button>
+            </div>
+        </div>
+    </div>
 </div>
