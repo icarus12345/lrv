@@ -14895,8 +14895,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var common_1 = __webpack_require__(1);
 exports.presetDefault = {
     selection: {
-        background: '#00A9ff',
-        border: '#00a9ff'
+        background: 'rgba(142, 211, 247, 0.1)',
+        border: 'rgba(3, 169, 244, 0.5)'
     },
     heightResizeHandle: {
         border: '#fff',
