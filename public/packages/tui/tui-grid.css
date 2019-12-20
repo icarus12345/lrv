@@ -239,7 +239,7 @@
   padding: 0;
   overflow: hidden;
 }
-.tui-grid-cell:hover {
+td.tui-grid-cell:hover {
   background: #e4f6ff;
 }
 .tui-grid-cell .tui-grid-cell-content {
@@ -474,6 +474,8 @@
 }
 .tui-grid-lside-area .tui-grid-body-area {
   margin-right: -17px;
+  margin-left: -17px;
+  padding-left: 17px;
 }
 .tui-grid-lside-area .tui-grid-body-area .tui-grid-selection-layer {
   left: 1px;

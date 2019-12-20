@@ -14942,14 +14942,14 @@ exports.presetDefault = {
             showHorizontalBorder: true
         },
         header: {
-            background: '#f9f9f9',
+            background: '#f6f6f6',
             border: '#eee',
             text: '#222',
             showVerticalBorder: true,
             showHorizontalBorder: true
         },
         rowHeader: {
-            background: '#f9f9f9',
+            background: '#f6f6f6',
             border: '#eee',
             text: '#333',
             showVerticalBorder: false,
@@ -14962,10 +14962,10 @@ exports.presetDefault = {
             showVerticalBorder: false
         },
         selectedHeader: {
-            background: '#e5f6ff'
+            background: '#f0f0f0'
         },
         selectedRowHeader: {
-            background: '#e5f6ff'
+            background: '#f0f0f0'
         },
         focused: {
             border: '#00a9ff'
@@ -14994,7 +14994,7 @@ exports.presetDefault = {
         currentRow: {}
     },
     rowHover: {
-        background: 'none'
+        background: 'red'
     }
 };
 exports.clean = common_1.deepMergedCopy(exports.presetDefault, {
