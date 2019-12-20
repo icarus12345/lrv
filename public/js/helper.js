@@ -17,12 +17,8 @@ var Helper = (function(){
 	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	    },
 	    beforeSend: function(xhr) {
-            
         },
         complete: function(xhr, stat) {
-            console.log(xhr, stat)
-            console.log(xhr.status)
-            console.log(xhr.statusText)
             Swal.close()
             switch(xhr.status){
                 case 419:

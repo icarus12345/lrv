@@ -256,7 +256,75 @@ var ImageRenderer = function(props) {
     this.render(props);
 }
 
+function AddEntry() {
+    EditEntry()
+}
+function EditEntry(id) {
+    $.ajax({
+        method: "GET",
+        url: id?(`product/${id}/edit`):'product/create', 
+        data: {
+            // _token: LA.token
+        }
+        //container: '#pjax-form-modal'
+    }).done((response)=>{
+        let modal = $(response).find('#pjax-form-modal>div')
+        $('body').append(modal)
+        modal
+            .addClass('modal flex-modal')
+            .modal('show')
+        modal.on('hidden.bs.modal',function(){
+            $(this).remove();
+        })
+        $(response).find("script[data-exec-on-popstate]").each(function () {
+            $.globalEval(this.text || this.textContent || this.innerHTML || '');
+        });
+        let form = modal.find('form');
+        form.attr('pjax-container',null)
+        modal.find('form button[type="submit"]').attr('type','button')
+            .click((e)=>{
+                // form.addClass('was-validated');
+                if (form[0].checkValidity() === false) {
+                    return;
+                }
 
+                
+                var process = new Promise(function (resolve,reject) {
+                    let data = {}
+                    //Object.assign(data, {
+                    //    _token: $.admin.token,
+                    //    _action: 'App_Admin_Extensions_Action_PopupEdit',
+                    //});
+                    
+                    var formData = new FormData(form[0]);
+                    for (var key in data) {
+                        formData.append(key, data[key]);
+                    }
+                    
+                    $.ajax({
+                        method: 'POST',
+                        url: form[0].action,
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            resolve(data);
+                            if (data.status === true) {
+                                modal.remove();
+                                grid.reloadData()
+                            }
+                        },
+                        error:function(request){
+                            reject(request);
+                        }
+                    });
+                });
+                process.then(Helper.Resolver).catch(Helper.Catcher);
+                
+            })
+    });
+}
 var InitGrid = () => {
     var onCellUpdated = (ev) => {
         if(!ev.value) return;
@@ -289,6 +357,7 @@ var InitGrid = () => {
             }
         });
     }
+    
     window.grid = new tui.Grid({
         el: document.getElementById('tui-grid'),
         rowHeight: 32,
@@ -448,16 +517,21 @@ var InitGrid = () => {
                         //'       Action',
                         '       <span class="glyphicon glyphicon-option-vertical"></span>',
                         '   </button>',
-                        '   <a href="product/'+props.value+'/edit" type="button" class="btn btn-default" data-preview><i class="fa fa-pencil"></i></a>',
+                        // '   <a href="product/'+props.value+'/edit" type="button" class="btn btn-default" data-preview><i class="fa fa-pencil"></i></a>',
+                        '   <a href="JavaScript:" data-action="edit" class="btn btn-default" data-preview><i class="fa fa-pencil"></i></a>',
                         '   <ul class="dropdown-menu -dropdown-menu-right">',
                         '       <li><a href="product/'+props.value+'" ><i class="fa fa-eye"></i> Show</a></li>',
-                        '       <li><a href="product/'+props.value+'/edit" ><i class="fa fa-pencil"></i> Edit</a></li>',
+                        // '       <li><a href="product/'+props.value+'/edit" ><i class="fa fa-pencil"></i> Edit</a></li>',
+                        '       <li><a href="JavaScript:" data-action="edit"><i class="fa fa-pencil"></i> Edit</a></li>',
                         '       <li><a href="JavaScript:" data-action="delete"><i class="fa fa-trash"></i> Delete</a></li>',
                         '   </ul>',
                         '</div>'
                     ].join(''));
                     const el = $el[0];
                     this.el = el;
+                    $el.find('[data-action="edit"]').click(()=>{
+                        EditEntry(props.value);
+                    });
                     $el.find('[data-action="delete"]').click(()=>{
                         console.log(self)
                         Helper.Encore_Admin_Grid_Actions_Delete({

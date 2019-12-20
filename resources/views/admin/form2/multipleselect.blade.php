@@ -18,11 +18,9 @@
     @include('admin::form.help-block')
 </div>
 <script data-exec-on-popstate>
-    console.log('HAHAHA', document.readyState)
     var el = document.getElementById('form-group-{{$id}}').getElementsByTagName('select')[0]
     el.classList.toggle('has-value', !!el.value);
     document.getElementById('form-group-{{$id}}').focus = function(){
-        console.log('FFFF')
     }
     
 </script>

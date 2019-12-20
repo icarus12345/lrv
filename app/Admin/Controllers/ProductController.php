@@ -268,7 +268,8 @@ class ProductController extends AdminController
 				->options(Size::pluck('name', 'id'))
 				->disableHorizontal();
 		});
-		$form->setView('admin.form');
+		// $form->setView('admin.form');
+		$form->setView('admin.form-modal-big');
         return $form;
     }
 }

@@ -127,5 +127,40 @@ var Helper = (function(){
         });
         process.then(actionResolver).catch(actionCatcher);
     }
+
+    $.ajaxSetup({
+	    headers: {
+	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	    },
+	    beforeSend: function(xhr) {
+            NProgress.start()
+        },
+        complete: function(xhr, stat) {
+            NProgress.done()
+            switch(xhr.status){
+                case 419:
+                    // CSRF token mismatch.
+                    setTimeout(()=>{
+                        Swal.fire(xhr.statusText, xhr.responseJSON.message, 'error');
+                    }, 150)
+                    break;
+                case 401:
+                    // Unauthenticated
+                    
+                    break;
+                case 403:
+                case 404:
+                case 500:
+                    // toastr.error(xhr.responseJSON.message||'',xhr.statusText,{"timeOut": "0",});
+                    setTimeout(()=>{
+                        Swal.fire(xhr.statusText, xhr.responseJSON.message, 'error');
+                    }, 150)
+                    break;
+                case 422:
+                    self.Catcher(xhr)
+                    break;
+            }
+        }
+	});
 	return self
 }())

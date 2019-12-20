@@ -463,6 +463,10 @@ border-bottom-color: #FF5722;
 }
 /* INPUT */
 /* SELECT */
+.form-group-2 .select2-container--default .select2-selection--multiple .select2-selection__clear{
+  position: absolute;
+  right: 0;
+}
 .form-group-2 .select2 .select2-selection--single .select2-selection__placeholder{
   color: transparent;
 }
@@ -571,4 +575,11 @@ body .ck.ck-balloon-panel{
 }
 .form-group-2>div input + .bootstrap-datetimepicker-widget{
   top: 34px !important;
+}
+.modal.flex-modal .box-body{
+  overflow-y: auto;
+  max-height: calc(100vh - 120px);
+}
+.modal.flex-modal .box.big-box{
+  max-width: 720px;width:auto;margin: 0;
 }

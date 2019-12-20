@@ -26,7 +26,7 @@
         </div>
                 
         <div class="btn-group pull-right grid-create-btn" style="margin-right: 10px">
-            <a href="product/create" class="btn btn-sm btn-success" title="New">
+            <a href="JavaScript:AddEntry()" class="btn btn-sm btn-success" title="New">
                 <i class="fa fa-plus"></i><span class="hidden-xs">&nbsp;&nbsp;New</span>
             </a>
         </div>
