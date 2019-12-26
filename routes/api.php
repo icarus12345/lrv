@@ -43,5 +43,7 @@ Route::group([
     Route::get('orders/detail/{order_id}', '\App\Admin\Controllers\OrderController@orderDetailList')->name('order.detail.list');
     Route::get('orders/out-of-stock/{order_id}', '\App\Admin\Controllers\OrderController@orderOutOfStock')->name('order.outofstock');
 
+    Route::get('colors', '\App\Admin\Controllers\ColorController@list')->name('color.list');
+
     // Route::put('product/{id}', '\App\Admin\Controllers\ProductController@apiUpdate')->name('product.update');
 });

@@ -15,10 +15,28 @@ $.fn.browses = function() {
 			dropify.data('DropifyMultiple').clearElement()
 		}
 	})
-		
+	var adjustment;
 	sortable.sortable({
 		vertical: false,
 		//placeholder: "ui-state-highlight"
+		// set $item relative to cursor position
+		onDragStart: function ($item, container, _super) {
+			var offset = $item.offset(),
+				pointer = container.rootGroup.pointer;
+		
+			adjustment = {
+			  left: pointer.left - offset.left,
+			  top: pointer.top - offset.top
+			};
+		
+			_super($item, container);
+		  },
+		  onDrag: function ($item, position) {
+			$item.css({
+			  left: position.left - adjustment.left,
+			  top: position.top - adjustment.top
+			});
+		  }
 	});
 	sortable.on('click','button',(e)=>{
 		$(e.target).parents('li').remove();

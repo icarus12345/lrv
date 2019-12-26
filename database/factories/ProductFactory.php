@@ -45,14 +45,14 @@ $factory->afterCreating(Product::class, function ($product, $faker) {
 			'size_id' => $size->id,
 			]);
 	}
-	$product->image = "https://picsum.photos/id/{$product->id}/240/320";
+	$product->image = "https://picsum.photos/240/320?t={$product->id}.jpg";
 	$i1 = rand(0,150);
 	$i2 = $i1+1;
 	$i3 = $i1+2;
 	$product->pictures = [
-		"https://picsum.photos/id/$i1/240/320",
-		"https://picsum.photos/id/$i2/240/320",
-		"https://picsum.photos/id/$i3/240/320",
+		"https://picsum.photos/240/320?t={$product->id}$i1.jpg",
+		"https://picsum.photos/240/320?t={$product->id}$i2.jpg",
+		"https://picsum.photos/240/320?t={$product->id}$i3.jpg",
 	];
 	$product->save();
 });
