@@ -17,7 +17,8 @@
         "laravel/framework": "^6.8",
         "laravel/tinker": "^1.0",
         "laravel/ui": "^1.1",
-        "mariuzzo/laravel-js-localization": "^1.5"
+        "mariuzzo/laravel-js-localization": "^1.5",
+        "spatie/db-dumper": "^2.15"
     },
     "require-dev": {
         "facade/ignition": "^1.4",

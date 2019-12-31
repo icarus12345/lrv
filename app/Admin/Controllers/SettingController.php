@@ -64,34 +64,34 @@ class SettingController extends AdminController
         $id = request()->route('setting');
         $setting = Setting::find($id);
         $form = new Form(new Setting);
-        $form->display('id', __('ID'));
+        $form->display2('id', __('ID'));
         if($id){
-            $form->display('display', __('Name'));
+            $form->display2('display', __('Name'));
         }else{
-            $form->select("type", trans('Type'))->options([
+            $form->select2("type", trans('Type'))->options([
                 'string'=>'String',
                 'image'=>'Image',
                 'text'=>'Text',
                 'html'=>'Html',
             ]);
-            $form->text("display", trans('Display'));
-            $form->text("name", trans('Name'));
+            $form->text2("display", trans('Display'));
+            $form->text2("name", trans('Name'));
         }
         if($setting){
 
             if($setting->type == 'string'){
-                $form->text("value", trans('Value'));
+                $form->text2("value", trans('Value'));
             }elseif($setting->type == 'text'){
-                $form->textarea("value", trans('Value'));
+                $form->textarea2("value", trans('Value'));
             }if($setting->type == 'image'){
-                $form->browse("value", trans('Value'));
+                $form->browse2("value", trans('Value'));
             }
         }else{
-            $form->text("value", trans('Value'));
+            $form->text2("value", trans('Value'));
         }
-        $form->display('created_at', __('Created At'));
-        $form->display('updated_at', __('Updated At'));
-
+        $form->display2('created_at', __('Created At'));
+        $form->display2('updated_at', __('Updated At'));
+        $form->setView('admin.form');
         return $form;
     }
 }

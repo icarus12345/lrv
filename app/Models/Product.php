@@ -406,4 +406,6 @@ class Product extends BaseModel
     {
         return $query->orderBy('id','desc');
     }
+
+    
 }

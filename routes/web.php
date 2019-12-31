@@ -30,9 +30,9 @@
 			Route::post('/account/profile/update', 'AccountController@updateProfile')->name('account.profile.update');
 			
 		});
-		// Route::get('/demo', 'HomeController@demo')->name('demo');
+		
 	});
-
+	Route::get('/demo', 'HomeController@demo')->name('demo');
 	Route::get('/home', 'HomeController@index');
 	Route::get('/about', 'HomeController@about');
 	Route::get('/contact', 'HomeController@contact');

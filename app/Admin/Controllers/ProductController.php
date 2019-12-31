@@ -15,6 +15,7 @@ use Encore\Admin\Form\Tab;
 use Illuminate\Http\Request;
 use Encore\Admin\Widgets\Box;
 use Encore\Admin\Facades\Admin;
+use Spatie\DbDumper\Databases\MySql;
 
 class ProductController extends AdminController
 {
@@ -78,6 +79,12 @@ class ProductController extends AdminController
      */
     protected function grid()
     {
+		// MySql::create()
+		// 	->setHost('222.255.117.30')
+		// 	->setDbName('petoivn_user')
+		// 	->setUserName('petoivn_user1')
+		// 	->setPassword('petoi+23$')
+		// 	->dumpToFile('dump.sql');
 		if(!$this->request->_export_){
 
 			return view('admin.page.demo.grid');//->render();
@@ -116,14 +123,14 @@ class ProductController extends AdminController
 		$locales = \Config::get('app.locales');
         foreach ($locales as $locale) {
 			$lang = "(".__("common.locales.{$locale}").")";
-            $show->field("name_{$locale}", trans('admin.title').$lang)->rules('required');
+            $show->field("name_{$locale}", trans('admin.title').$lang);
         }
 		$show->image()->browse();
 		$show->pictures()->browses();
 		$show->price();
         foreach ($locales as $locale) {
 			$lang = "(".__("common.locales.{$locale}").")";
-            $show->field("desc_{$locale}", trans('Description').$lang)->rules('required');
+            $show->field("desc_{$locale}", trans('Description').$lang);
         }
 		foreach ($locales as $locale) {
 			$lang = "(".__("common.locales.{$locale}").")";

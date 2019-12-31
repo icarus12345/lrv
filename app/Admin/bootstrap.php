@@ -48,3 +48,4 @@ Form::extend('date2', \App\Admin\Extensions\Form2\Date2::class);
 Form::extend('decimal2', \App\Admin\Extensions\Form2\Decimal2::class);
 Form::extend('url2', \App\Admin\Extensions\Form2\Url2::class);
 Form::extend('hasMany2', \App\Admin\Extensions\Form2\HasMany2::class);
+Form::extend('display2', \App\Admin\Extensions\Form2\Display2::class);

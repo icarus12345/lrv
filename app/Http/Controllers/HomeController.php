@@ -47,7 +47,15 @@ class HomeController extends Controller
      */
     public function demo()
     {
-        return view('home');
+        $abc = $this->abc();
+        return view('welcome',[
+            'abc' => $abc
+        ]);
+    }
+
+    public function abc()
+    {
+        return 'abc';
     }
 	
 	public function locale(string $locale)

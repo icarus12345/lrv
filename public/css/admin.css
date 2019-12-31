@@ -247,6 +247,8 @@
   min-width: 100%;
 }
 
+
+.form-group-2>div .display-value,
 .form-group-2>div .select2 .select2-selection--single,
 .form-group-2>div .select2 .select2-selection--multiple,
 .form-group-2>div textarea,
@@ -261,6 +263,9 @@
   background: transparent;
   box-shadow: none;
 }
+.form-group-2>div .display-value{
+  background: #f6f6f6;
+}
 .form-group-2>div textarea+.cke_textarea_inline:focus{
   outline: none;
 }
@@ -268,6 +273,7 @@
   min-height: 180px;
   padding: 6px 12px;
 }
+.form-group-2>div .display-value ~ .line,
 .form-group-2>div .document-editor-preview ~ .line,
 .form-group-2>div .select2 ~ .line,
 .form-group-2>div textarea ~ .line,
@@ -284,6 +290,7 @@
   transition: all 0.5s;
   width: 100%;
   border-bottom: 1px solid #ccc;
+  z-index: 2;
 }
 .form-group-2 .form-control:invalid,
 .form-group-2.has-error .form-control,
@@ -330,6 +337,7 @@
 .form-group-2>div .select2.select2-container--open .select2-selection--single{
   /* background: #00bcd41f; */
 }
+.form-group-2>div .display-value +label,
 .form-group-2>div input[type="text"] + div + label,
 .form-group-2>div input[type="text"] + div + label,
 .form-group-2>div .browse +label,
@@ -353,7 +361,10 @@
   color: #777;
   width: 100%;
   text-align: left !important;
+  z-index: 2;
 }
+
+.form-group-2>div .display-value +label,
 .form-group-2>div .browse +label,
 .form-group-2>div .browses +label,
 .form-group-2>div .document-editor-preview +label,
